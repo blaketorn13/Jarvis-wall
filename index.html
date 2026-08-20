@@ -42,6 +42,11 @@ select {
     font-family: inherit;
 }
 
+button:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+}
+
 .grid {
     position: fixed;
     inset: 0;
@@ -711,6 +716,148 @@ select {
     cursor: pointer;
 }
 
+/* LOCKDOWN */
+
+#lockdown {
+    position: fixed;
+    inset: 0;
+
+    z-index: 999;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(120,0,0,.25),
+            #050000 70%
+        );
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity .25s;
+}
+
+#lockdown.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.lockIcon {
+    width: 90px;
+    height: 90px;
+
+    border:
+        2px solid #ff4d4d;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 42px;
+
+    color: #ff4d4d;
+
+    box-shadow:
+        0 0 25px rgba(255,50,50,.35);
+
+    margin-bottom: 25px;
+}
+
+.lockTitle {
+    color: #ff5a5a;
+
+    font-size: 32px;
+
+    letter-spacing: 7px;
+
+    text-align: center;
+
+    text-shadow:
+        0 0 20px rgba(255,50,50,.55);
+}
+
+.lockSub {
+    margin-top: 14px;
+
+    color: #ffaaaa;
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+
+    text-align: center;
+}
+
+.lockScan {
+    margin-top: 30px;
+
+    font-size: 9px;
+
+    letter-spacing: 3px;
+
+    opacity: .55;
+
+    text-align: center;
+}
+
+.lockCamera {
+    position: relative;
+
+    width: min(300px, 85vw);
+    height: 210px;
+
+    margin-top: 25px;
+
+    overflow: hidden;
+
+    border:
+        1px solid rgba(255,70,70,.5);
+
+    background: #000;
+}
+
+#lockVideo {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transform: scaleX(-1);
+}
+
+#lockCanvas {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    transform: scaleX(-1);
+
+    pointer-events: none;
+}
+
+.lockStatus {
+    margin-top: 15px;
+
+    color: #ff6b6b;
+
+    font-size: 12px;
+
+    letter-spacing: 3px;
+}
+
 /* MOBILE */
 
 @media(max-width:700px) {
@@ -744,20 +891,22 @@ select {
         padding: 18px;
     }
 
+    .lockTitle {
+        font-size: 25px;
+    }
+
 }
 
 </style>
 </head>
 
-
 <body>
 
 <div class="grid"></div>
 
-
 <!-- MAIN -->
 
-<div class="main">
+<div class="main" id="mainInterface">
 
     <div class="header">
 
@@ -775,22 +924,17 @@ select {
 
         <div class="clock">
 
-            <div
-                id="time"
-                class="time">
+            <div id="time" class="time">
                 --:--
             </div>
 
-            <div
-                id="date"
-                class="date">
+            <div id="date" class="date">
                 ---
             </div>
 
         </div>
 
     </div>
-
 
     <div class="center">
 
@@ -816,20 +960,17 @@ select {
 
         </div>
 
-
         <div
             id="systemStatus"
             class="status">
             STARTING CAMERA
         </div>
 
-
         <div
             id="systemSubstatus"
             class="substatus">
             INITIALIZING
         </div>
-
 
         <div class="buttonRow">
 
@@ -849,7 +990,6 @@ select {
 
     </div>
 
-
     <div class="panels">
 
         <div class="panel">
@@ -866,7 +1006,6 @@ select {
 
         </div>
 
-
         <div class="panel">
 
             <div class="panel-title">
@@ -880,7 +1019,6 @@ select {
             </div>
 
         </div>
-
 
         <div class="panel">
 
@@ -900,7 +1038,6 @@ select {
 
 </div>
 
-
 <!-- REGISTER -->
 
 <div
@@ -917,7 +1054,6 @@ select {
             CREATE A NEW JARVIS IDENTITY
         </div>
 
-
         <div class="formGroup">
 
             <label>
@@ -932,7 +1068,6 @@ select {
 
         </div>
 
-
         <div class="formGroup">
 
             <label>
@@ -946,7 +1081,6 @@ select {
                 autocomplete="off">
 
         </div>
-
 
         <div class="registerCamera">
 
@@ -963,13 +1097,11 @@ select {
 
         </div>
 
-
         <div
             id="registerStatus"
             class="substatus">
             LOOK AT THE CAMERA
         </div>
-
 
         <div class="modalButtons">
 
@@ -989,7 +1121,6 @@ select {
 
 </div>
 
-
 <!-- MANAGE -->
 
 <div
@@ -1006,12 +1137,10 @@ select {
             MANAGE JARVIS IDENTITIES
         </div>
 
-
         <div
             id="peopleList"
             class="peopleList">
         </div>
-
 
         <div class="modalButtons">
 
@@ -1025,7 +1154,6 @@ select {
     </div>
 
 </div>
-
 
 <!-- WELCOME -->
 
@@ -1055,7 +1183,6 @@ select {
             WELCOME BACK TO JARVIS.
         </div>
 
-
         <div class="modalButtons">
 
             <button
@@ -1074,7 +1201,6 @@ select {
 
 </div>
 
-
 <!-- AI SCREEN -->
 
 <div
@@ -1083,7 +1209,6 @@ select {
     <div class="aiTitle">
         JARVIS // AI CORE
     </div>
-
 
     <div
         id="aiMessages"
@@ -1094,7 +1219,6 @@ select {
         </div>
 
     </div>
-
 
     <div class="aiInputArea">
 
@@ -1111,7 +1235,6 @@ select {
 
     </div>
 
-
     <button
         id="aiBack"
         style="margin:12px auto;">
@@ -1120,6 +1243,48 @@ select {
 
 </div>
 
+<!-- LOCKDOWN -->
+
+<div id="lockdown">
+
+    <div class="lockIcon">
+        🔒
+    </div>
+
+    <div class="lockTitle">
+        ACCESS DENIED
+    </div>
+
+    <div class="lockSub">
+        UNKNOWN USER DETECTED
+    </div>
+
+    <div class="lockCamera">
+
+        <video
+            id="lockVideo"
+            autoplay
+            muted
+            playsinline>
+        </video>
+
+        <canvas
+            id="lockCanvas">
+        </canvas>
+
+    </div>
+
+    <div
+        id="lockStatus"
+        class="lockStatus">
+        SCANNING FOR AUTHORIZED USER
+    </div>
+
+    <div class="lockScan">
+        SYSTEM LOCKED
+    </div>
+
+</div>
 
 <script>
 
@@ -1131,75 +1296,77 @@ function updateClock() {
 
     const now = new Date();
 
-    document
-        .getElementById("time")
-        .textContent =
-        now.toLocaleTimeString(
-            [],
-            {
-                hour: "2-digit",
-                minute: "2-digit"
-            }
-        );
+    document.getElementById("time").textContent =
+        now.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit"
+        });
 
-    document
-        .getElementById("date")
-        .textContent =
-        now.toLocaleDateString(
-            [],
-            {
-                weekday: "long",
-                month: "long",
-                day: "numeric"
-            }
-        )
-        .toUpperCase();
+    document.getElementById("date").textContent =
+        now.toLocaleDateString([], {
+            weekday: "long",
+            month: "long",
+            day: "numeric"
+        }).toUpperCase();
 }
 
 updateClock();
 
-setInterval(
-    updateClock,
-    1000
-);
+setInterval(updateClock, 1000);
 
 
 /* =========================
-   MAIN CAMERA
+   MAIN ELEMENTS
 ========================= */
 
 const video =
-    document.getElementById(
-        "camera"
-    );
+    document.getElementById("camera");
 
 const canvas =
-    document.getElementById(
-        "faceCanvas"
-    );
+    document.getElementById("faceCanvas");
 
 const ctx =
     canvas.getContext("2d");
 
 const status =
-    document.getElementById(
-        "systemStatus"
-    );
+    document.getElementById("systemStatus");
 
 const substatus =
-    document.getElementById(
-        "systemSubstatus"
-    );
+    document.getElementById("systemSubstatus");
 
 const cameraStatus =
-    document.getElementById(
-        "cameraStatus"
-    );
+    document.getElementById("cameraStatus");
 
 const securityStatus =
-    document.getElementById(
-        "securityStatus"
-    );
+    document.getElementById("securityStatus");
+
+const lockdown =
+    document.getElementById("lockdown");
+
+const lockVideo =
+    document.getElementById("lockVideo");
+
+const lockCanvas =
+    document.getElementById("lockCanvas");
+
+const lockCtx =
+    lockCanvas.getContext("2d");
+
+const lockStatus =
+    document.getElementById("lockStatus");
+
+
+/* =========================
+   LOCKDOWN STATE
+========================= */
+
+let systemLocked = false;
+
+let lastDeniedTime = 0;
+
+let lastVerifiedTime = 0;
+
+const DENIED_COOLDOWN = 3500;
 
 
 /* =========================
@@ -1242,12 +1409,22 @@ function loadRegisteredFaces() {
 
 function saveRegisteredFaces() {
 
-    localStorage.setItem(
-        "jarvisRegisteredFaces",
-        JSON.stringify(
-            registeredFaces
-        )
-    );
+    try {
+
+        localStorage.setItem(
+            "jarvisRegisteredFaces",
+            JSON.stringify(
+                registeredFaces
+            )
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Could not save faces:",
+            error
+        );
+    }
 
     updateUserCount();
 }
@@ -1255,11 +1432,9 @@ function saveRegisteredFaces() {
 
 function updateUserCount() {
 
-    document
-        .getElementById(
-            "userCount"
-        )
-        .textContent =
+    document.getElementById(
+        "userCount"
+    ).textContent =
         registeredFaces.length;
 }
 
@@ -1282,28 +1457,31 @@ async function startCamera() {
             "REQUESTING ACCESS";
 
         const stream =
-            await navigator
-                .mediaDevices
-                .getUserMedia({
+            await navigator.mediaDevices.getUserMedia({
 
-                    video: {
-                        facingMode: "user",
-                        width: {
-                            ideal: 640
-                        },
-                        height: {
-                            ideal: 480
-                        }
+                video: {
+                    facingMode: "user",
+                    width: {
+                        ideal: 640
                     },
+                    height: {
+                        ideal: 480
+                    }
+                },
 
-                    audio: false
+                audio: false
 
-                });
+            });
 
         video.srcObject =
             stream;
 
+        lockVideo.srcObject =
+            stream;
+
         await video.play();
+
+        await lockVideo.play();
 
         cameraStatus.textContent =
             "ONLINE";
@@ -1316,13 +1494,13 @@ async function startCamera() {
 
         resizeCanvas();
 
+        resizeLockCanvas();
+
         loadFaceModels();
 
     } catch (error) {
 
-        console.error(
-            error
-        );
+        console.error(error);
 
         cameraStatus.textContent =
             "ERROR";
@@ -1351,9 +1529,26 @@ function resizeCanvas() {
 }
 
 
+function resizeLockCanvas() {
+
+    if (!lockVideo.videoWidth) {
+        return;
+    }
+
+    lockCanvas.width =
+        lockVideo.videoWidth;
+
+    lockCanvas.height =
+        lockVideo.videoHeight;
+}
+
+
 video.addEventListener(
     "loadedmetadata",
-    resizeCanvas
+    () => {
+        resizeCanvas();
+        resizeLockCanvas();
+    }
 );
 
 
@@ -1373,19 +1568,13 @@ async function loadFaceModels() {
     try {
 
         await faceapi.nets.tinyFaceDetector
-            .loadFromUri(
-                MODEL_URL
-            );
+            .loadFromUri(MODEL_URL);
 
         await faceapi.nets.faceLandmark68TinyNet
-            .loadFromUri(
-                MODEL_URL
-            );
+            .loadFromUri(MODEL_URL);
 
         await faceapi.nets.faceRecognitionNet
-            .loadFromUri(
-                MODEL_URL
-            );
+            .loadFromUri(MODEL_URL);
 
         securityStatus.textContent =
             registeredFaces.length
@@ -1423,30 +1612,34 @@ async function loadFaceModels() {
 
 
 /* =========================
-   DRAW GREEN FACE MESH
+   DRAW FACE MESH
 ========================= */
 
 function drawFaceMesh(
-    detection
+    detection,
+    targetCtx
 ) {
 
-    ctx.clearRect(
+    const targetCanvas =
+        targetCtx.canvas;
+
+    targetCtx.clearRect(
         0,
         0,
-        canvas.width,
-        canvas.height
+        targetCanvas.width,
+        targetCanvas.height
     );
 
     const points =
         detection.landmarks.positions;
 
-    ctx.strokeStyle =
+    targetCtx.strokeStyle =
         "#39ff88";
 
-    ctx.fillStyle =
+    targetCtx.fillStyle =
         "#39ff88";
 
-    ctx.lineWidth = 1;
+    targetCtx.lineWidth = 1;
 
     const connections = [
 
@@ -1464,9 +1657,9 @@ function drawFaceMesh(
     connections.forEach(
         pair => {
 
-            ctx.beginPath();
+            targetCtx.beginPath();
 
-            ctx.moveTo(
+            targetCtx.moveTo(
                 points[pair[0]].x,
                 points[pair[0]].y
             );
@@ -1480,25 +1673,24 @@ function drawFaceMesh(
                 i++
             ) {
 
-                ctx.lineTo(
+                targetCtx.lineTo(
                     points[i].x,
                     points[i].y
                 );
 
             }
 
-            ctx.stroke();
+            targetCtx.stroke();
 
         }
     );
 
-
     points.forEach(
         point => {
 
-            ctx.beginPath();
+            targetCtx.beginPath();
 
-            ctx.arc(
+            targetCtx.arc(
                 point.x,
                 point.y,
                 1.5,
@@ -1506,10 +1698,107 @@ function drawFaceMesh(
                 Math.PI * 2
             );
 
-            ctx.fill();
+            targetCtx.fill();
 
         }
     );
+}
+
+
+/* =========================
+   LOCKDOWN
+========================= */
+
+function enterLockdown() {
+
+    if (systemLocked) {
+        return;
+    }
+
+    systemLocked = true;
+
+    lastDeniedTime =
+        Date.now();
+
+    status.textContent =
+        "ACCESS DENIED";
+
+    substatus.textContent =
+        "UNKNOWN USER";
+
+    securityStatus.textContent =
+        "LOCKED";
+
+    lockStatus.textContent =
+        "SCANNING FOR AUTHORIZED USER";
+
+    lockdown.classList.add("open");
+
+    disableControls();
+
+}
+
+
+function exitLockdown(person) {
+
+    if (!systemLocked) {
+        return;
+    }
+
+    systemLocked = false;
+
+    lastVerifiedTime =
+        Date.now();
+
+    lockdown.classList.remove("open");
+
+    securityStatus.textContent =
+        person.name.toUpperCase();
+
+    status.textContent =
+        "ACCESS GRANTED";
+
+    substatus.textContent =
+        "IDENTITY VERIFIED";
+
+    enableControls();
+
+    showWelcome(person);
+
+}
+
+
+function disableControls() {
+
+    document.getElementById(
+        "registerFaceButton"
+    ).disabled = true;
+
+    document.getElementById(
+        "manageFacesButton"
+    ).disabled = true;
+
+    document.getElementById(
+        "openAI"
+    ).disabled = true;
+
+}
+
+
+function enableControls() {
+
+    document.getElementById(
+        "registerFaceButton"
+    ).disabled = false;
+
+    document.getElementById(
+        "manageFacesButton"
+    ).disabled = false;
+
+    document.getElementById(
+        "openAI"
+    ).disabled = false;
+
 }
 
 
@@ -1539,11 +1828,10 @@ async function beginFaceTracking() {
                     await faceapi
                         .detectSingleFace(
                             video,
-                            new faceapi
-                                .TinyFaceDetectorOptions({
-                                    inputSize: 320,
-                                    scoreThreshold: .35
-                                })
+                            new faceapi.TinyFaceDetectorOptions({
+                                inputSize: 320,
+                                scoreThreshold: .35
+                            })
                         )
                         .withFaceLandmarks(true)
                         .withFaceDescriptor();
@@ -1555,46 +1843,99 @@ async function beginFaceTracking() {
                     canvas.height
                 );
 
+                lockCtx.clearRect(
+                    0,
+                    0,
+                    lockCanvas.width,
+                    lockCanvas.height
+                );
+
+
+                /* NO FACE */
+
                 if (!result) {
 
-                    status.textContent =
-                        registeredFaces.length
-                        ? "SCANNING..."
-                        : "NO FACE FOUND";
+                    if (!systemLocked) {
 
-                    substatus.textContent =
-                        registeredFaces.length
-                        ? "LOOK AT THE CAMERA"
-                        : "REGISTER A FACE";
+                        status.textContent =
+                            registeredFaces.length
+                            ? "SCANNING..."
+                            : "NO FACE FOUND";
 
-                } else {
+                        substatus.textContent =
+                            registeredFaces.length
+                            ? "LOOK AT THE CAMERA"
+                            : "REGISTER A FACE";
 
-                    drawFaceMesh(
-                        result
-                    );
+                    } else {
+
+                        lockStatus.textContent =
+                            "NO FACE DETECTED";
+
+                    }
+
+                }
+
+
+                /* FACE FOUND */
+
+                else {
+
+                    if (!systemLocked) {
+
+                        drawFaceMesh(
+                            result,
+                            ctx
+                        );
+
+                    } else {
+
+                        drawFaceMesh(
+                            result,
+                            lockCtx
+                        );
+
+                    }
+
 
                     if (
                         registeredFaces.length === 0
                     ) {
 
-                        status.textContent =
-                            "FACE DETECTED";
+                        if (!systemLocked) {
 
-                        substatus.textContent =
-                            "NO REGISTERED USERS";
+                            status.textContent =
+                                "FACE DETECTED";
 
-                    } else {
+                            substatus.textContent =
+                                "NO REGISTERED USERS";
 
-                        status.textContent =
-                            "FACE DETECTED";
+                        }
 
-                        substatus.textContent =
-                            "ANALYZING IDENTITY";
+                    }
+
+                    else {
+
+                        if (!systemLocked) {
+
+                            status.textContent =
+                                "FACE DETECTED";
+
+                            substatus.textContent =
+                                "ANALYZING IDENTITY";
+
+                        } else {
+
+                            lockStatus.textContent =
+                                "ANALYZING IDENTITY";
+
+                        }
+
 
                         if (
                             Date.now() -
                             lastAuthentication >
-                            4000
+                            1500
                         ) {
 
                             authenticateFace(
@@ -1620,9 +1961,7 @@ async function beginFaceTracking() {
 
         }
 
-        requestAnimationFrame(
-            loop
-        );
+        requestAnimationFrame(loop);
     }
 
     loop();
@@ -1633,9 +1972,7 @@ async function beginFaceTracking() {
    AUTHENTICATE
 ========================= */
 
-function authenticateFace(
-    result
-) {
+function authenticateFace(result) {
 
     lastAuthentication =
         Date.now();
@@ -1683,15 +2020,18 @@ function authenticateFace(
 
 
     /*
-       Demo recognition threshold.
-
-       Lower numbers mean a stricter
-       match.
+       Lower = stricter.
+       0.50 is the current
+       recognition threshold.
     */
 
     const MATCH_THRESHOLD =
         0.50;
 
+
+    /* =========================
+       RECOGNIZED
+    ========================= */
 
     if (
         bestMatch &&
@@ -1699,32 +2039,89 @@ function authenticateFace(
         MATCH_THRESHOLD
     ) {
 
+        if (systemLocked) {
+
+            exitLockdown(
+                bestMatch
+            );
+
+            return;
+
+        }
+
+
+        /*
+           Don't repeatedly open
+           the welcome screen.
+        */
+
+        if (
+            Date.now() -
+            lastVerifiedTime <
+            5000
+        ) {
+
+            return;
+
+        }
+
+        lastVerifiedTime =
+            Date.now();
+
         status.textContent =
-            "IDENTITY VERIFIED";
+            "ACCESS GRANTED";
 
         substatus.textContent =
-            "ACCESS AUTHORIZED";
+            "IDENTITY VERIFIED";
 
         securityStatus.textContent =
             bestMatch.name
-            .toUpperCase();
+                .toUpperCase();
 
         showWelcome(
             bestMatch
         );
 
-    } else {
+    }
 
-        status.textContent =
-            "ACCESS DENIED";
 
-        substatus.textContent =
-            "UNKNOWN USER";
+    /* =========================
+       UNKNOWN
+    ========================= */
 
-        securityStatus.textContent =
-            "UNKNOWN";
+    else {
+
+        if (
+            systemLocked
+        ) {
+
+            lockStatus.textContent =
+                "ACCESS DENIED";
+
+            return;
+
+        }
+
+
+        /*
+           Prevent the screen from
+           repeatedly flashing.
+        */
+
+        if (
+            Date.now() -
+            lastDeniedTime <
+            DENIED_COOLDOWN
+        ) {
+
+            return;
+
+        }
+
+        enterLockdown();
 
     }
+
 }
 
 
@@ -1760,6 +2157,10 @@ document
     .addEventListener(
         "click",
         () => {
+
+            if (systemLocked) {
+                return;
+            }
 
             document
                 .getElementById(
@@ -1815,17 +2216,15 @@ async function startRegisterCamera() {
     try {
 
         const stream =
-            await navigator
-                .mediaDevices
-                .getUserMedia({
+            await navigator.mediaDevices.getUserMedia({
 
-                    video: {
-                        facingMode: "user"
-                    },
+                video: {
+                    facingMode: "user"
+                },
 
-                    audio: false
+                audio: false
 
-                });
+            });
 
         registerVideo.srcObject =
             stream;
@@ -1856,6 +2255,10 @@ document
     .addEventListener(
         "click",
         async () => {
+
+            if (systemLocked) {
+                return;
+            }
 
             const name =
                 document
@@ -1902,11 +2305,10 @@ document
                     await faceapi
                         .detectSingleFace(
                             registerVideo,
-                            new faceapi
-                                .TinyFaceDetectorOptions({
-                                    inputSize: 320,
-                                    scoreThreshold: .35
-                                })
+                            new faceapi.TinyFaceDetectorOptions({
+                                inputSize: 320,
+                                scoreThreshold: .35
+                            })
                         )
                         .withFaceLandmarks(true)
                         .withFaceDescriptor();
@@ -2019,6 +2421,10 @@ document
         "click",
         () => {
 
+            if (systemLocked) {
+                return;
+            }
+
             registerOverlay
                 .classList
                 .remove("open");
@@ -2044,6 +2450,10 @@ document
     .addEventListener(
         "click",
         () => {
+
+            if (systemLocked) {
+                return;
+            }
 
             renderPeopleList();
 
@@ -2175,9 +2585,11 @@ function renderPeopleList() {
    DELETE PERSON
 ========================= */
 
-function deletePerson(
-    id
-) {
+function deletePerson(id) {
+
+    if (systemLocked) {
+        return;
+    }
 
     const person =
         registeredFaces.find(
@@ -2252,9 +2664,7 @@ const welcomeOverlay =
     );
 
 
-function showWelcome(
-    person
-) {
+function showWelcome(person) {
 
     document
         .getElementById(
@@ -2325,6 +2735,10 @@ document
         "click",
         () => {
 
+            if (systemLocked) {
+                return;
+            }
+
             welcomeOverlay
                 .classList
                 .remove("open");
@@ -2382,9 +2796,11 @@ function addAIMessage(
         "aiMessage";
 
     if (user) {
+
         message.classList.add(
             "userMessage"
         );
+
     }
 
     message.textContent =
@@ -2400,6 +2816,10 @@ function addAIMessage(
 
 
 async function sendAIMessage() {
+
+    if (systemLocked) {
+        return;
+    }
 
     const text =
         aiInput.value.trim();
@@ -2441,10 +2861,12 @@ async function sendAIMessage() {
 
 
         if (!response.ok) {
+
             throw new Error(
                 data.error ||
                 "AI request failed"
             );
+
         }
 
 
@@ -2456,9 +2878,7 @@ async function sendAIMessage() {
 
     } catch (error) {
 
-        console.error(
-            error
-        );
+        console.error(error);
 
         addAIMessage(
             "I couldn't connect to my AI core.",
@@ -2484,8 +2904,7 @@ aiInput.addEventListener(
     event => {
 
         if (
-            event.key ===
-            "Enter"
+            event.key === "Enter"
         ) {
 
             sendAIMessage();

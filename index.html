@@ -10,466 +10,608 @@
 
 <style>
 * {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #05070a;
-  color: #eaf7ff;
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #05070a;
+  color: #eaf7ff;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
-  background:
-    radial-gradient(circle at 50% 45%, rgba(70,150,190,.10), transparent 35%),
-    #05070a;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(70,150,190,.10), transparent 35%),
+    #05070a;
 }
 
 body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  opacity: .08;
-  background-image:
-    linear-gradient(rgba(180,230,255,.5) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(180,230,255,.5) 1px, transparent 1px);
-  background-size: 45px 45px;
-  pointer-events: none;
+  content: "";
+  position: fixed;
+  inset: 0;
+  opacity: .07;
+  background-image:
+    linear-gradient(rgba(180,230,255,.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180,230,255,.5) 1px, transparent 1px);
+  background-size: 45px 45px;
+  pointer-events: none;
 }
 
 .system {
-  width: 100%;
-  height: 100%;
-  padding: 28px 34px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 28px 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
 }
 
 .system-title {
-  font-size: 12px;
-  letter-spacing: 4px;
-  opacity: .55;
+  font-size: 12px;
+  letter-spacing: 4px;
+  opacity: .5;
 }
 
 .system-name {
-  font-size: 20px;
-  letter-spacing: 3px;
-  margin-top: 6px;
+  font-size: 20px;
+  letter-spacing: 3px;
+  margin-top: 6px;
 }
 
 .clock {
-  text-align: right;
+  text-align: right;
 }
 
 .time {
-  font-size: 34px;
-  font-weight: 300;
-  letter-spacing: 2px;
+  font-size: 34px;
 }
 
 .date {
-  font-size: 11px;
-  letter-spacing: 2px;
-  opacity: .45;
-  margin-top: 4px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  opacity: .4;
+  margin-top: 4px;
 }
 
 .center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .scanner {
-  width: 270px;
-  height: 270px;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 270px;
+  height: 270px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .circle {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid rgba(190,235,255,.35);
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(190,235,255,.35);
 }
 
-.circle.one {
-  width: 245px;
-  height: 245px;
+.one {
+  width: 245px;
+  height: 245px;
 }
 
-.circle.two {
-  width: 205px;
-  height: 205px;
-  border-style: dashed;
-  opacity: .45;
-  animation: rotate 18s linear infinite;
+.two {
+  width: 205px;
+  height: 205px;
+  border-style: dashed;
+  opacity: .45;
+  animation: rotate 18s linear infinite;
 }
 
-.circle.three {
-  width: 155px;
-  height: 155px;
-  opacity: .5;
+.three {
+  width: 155px;
+  height: 155px;
 }
 
 @keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .corner {
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  border-color: #d9f5ff;
-  border-style: solid;
-  opacity: .8;
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-color: #d9f5ff;
+  border-style: solid;
 }
 
 .tl {
-  top: 5px;
-  left: 5px;
-  border-width: 2px 0 0 2px;
+  top: 5px;
+  left: 5px;
+  border-width: 2px 0 0 2px;
 }
 
 .tr {
-  top: 5px;
-  right: 5px;
-  border-width: 2px 2px 0 0;
+  top: 5px;
+  right: 5px;
+  border-width: 2px 2px 0 0;
 }
 
 .bl {
-  bottom: 5px;
-  left: 5px;
-  border-width: 0 0 2px 2px;
+  bottom: 5px;
+  left: 5px;
+  border-width: 0 0 2px 2px;
 }
 
 .br {
-  bottom: 5px;
-  right: 5px;
-  border-width: 0 2px 2px 0;
+  bottom: 5px;
+  right: 5px;
+  border-width: 0 2px 2px 0;
 }
 
 .scan {
-  position: absolute;
-  width: 190px;
-  height: 1px;
-  background: #d8f6ff;
-  box-shadow: 0 0 12px rgba(190,240,255,.9);
-  animation: scan 2.8s ease-in-out infinite;
+  position: absolute;
+  width: 190px;
+  height: 1px;
+  background: #d8f6ff;
+  box-shadow: 0 0 12px #d8f6ff;
+  animation: scan 2.8s ease-in-out infinite;
 }
 
 @keyframes scan {
-  0%, 100% {
-    transform: translateY(-90px);
-    opacity: .2;
-  }
+  0%,100% {
+    transform: translateY(-90px);
+    opacity: .2;
+  }
 
-  50% {
-    transform: translateY(90px);
-    opacity: 1;
-  }
+  50% {
+    transform: translateY(90px);
+    opacity: 1;
+  }
 }
 
-.center-label {
-  font-size: 13px;
-  letter-spacing: 5px;
-  margin-top: 20px;
+.status {
+  margin-top: 20px;
+  font-size: 13px;
+  letter-spacing: 5px;
 }
 
-.center-status {
-  font-size: 10px;
-  letter-spacing: 3px;
-  opacity: .45;
-  margin-top: 9px;
+.substatus {
+  margin-top: 9px;
+  font-size: 10px;
+  letter-spacing: 3px;
+  opacity: .4;
 }
 
 .panels {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  width: 100%;
-  max-width: 850px;
-  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 14px;
+  max-width: 850px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .panel {
-  border: 1px solid rgba(190,230,255,.14);
-  background: rgba(255,255,255,.025);
-  padding: 15px;
-  min-height: 72px;
+  border: 1px solid rgba(190,230,255,.14);
+  background: rgba(255,255,255,.025);
+  padding: 15px;
 }
 
 .panel-title {
-  font-size: 9px;
-  letter-spacing: 2px;
-  opacity: .4;
-  margin-bottom: 9px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  opacity: .4;
+  margin-bottom: 9px;
 }
 
 .panel-value {
-  font-size: 13px;
-  letter-spacing: 1px;
+  font-size: 13px;
+  letter-spacing: 1px;
 }
 
 .online {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #c9f3ff;
-  box-shadow: 0 0 8px rgba(190,240,255,.8);
-  margin-right: 7px;
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #c9f3ff;
+  box-shadow: 0 0 8px #c9f3ff;
+  margin-right: 7px;
 }
 
 .bottom {
-  display: flex;
-  justify-content: space-between;
-  font-size: 9px;
-  letter-spacing: 2px;
-  opacity: .35;
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  letter-spacing: 2px;
+  opacity: .3;
 }
 
-.welcome-screen {
-  position: fixed;
-  inset: 0;
-  background: #05070a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .5s ease;
-  z-index: 10;
+.welcome {
+  position: fixed;
+  inset: 0;
+  background: #05070a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s;
+  z-index: 5;
 }
 
-.welcome-screen.active {
-  opacity: 1;
+.welcome.show {
+  opacity: 1;
 }
 
-.welcome-small {
-  font-size: 11px;
-  letter-spacing: 5px;
-  opacity: .45;
-  margin-bottom: 18px;
+.w-small {
+  font-size: 11px;
+  letter-spacing: 5px;
+  opacity: .45;
 }
 
-.welcome-big {
-  font-size: 42px;
-  font-weight: 300;
-  letter-spacing: 8px;
+.w-big {
+  margin-top: 18px;
+  font-size: 42px;
+  letter-spacing: 8px;
 }
 
-.welcome-name {
-  margin-top: 14px;
-  font-size: 14px;
-  letter-spacing: 5px;
-  opacity: .65;
+.w-name {
+  margin-top: 15px;
+  font-size: 15px;
+  letter-spacing: 5px;
 }
 
 .access {
-  margin-top: 30px;
-  font-size: 10px;
-  letter-spacing: 4px;
-  opacity: .5;
+  margin-top: 30px;
+  font-size: 10px;
+  letter-spacing: 4px;
+  opacity: .5;
 }
 
-@media (max-width: 700px) {
-  .system {
-    padding: 20px;
-  }
+.activate {
+  position: fixed;
+  inset: 0;
+  background: #05070a;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
 
-  .panels {
-    grid-template-columns: 1fr;
-  }
+.activate.hidden {
+  display: none;
+}
 
-  .panel {
-    min-height: 55px;
-  }
+.activate-title {
+  font-size: 22px;
+  letter-spacing: 5px;
+}
 
-  .scanner {
-    transform: scale(.8);
-  }
+.activate-text {
+  margin-top: 14px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  opacity: .45;
+}
 
-  .welcome-big {
-    font-size: 27px;
-  }
+button {
+  margin-top: 28px;
+  padding: 15px 25px;
+  background: transparent;
+  color: #eaf7ff;
+  border: 1px solid rgba(220,245,255,.4);
+  font-size: 11px;
+  letter-spacing: 3px;
+}
+
+video,
+canvas {
+  display: none;
+}
+
+@media(max-width:700px) {
+  .system {
+    padding: 20px;
+  }
+
+  .panels {
+    grid-template-columns: 1fr;
+  }
+
+  .scanner {
+    transform: scale(.8);
+  }
+
+  .w-big {
+    font-size: 27px;
+  }
 }
 </style>
 </head>
 
 <body>
 
+<div class="activate" id="activate">
+  <div class="activate-title">JARVIS // CORE</div>
+  <div class="activate-text">PROXIMITY SENSOR OFFLINE</div>
+  <button id="activateButton">ACTIVATE SENSOR</button>
+</div>
+
 <div class="system">
 
-  <div class="topbar">
+  <div class="topbar">
+    <div>
+      <div class="system-title">PERSONAL INTERFACE</div>
+      <div class="system-name">JARVIS // CORE</div>
+    </div>
 
-    <div>
-      <div class="system-title">PERSONAL INTERFACE</div>
-      <div class="system-name">JARVIS // CORE</div>
-    </div>
+    <div class="clock">
+      <div class="time" id="time">--:--</div>
+      <div class="date" id="date">---</div>
+    </div>
+  </div>
 
-    <div class="clock">
-      <div class="time" id="time">--:--</div>
-      <div class="date" id="date">---</div>
-    </div>
+  <div class="center">
 
-  </div>
+    <div class="scanner">
 
-  <div class="center">
+      <div class="circle one"></div>
+      <div class="circle two"></div>
+      <div class="circle three"></div>
 
-    <div class="scanner">
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
 
-      <div class="circle one"></div>
-      <div class="circle two"></div>
-      <div class="circle three"></div>
+      <div class="scan"></div>
 
-      <div class="corner tl"></div>
-      <div class="corner tr"></div>
-      <div class="corner bl"></div>
-      <div class="corner br"></div>
+    </div>
 
-      <div class="scan"></div>
+    <div class="status" id="status">
+      SYSTEM READY
+    </div>
 
-    </div>
+    <div class="substatus" id="substatus">
+      MONITORING ENVIRONMENT
+    </div>
 
-    <div class="center-label" id="mainStatus">
-      SYSTEM READY
-    </div>
+  </div>
 
-    <div class="center-status">
-      AWAITING USER
-    </div>
+  <div class="panels">
 
-  </div>
+    <div class="panel">
+      <div class="panel-title">CORE STATUS</div>
+      <div class="panel-value">
+        <span class="online"></span>ONLINE
+      </div>
+    </div>
 
-  <div class="panels">
+    <div class="panel">
+      <div class="panel-title">SECURITY</div>
+      <div class="panel-value">AUTHENTICATION READY</div>
+    </div>
 
-    <div class="panel">
-      <div class="panel-title">CORE STATUS</div>
-      <div class="panel-value">
-        <span class="online"></span>
-        ONLINE
-      </div>
-    </div>
+    <div class="panel">
+      <div class="panel-title">SENSOR</div>
+      <div class="panel-value" id="sensorStatus">OFFLINE</div>
+    </div>
 
-    <div class="panel">
-      <div class="panel-title">SECURITY</div>
-      <div class="panel-value">
-        AUTHENTICATION READY
-      </div>
-    </div>
+  </div>
 
-    <div class="panel">
-      <div class="panel-title">NETWORK</div>
-      <div class="panel-value">
-        CONNECTED
-      </div>
-    </div>
-
-  </div>
-
-  <div class="bottom">
-    <div>JARVIS CORE 01</div>
-    <div>LOCAL SYSTEM</div>
-    <div>v1.0</div>
-  </div>
+  <div class="bottom">
+    <div>JARVIS CORE 01</div>
+    <div>LOCAL SYSTEM</div>
+    <div>v2.0</div>
+  </div>
 
 </div>
 
-<div class="welcome-screen" id="welcomeScreen">
+<div class="welcome" id="welcome">
 
-  <div class="welcome-small">
-    IDENTITY VERIFIED
-  </div>
+  <div class="w-small">IDENTITY VERIFIED</div>
 
-  <div class="welcome-big">
-    WELCOME BACK
-  </div>
+  <div class="w-big">WELCOME BACK</div>
 
-  <div class="welcome-name">
-    BLAKE
-  </div>
+  <div class="w-name">BLAKE</div>
 
-  <div class="access">
-    ACCESS GRANTED
-  </div>
+  <div class="access">ACCESS GRANTED</div>
 
 </div>
+
+<video id="camera" autoplay playsinline muted></video>
+<canvas id="canvas"></canvas>
 
 <script>
 
+const video = document.getElementById("camera");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const activate = document.getElementById("activate");
+const button = document.getElementById("activateButton");
+const status = document.getElementById("status");
+const substatus = document.getElementById("substatus");
+const sensorStatus = document.getElementById("sensorStatus");
+const welcome = document.getElementById("welcome");
+
 function updateClock() {
 
-  const now = new Date();
+  const now = new Date();
 
-  document.getElementById("time").textContent =
-    now.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
+  document.getElementById("time").textContent =
+    now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
 
-  document.getElementById("date").textContent =
-    now.toLocaleDateString([], {
-      weekday: "long",
-      month: "long",
-      day: "numeric"
-    }).toUpperCase();
-
+  document.getElementById("date").textContent =
+    now.toLocaleDateString([], {
+      weekday: "long",
+      month: "long",
+      day: "numeric"
+    }).toUpperCase();
 }
 
 updateClock();
-
 setInterval(updateClock, 1000);
+
+
+let previousFrame = null;
+let scanning = false;
+let lastTrigger = 0;
+
+
+async function activateCamera() {
+
+  try {
+
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: "user",
+        width: { ideal: 640 },
+        height: { ideal: 480 }
+      },
+      audio: false
+    });
+
+    video.srcObject = stream;
+
+    activate.classList.add("hidden");
+
+    sensorStatus.textContent = "ONLINE";
+
+    status.textContent = "SYSTEM READY";
+    substatus.textContent = "MONITORING ENVIRONMENT";
+
+    startDetection();
+
+  } catch (error) {
+
+    button.textContent = "CAMERA ACCESS FAILED";
+
+    substatus.textContent =
+      "CHECK SAFARI CAMERA PERMISSIONS";
+
+  }
+}
+
+
+button.addEventListener("click", activateCamera);
+
+
+function startDetection() {
+
+  canvas.width = 160;
+  canvas.height = 120;
+
+  setTimeout(checkFrame, 1500);
+}
+
+
+function checkFrame() {
+
+  if (!video.videoWidth) {
+    requestAnimationFrame(checkFrame);
+    return;
+  }
+
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  const current =
+    ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+  if (previousFrame) {
+
+    let difference = 0;
+
+    for (let i = 0; i < current.data.length; i += 16) {
+
+      difference += Math.abs(
+        current.data[i] -
+        previousFrame.data[i]
+      );
+
+    }
+
+    difference =
+      difference / (current.data.length / 16);
+
+    if (
+      difference > 18 &&
+      !scanning &&
+      Date.now() - lastTrigger > 10000
+    ) {
+
+      runScan();
+
+    }
+  }
+
+  previousFrame = current;
+
+  requestAnimationFrame(checkFrame);
+}
 
 
 function runScan() {
 
-  const status =
-    document.getElementById("mainStatus");
+  scanning = true;
+  lastTrigger = Date.now();
 
-  const welcome =
-    document.getElementById("welcomeScreen");
+  status.textContent = "MOTION DETECTED";
+  substatus.textContent = "ANALYZING SUBJECT";
 
-  status.textContent = "SCANNING...";
+  setTimeout(() => {
 
-  setTimeout(function() {
-    status.textContent = "IDENTITY VERIFIED";
-  }, 1800);
+    status.textContent = "SCANNING...";
+    substatus.textContent = "IDENTITY ANALYSIS";
 
-  setTimeout(function() {
-    welcome.classList.add("active");
-  }, 2600);
+  }, 900);
 
-  setTimeout(function() {
-    welcome.classList.remove("active");
-    status.textContent = "SYSTEM READY";
-  }, 5200);
+  setTimeout(() => {
+
+    status.textContent = "IDENTITY VERIFIED";
+    substatus.textContent = "ACCESS AUTHORIZED";
+
+  }, 2200);
+
+  setTimeout(() => {
+
+    welcome.classList.add("show");
+
+  }, 2700);
+
+  setTimeout(() => {
+
+    welcome.classList.remove("show");
+
+  }, 5200);
+
+  setTimeout(() => {
+
+    status.textContent = "SYSTEM READY";
+    substatus.textContent = "MONITORING ENVIRONMENT";
+    scanning = false;
+
+  }, 5700);
 
 }
-
-document.addEventListener("click", runScan);
 
 </script>
 

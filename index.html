@@ -484,6 +484,53 @@ updateClock();
 
 setInterval(updateClock, 1000);
 
+
+/* CAMERA TEST */
+
+async function startCamera() {
+
+    try {
+
+        const stream =
+            await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            });
+
+        console.log("JARVIS CAMERA ONLINE");
+
+        /*
+        We don't display the camera.
+        The HUD stays visible.
+        */
+
+        const video =
+            document.createElement("video");
+
+        video.srcObject = stream;
+
+        video.setAttribute("playsinline", "");
+        video.muted = true;
+
+        await video.play();
+
+        console.log("CAMERA SENSOR ACTIVE");
+
+    }
+
+    catch(error) {
+
+        console.log(
+            "Camera permission was not granted:",
+            error
+        );
+
+    }
+}
+
+
+startCamera();
+
 </script>
 
 </body>

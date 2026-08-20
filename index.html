@@ -1,1145 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>JARVIS</title>
 
+<!-- MediaPipe Face Mesh -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+
 <style>
+*{box-sizing:border-box}
 
-* {
-    box-sizing: border-box;
+html,body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#020810;
+    color:#aeeeff;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #020810;
-    color: #aeeeff;
-    font-family: Arial, Helvetica, sans-serif;
+body{
+    background:radial-gradient(circle at center,rgba(0,150,255,.20),#020810 70%);
 }
 
-body {
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(0,150,255,.20),
-            #020810 70%
-        );
-}
-
-/* =========================
-   BACKGROUND
-========================= */
-
-.grid {
-    position: fixed;
-    inset: 0;
-
+.grid{
+    position:fixed;
+    inset:0;
     background-image:
-        linear-gradient(
-            rgba(50,190,255,.10) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            90deg,
-            rgba(50,190,255,.10) 1px,
-            transparent 1px
-        );
+        linear-gradient(rgba(50,190,255,.10) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(50,190,255,.10) 1px,transparent 1px);
+    background-size:45px 45px;
+}
 
-    background-size: 45px 45px;
+.main{
+    position:relative;
+    z-index:2;
+    width:100%;
+    height:100%;
+    padding:25px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+}
+
+.system{
+    font-size:10px;
+    letter-spacing:4px;
+    opacity:.45;
+}
+
+.logo{
+    margin-top:7px;
+    font-size:24px;
+    letter-spacing:6px;
+    text-shadow:0 0 15px rgba(80,220,255,.7);
+}
+
+.clock{text-align:right}
+.time{font-size:30px}
+
+.date{
+    margin-top:5px;
+    font-size:9px;
+    letter-spacing:2px;
+    opacity:.4;
+}
+
+.center{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 }
 
 /* =========================
-   MAIN SYSTEM
+   FACE SCANNER
 ========================= */
 
-.main {
-    position: relative;
-    z-index: 2;
-
-    width: 100%;
-    height: 100%;
-
-    padding: 25px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-}
-
-.system {
-    font-size: 10px;
-    letter-spacing: 4px;
-    opacity: .45;
-}
-
-.logo {
-    margin-top: 7px;
-
-    font-size: 24px;
-    letter-spacing: 6px;
-
-    text-shadow:
-        0 0 15px
-        rgba(80,220,255,.7);
-}
-
-.clock {
-    text-align: right;
-}
-
-.time {
-    font-size: 30px;
-}
-
-.date {
-    margin-top: 5px;
-
-    font-size: 9px;
-    letter-spacing: 2px;
-
-    opacity: .4;
-}
-
-/* =========================
-   CAMERA SCANNER
-========================= */
-
-.center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.cameraScanner {
-
-    position: relative;
-
-    width: min(680px, 90vw);
-    height: min(390px, 52vh);
-
-    overflow: hidden;
-
-    background: #001018;
-
-    border:
-        1px solid
-        rgba(70,230,180,.65);
-
+.faceScanner{
+    position:relative;
+    width:250px;
+    height:190px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:#010b12;
+    border:1px solid rgba(90,220,255,.5);
     box-shadow:
-        0 0 20px rgba(0,255,170,.12),
-        inset 0 0 50px rgba(0,255,170,.05);
-
+        0 0 20px rgba(0,170,255,.15),
+        inset 0 0 30px rgba(0,170,255,.08);
 }
 
-/* LIVE CAMERA */
-
-#cameraFeed {
-
-    position: absolute;
-
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    transform: scaleX(-1);
-
-    opacity: .82;
-
-    filter:
-        contrast(1.08)
-        brightness(.72)
-        saturate(.75);
+/* Camera image */
+#cameraVideo{
+    position:absolute;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:scaleX(-1);
+    opacity:.75;
 }
 
-/* GREEN MESH */
-
-.cameraMesh {
-
-    position: absolute;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    background-image:
-
-        linear-gradient(
-            rgba(0,255,150,.13) 1px,
-            transparent 1px
-        ),
-
-        linear-gradient(
-            90deg,
-            rgba(0,255,150,.13) 1px,
-            transparent 1px
-        );
-
-    background-size: 28px 28px;
-
-    mix-blend-mode: screen;
-
-    opacity: .8;
+/* Face mesh canvas */
+#faceCanvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    transform:scaleX(-1);
+    pointer-events:none;
 }
 
-/* GREEN TINT */
-
-.cameraTint {
-
-    position: absolute;
-
-    inset: 0;
-
-    background:
-        linear-gradient(
-            rgba(0,255,150,.08),
-            rgba(0,255,150,.03)
-        );
-
-    pointer-events: none;
+/* Scanner corners */
+.scannerCorner{
+    position:absolute;
+    width:25px;
+    height:25px;
+    border:2px solid #7de5ff;
+    z-index:5;
 }
 
-/* SCAN LINE */
+.scannerTL{
+    top:6px;
+    left:6px;
+    border-right:0;
+    border-bottom:0;
+}
 
-.cameraScanLine {
+.scannerTR{
+    top:6px;
+    right:6px;
+    border-left:0;
+    border-bottom:0;
+}
 
-    position: absolute;
+.scannerBL{
+    bottom:6px;
+    left:6px;
+    border-right:0;
+    border-top:0;
+}
 
-    left: 0;
-    right: 0;
+.scannerBR{
+    bottom:6px;
+    right:6px;
+    border-left:0;
+    border-top:0;
+}
 
-    height: 3px;
-
-    background: #45ffae;
-
+/* Thin scanning line */
+.faceScanLine{
+    position:absolute;
+    left:8px;
+    right:8px;
+    height:2px;
+    background:#57ff91;
     box-shadow:
-        0 0 8px #45ffae,
-        0 0 25px #00ff91;
-
-    animation:
-        cameraScan 3s ease-in-out infinite;
-
-    opacity: .9;
-
-    pointer-events: none;
+        0 0 8px #57ff91,
+        0 0 20px #00ff66;
+    opacity:.7;
+    animation:faceScan 2.5s ease-in-out infinite;
+    z-index:6;
 }
 
-@keyframes cameraScan {
-
-    0% {
-        top: 5%;
-        opacity: .15;
-    }
-
-    50% {
-        top: 92%;
-        opacity: 1;
-    }
-
-    100% {
-        top: 5%;
-        opacity: .15;
-    }
+@keyframes faceScan{
+    0%,100%{top:12%;opacity:.2}
+    50%{top:88%;opacity:1}
 }
 
-/* CAMERA CORNERS */
-
-.cameraCorner {
-
-    position: absolute;
-
-    width: 45px;
-    height: 45px;
-
-    border-color: #54ffb4;
-    border-style: solid;
-
-    filter:
-        drop-shadow(
-            0 0 5px
-            rgba(0,255,150,.7)
-        );
-
-}
-
-.cameraTL {
-    top: 14px;
-    left: 14px;
-
-    border-width: 3px 0 0 3px;
-}
-
-.cameraTR {
-    top: 14px;
-    right: 14px;
-
-    border-width: 3px 3px 0 0;
-}
-
-.cameraBL {
-    bottom: 14px;
-    left: 14px;
-
-    border-width: 0 0 3px 3px;
-}
-
-.cameraBR {
-    bottom: 14px;
-    right: 14px;
-
-    border-width: 0 3px 3px 0;
-}
-
-/* FACE SCAN BOX */
-
-.faceScanner {
-
-    position: absolute;
-
-    left: 50%;
-    top: 50%;
-
-    width: 150px;
-    height: 190px;
-
-    transform:
-        translate(-50%, -50%);
-
-    border:
-        1px solid
-        rgba(70,255,170,.75);
-
+/* Green face detection glow */
+.faceDetected{
     box-shadow:
-        0 0 20px
-        rgba(0,255,150,.12);
-
-    opacity: .8;
-
-    animation:
-        facePulse 2s ease-in-out infinite;
+        0 0 15px rgba(50,255,120,.35),
+        0 0 40px rgba(50,255,120,.15),
+        inset 0 0 25px rgba(50,255,120,.12);
 }
 
-@keyframes facePulse {
-
-    0%, 100% {
-        opacity: .45;
-        transform:
-            translate(-50%, -50%)
-            scale(.96);
-    }
-
-    50% {
-        opacity: 1;
-        transform:
-            translate(-50%, -50%)
-            scale(1.02);
-    }
+.status{
+    margin-top:12px;
+    font-size:14px;
+    letter-spacing:5px;
 }
 
-/* FACE BOX CORNERS */
-
-.faceScanner::before,
-.faceScanner::after {
-
-    content: "";
-
-    position: absolute;
-
-    inset: -1px;
-
-    border:
-        3px solid
-        transparent;
-
-    pointer-events: none;
+.substatus{
+    margin-top:8px;
+    font-size:9px;
+    letter-spacing:3px;
+    opacity:.4;
 }
 
-.faceScanner::before {
-
-    border-left-color: #55ffb5;
-    border-top-color: #55ffb5;
+.panels{
+    width:100%;
+    max-width:900px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
 }
 
-.faceScanner::after {
-
-    border-right-color: #55ffb5;
-    border-bottom-color: #55ffb5;
+.panel{
+    padding:14px;
+    border:1px solid rgba(80,210,255,.2);
+    background:rgba(0,100,160,.06);
 }
 
-/* CAMERA LABELS */
-
-.cameraLabel {
-
-    position: absolute;
-
-    font-size: 8px;
-
-    letter-spacing: 2px;
-
-    color: #64ffba;
-
-    text-shadow:
-        0 0 8px
-        rgba(0,255,150,.8);
-
+.panel-title{
+    font-size:8px;
+    letter-spacing:2px;
+    opacity:.4;
 }
 
-.cameraTopLeft {
-    top: 20px;
-    left: 70px;
-}
-
-.cameraTopRight {
-    top: 20px;
-    right: 70px;
-}
-
-.cameraBottomLeft {
-    bottom: 20px;
-    left: 70px;
-}
-
-.cameraBottomRight {
-    bottom: 20px;
-    right: 70px;
-}
-
-/* CAMERA OFF */
-
-.cameraOffline {
-
-    position: absolute;
-
-    inset: 0;
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    text-align: center;
-
-    background:
-        rgba(0,10,15,.92);
-
-    color: #62ffb9;
-
-    font-size: 10px;
-
-    letter-spacing: 3px;
-}
-
-.cameraOffline.show {
-    display: flex;
-}
-
-/* STATUS */
-
-.status {
-    margin-top: 14px;
-
-    font-size: 14px;
-
-    letter-spacing: 5px;
-
-    color: #b9f5ff;
-
-    text-shadow:
-        0 0 10px
-        rgba(80,220,255,.5);
-}
-
-.substatus {
-    margin-top: 8px;
-
-    font-size: 9px;
-
-    letter-spacing: 3px;
-
-    opacity: .4;
-}
-
-/* =========================
-   PANELS
-========================= */
-
-.panels {
-
-    width: 100%;
-
-    max-width: 900px;
-
-    margin: auto;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 12px;
-}
-
-.panel {
-
-    padding: 14px;
-
-    border:
-        1px solid
-        rgba(80,210,255,.2);
-
-    background:
-        rgba(0,100,160,.06);
-}
-
-.panel-title {
-    font-size: 8px;
-    letter-spacing: 2px;
-    opacity: .4;
-}
-
-.panel-value {
-    margin-top: 10px;
-    font-size: 11px;
+.panel-value{
+    margin-top:10px;
+    font-size:11px;
 }
 
 /* =========================
    WELCOME SCREEN
 ========================= */
 
-#jarvisConsole {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 50;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(0,150,255,.18),
-            #020810 65%
-        );
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition:
-        opacity .6s;
+#jarvisConsole{
+    position:fixed;
+    inset:0;
+    z-index:50;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:radial-gradient(circle at center,rgba(0,150,255,.18),#020810 65%);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .6s;
 }
 
-#jarvisConsole.open {
-    opacity: 1;
-    pointer-events: auto;
+#jarvisConsole.open{
+    opacity:1;
+    pointer-events:auto;
 }
 
-.consoleGrid {
-
-    position: absolute;
-
-    inset: 0;
-
+.consoleGrid{
+    position:absolute;
+    inset:0;
     background-image:
-
-        linear-gradient(
-            rgba(50,190,255,.12) 1px,
-            transparent 1px
-        ),
-
-        linear-gradient(
-            90deg,
-            rgba(50,190,255,.12) 1px,
-            transparent 1px
-        );
-
-    background-size: 45px 45px;
-
-    opacity: .3;
+        linear-gradient(rgba(50,190,255,.12) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(50,190,255,.12) 1px,transparent 1px);
+    background-size:45px 45px;
+    opacity:.3;
 }
 
-.consoleCore {
-
-    position: relative;
-
-    width: 220px;
-    height: 220px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
+.consoleCore{
+    position:relative;
+    width:220px;
+    height:220px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
-.consoleRing {
-
-    position: absolute;
-
-    border-radius: 50%;
-
-    border:
-        1px solid
-        rgba(90,220,255,.6);
+.consoleRing{
+    position:absolute;
+    border-radius:50%;
+    border:1px solid rgba(90,220,255,.6);
 }
 
-.ringA {
-
-    width: 210px;
-    height: 210px;
-
-    animation:
-        spin 12s linear infinite;
+.ringA{
+    width:210px;
+    height:210px;
+    animation:spin 12s linear infinite;
 }
 
-.ringB {
-
-    width: 165px;
-    height: 165px;
-
-    border-style: dashed;
-
-    animation:
-        spinReverse 8s linear infinite;
+.ringB{
+    width:165px;
+    height:165px;
+    border-style:dashed;
+    animation:spinReverse 8s linear infinite;
 }
 
-.ringC {
-
-    width: 110px;
-    height: 110px;
-
-    animation:
-        pulse 2s infinite;
+.ringC{
+    width:110px;
+    height:110px;
+    animation:pulse 2s infinite;
 }
 
-.consoleDot {
-
-    width: 14px;
-    height: 14px;
-
-    border-radius: 50%;
-
-    background: white;
-
-    box-shadow:
-        0 0 15px white,
-        0 0 35px #22c8ff,
-        0 0 60px #008bd0;
+.consoleDot{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:white;
+    box-shadow:0 0 15px white,0 0 35px #22c8ff,0 0 60px #008bd0;
 }
 
-@keyframes spin {
-
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
+@keyframes spin{
+    from{transform:rotate(0deg)}
+    to{transform:rotate(360deg)}
 }
 
-@keyframes spinReverse {
-
-    from {
-        transform: rotate(360deg);
-    }
-
-    to {
-        transform: rotate(0deg);
-    }
+@keyframes spinReverse{
+    from{transform:rotate(360deg)}
+    to{transform:rotate(0deg)}
 }
 
-@keyframes pulse {
-
-    0%, 100% {
-        transform: scale(.9);
-        opacity: .4;
-    }
-
-    50% {
-        transform: scale(1.08);
-        opacity: 1;
-    }
+@keyframes pulse{
+    0%,100%{transform:scale(.9);opacity:.4}
+    50%{transform:scale(1.08);opacity:1}
 }
 
-.consoleStatus {
-
-    position: relative;
-
-    margin-top: 25px;
-
-    font-size: 10px;
-
-    letter-spacing: 5px;
-
-    opacity: .5;
+.consoleStatus{
+    position:relative;
+    margin-top:25px;
+    font-size:10px;
+    letter-spacing:5px;
+    opacity:.5;
 }
 
-.consoleWelcome {
-
-    position: relative;
-
-    margin-top: 15px;
-
-    font-size: 34px;
-
-    letter-spacing: 7px;
-
-    text-shadow:
-        0 0 20px
-        rgba(80,220,255,.7);
+.consoleWelcome{
+    position:relative;
+    margin-top:15px;
+    font-size:34px;
+    letter-spacing:7px;
+    text-shadow:0 0 20px rgba(80,220,255,.7);
 }
 
-.consoleName {
-
-    position: relative;
-
-    margin-top: 10px;
-
-    font-size: 15px;
-
-    letter-spacing: 6px;
+.consoleName{
+    position:relative;
+    margin-top:10px;
+    font-size:15px;
+    letter-spacing:6px;
 }
 
-.consoleMessage {
-
-    position: relative;
-
-    margin-top: 35px;
-
-    width: 80%;
-
-    max-width: 650px;
-
-    padding: 20px;
-
-    border:
-        1px solid
-        rgba(80,210,255,.25);
-
-    background:
-        rgba(0,100,160,.08);
-
-    text-align: center;
-
-    font-size: 12px;
-
-    letter-spacing: 2px;
-
-    line-height: 1.8;
+.consoleMessage{
+    position:relative;
+    margin-top:35px;
+    width:80%;
+    max-width:650px;
+    padding:20px;
+    border:1px solid rgba(80,210,255,.25);
+    background:rgba(0,100,160,.08);
+    text-align:center;
+    font-size:12px;
+    letter-spacing:2px;
+    line-height:1.8;
 }
 
-.jarvisButton {
-
-    position: relative;
-
-    margin-top: 12px;
-
-    padding: 12px 20px;
-
-    border:
-        1px solid
-        rgba(100,220,255,.4);
-
-    background:
-        rgba(0,100,160,.12);
-
-    color: #aeeeff;
-
-    font-size: 9px;
-
-    letter-spacing: 3px;
-
-    cursor: pointer;
+.jarvisButton{
+    position:relative;
+    margin-top:12px;
+    padding:12px 20px;
+    border:1px solid rgba(100,220,255,.4);
+    background:rgba(0,100,160,.12);
+    color:#aeeeff;
+    font-size:9px;
+    letter-spacing:3px;
+    cursor:pointer;
 }
 
 /* =========================
    AI SCREEN
 ========================= */
 
-#aiScreen {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 100;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(0,150,255,.18),
-            #020810 70%
-        );
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition:
-        opacity .5s;
-
-    padding: 25px;
+#aiScreen{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    background:radial-gradient(circle at center,rgba(0,150,255,.18),#020810 70%);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .5s;
+    padding:25px;
 }
 
-#aiScreen.open {
-
-    opacity: 1;
-
-    pointer-events: auto;
+#aiScreen.open{
+    opacity:1;
+    pointer-events:auto;
 }
 
-.aiGrid {
-
-    position: absolute;
-
-    inset: 0;
-
+.aiGrid{
+    position:absolute;
+    inset:0;
     background-image:
-
-        linear-gradient(
-            rgba(50,190,255,.10) 1px,
-            transparent 1px
-        ),
-
-        linear-gradient(
-            90deg,
-            rgba(50,190,255,.10) 1px,
-            transparent 1px
-        );
-
-    background-size: 45px 45px;
+        linear-gradient(rgba(50,190,255,.10) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(50,190,255,.10) 1px,transparent 1px);
+    background-size:45px 45px;
 }
 
-.aiHeader {
-
-    position: relative;
-
-    z-index: 2;
-
-    width: 100%;
-
-    display: flex;
-
-    justify-content:
-        space-between;
+.aiHeader{
+    position:relative;
+    z-index:2;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
 }
 
-.aiSmall {
-
-    font-size: 9px;
-
-    letter-spacing: 3px;
-
-    opacity: .4;
+.aiSmall{
+    font-size:9px;
+    letter-spacing:3px;
+    opacity:.4;
 }
 
-.aiTitle {
-
-    margin-top: 5px;
-
-    font-size: 28px;
-
-    letter-spacing: 6px;
-
-    text-shadow:
-        0 0 20px
-        rgba(70,220,255,.7);
+.aiTitle{
+    margin-top:5px;
+    font-size:28px;
+    letter-spacing:6px;
+    text-shadow:0 0 20px rgba(70,220,255,.7);
 }
 
-.aiStatus {
-
-    font-size: 9px;
-
-    letter-spacing: 3px;
+.aiStatus{
+    font-size:9px;
+    letter-spacing:3px;
 }
 
-/* AI ORB */
-
-.aiOrb {
-
-    position: relative;
-
-    width: 210px;
-    height: 210px;
-
-    margin-top: 10px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
+.aiOrb{
+    position:relative;
+    width:210px;
+    height:210px;
+    margin-top:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
-.aiRing {
-
-    position: absolute;
-
-    border-radius: 50%;
-
-    border:
-        1px solid
-        rgba(70,210,255,.5);
+.aiRing{
+    position:absolute;
+    border-radius:50%;
+    border:1px solid rgba(70,210,255,.5);
 }
 
-.aiRing1 {
-
-    width: 200px;
-    height: 200px;
-
-    animation:
-        spin 12s linear infinite;
+.aiRing1{
+    width:200px;
+    height:200px;
+    animation:spin 12s linear infinite;
 }
 
-.aiRing2 {
-
-    width: 155px;
-    height: 155px;
-
-    border-style: dashed;
-
-    animation:
-        spinReverse 8s linear infinite;
+.aiRing2{
+    width:155px;
+    height:155px;
+    border-style:dashed;
+    animation:spinReverse 8s linear infinite;
 }
 
-.aiRing3 {
-
-    width: 105px;
-    height: 105px;
-
-    animation:
-        pulse 2s infinite;
+.aiRing3{
+    width:105px;
+    height:105px;
+    animation:pulse 2s infinite;
 }
 
-.aiCore {
-
-    width: 20px;
-    height: 20px;
-
-    border-radius: 50%;
-
-    background: white;
-
-    box-shadow:
-        0 0 15px white,
-        0 0 35px #21caff,
-        0 0 70px #008bd0;
+.aiCore{
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    background:white;
+    box-shadow:0 0 15px white,0 0 35px #21caff,0 0 70px #008bd0;
 }
 
-/* =========================
-   CHAT
-========================= */
-
-.aiMessages {
-
-    position: relative;
-
-    z-index: 2;
-
-    width: 100%;
-
-    max-width: 700px;
-
-    flex: 1;
-
-    overflow-y: auto;
-
-    padding: 10px 5px;
+.aiMessages{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:700px;
+    flex:1;
+    overflow-y:auto;
+    padding:10px 5px;
 }
 
-.aiMessage {
-
-    padding: 13px 16px;
-
-    margin-bottom: 12px;
-
-    border:
-        1px solid
-        rgba(70,210,255,.2);
-
-    background:
-        rgba(0,100,160,.08);
-
-    font-size: 12px;
-
-    line-height: 1.6;
+.aiMessage{
+    padding:13px 16px;
+    margin-bottom:12px;
+    border:1px solid rgba(70,210,255,.2);
+    background:rgba(0,100,160,.08);
+    font-size:12px;
+    line-height:1.6;
 }
 
-.jarvisMessage {
-    border-left:
-        2px solid
-        #5edcff;
+.jarvisMessage{
+    border-left:2px solid #5edcff;
 }
 
-.userMessage {
-
-    border-right:
-        2px solid
-        #5edcff;
-
-    text-align: right;
+.userMessage{
+    border-right:2px solid #5edcff;
+    text-align:right;
 }
 
-/* =========================
-   INPUT
-========================= */
-
-.aiInputArea {
-
-    position: relative;
-
-    z-index: 2;
-
-    width: 100%;
-
-    max-width: 700px;
-
-    display: flex;
-
-    gap: 8px;
+.aiInputArea{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:700px;
+    display:flex;
+    gap:8px;
 }
 
-#aiInput {
-
-    flex: 1;
-
-    padding: 15px;
-
-    border:
-        1px solid
-        rgba(70,210,255,.3);
-
-    outline: none;
-
-    background:
-        rgba(0,50,80,.5);
-
-    color:
-        #bdf2ff;
-
-    font-size: 12px;
+#aiInput{
+    flex:1;
+    padding:15px;
+    border:1px solid rgba(70,210,255,.3);
+    outline:none;
+    background:rgba(0,50,80,.5);
+    color:#bdf2ff;
+    font-size:12px;
 }
 
-#aiInput::placeholder {
-    color:
-        rgba(160,230,255,.4);
+#aiInput::placeholder{
+    color:rgba(160,230,255,.4);
 }
 
-#aiSend,
-#aiMic,
-#aiBack {
-
-    border:
-        1px solid
-        rgba(70,210,255,.35);
-
-    background:
-        rgba(0,100,160,.12);
-
-    color:
-        #aeeeff;
-
-    cursor: pointer;
-
-    letter-spacing: 2px;
+#aiSend,#aiMic,#aiBack{
+    border:1px solid rgba(70,210,255,.35);
+    background:rgba(0,100,160,.12);
+    color:#aeeeff;
+    cursor:pointer;
+    letter-spacing:2px;
 }
 
-#aiSend,
-#aiMic {
-    padding: 0 16px;
+#aiSend,#aiMic{
+    padding:0 16px;
 }
 
-#aiBack {
-
-    position: relative;
-
-    z-index: 2;
-
-    margin-top: 12px;
-
-    margin-bottom: 10px;
-
-    padding:
-        10px 20px;
-
-    font-size: 9px;
+#aiBack{
+    position:relative;
+    z-index:2;
+    margin-top:12px;
+    margin-bottom:10px;
+    padding:10px 20px;
+    font-size:9px;
 }
 
-/* =========================
-   MOBILE
-========================= */
+@media(max-width:700px){
+    .main{padding:18px}
 
-@media(max-width:700px) {
-
-    .main {
-        padding: 18px;
+    .faceScanner{
+        width:230px;
+        height:175px;
     }
 
-    .cameraScanner {
-
-        width: 94vw;
-
-        height: 42vh;
-
+    .panels{
+        grid-template-columns:1fr;
+        gap:7px;
     }
 
-    .faceScanner {
+    .panel{padding:9px}
 
-        width: 120px;
-        height: 155px;
-
-    }
-
-    .panels {
-
-        grid-template-columns:
-            1fr;
-
-        gap: 7px;
-    }
-
-    .panel {
-        padding: 9px;
-    }
-
-    .consoleWelcome {
-        font-size: 25px;
-    }
-
-    .cameraLabel {
-        font-size: 7px;
-    }
-
+    .consoleWelcome{font-size:25px}
 }
-
 </style>
 </head>
 
@@ -1147,227 +560,109 @@ body {
 
 <div class="grid"></div>
 
-<!-- MAIN SYSTEM -->
-
 <div class="main">
 
     <div class="header">
 
         <div>
-
-            <div class="system">
-                PERSONAL INTERFACE
-            </div>
-
-            <div class="logo">
-                JARVIS // CORE
-            </div>
-
+            <div class="system">PERSONAL INTERFACE</div>
+            <div class="logo">JARVIS // CORE</div>
         </div>
 
         <div class="clock">
-
-            <div
-                class="time"
-                id="time">
-                --:--
-            </div>
-
-            <div
-                class="date"
-                id="date">
-                ---
-            </div>
-
+            <div class="time" id="time">--:--</div>
+            <div class="date" id="date">---</div>
         </div>
 
     </div>
-
 
     <div class="center">
 
-        <!-- CAMERA SCANNER -->
+        <!-- SMALL CAMERA / FACE SCANNER -->
+        <div class="faceScanner" id="faceScanner">
 
-        <div class="cameraScanner">
+            <video id="cameraVideo" autoplay playsinline muted></video>
 
-            <video
-                id="cameraFeed"
-                autoplay
-                playsinline
-                muted>
-            </video>
+            <canvas id="faceCanvas"></canvas>
 
-            <div class="cameraMesh"></div>
+            <div class="scannerCorner scannerTL"></div>
+            <div class="scannerCorner scannerTR"></div>
+            <div class="scannerCorner scannerBL"></div>
+            <div class="scannerCorner scannerBR"></div>
 
-            <div class="cameraTint"></div>
-
-            <div class="cameraScanLine"></div>
-
-            <div class="cameraCorner cameraTL"></div>
-            <div class="cameraCorner cameraTR"></div>
-            <div class="cameraCorner cameraBL"></div>
-            <div class="cameraCorner cameraBR"></div>
-
-            <div class="faceScanner"></div>
-
-            <div class="cameraLabel cameraTopLeft">
-                VISUAL SENSOR
-            </div>
-
-            <div class="cameraLabel cameraTopRight">
-                LIVE FEED
-            </div>
-
-            <div class="cameraLabel cameraBottomLeft">
-                FACE SCAN ACTIVE
-            </div>
-
-            <div class="cameraLabel cameraBottomRight">
-                JARVIS VISION
-            </div>
-
-            <div
-                id="cameraOffline"
-                class="cameraOffline">
-
-                CAMERA UNAVAILABLE
-
-            </div>
+            <div class="faceScanLine"></div>
 
         </div>
 
-
-        <div
-            class="status"
-            id="systemStatus">
-
+        <div class="status" id="systemStatus">
             SYSTEM READY
-
         </div>
 
-
-        <div
-            class="substatus"
-            id="systemSubstatus">
-
+        <div class="substatus" id="systemSubstatus">
             MONITORING ENVIRONMENT
-
         </div>
 
     </div>
-
 
     <div class="panels">
 
         <div class="panel">
-
-            <div class="panel-title">
-                CORE STATUS
-            </div>
-
-            <div class="panel-value">
-                ONLINE
-            </div>
-
+            <div class="panel-title">CORE STATUS</div>
+            <div class="panel-value">ONLINE</div>
         </div>
 
-
         <div class="panel">
-
-            <div class="panel-title">
-                SECURITY
-            </div>
-
-            <div class="panel-value">
-                AUTHENTICATION READY
-            </div>
-
+            <div class="panel-title">SECURITY</div>
+            <div class="panel-value">AUTHENTICATION READY</div>
         </div>
 
-
         <div class="panel">
-
-            <div class="panel-title">
-                VISION
-            </div>
-
-            <div class="panel-value">
-                CAMERA SCANNER ACTIVE
-            </div>
-
+            <div class="panel-title">SYSTEM</div>
+            <div class="panel-value">ALL SYSTEMS NOMINAL</div>
         </div>
 
     </div>
 
 </div>
 
-
-<!-- WELCOME -->
+<!-- WELCOME SCREEN -->
 
 <div id="jarvisConsole">
 
     <div class="consoleGrid"></div>
 
     <div class="consoleCore">
-
         <div class="consoleRing ringA"></div>
-
         <div class="consoleRing ringB"></div>
-
         <div class="consoleRing ringC"></div>
-
         <div class="consoleDot"></div>
-
     </div>
 
-    <div class="consoleStatus">
-        IDENTITY VERIFIED
-    </div>
+    <div class="consoleStatus">IDENTITY VERIFIED</div>
 
-    <div class="consoleWelcome">
-        WELCOME BACK
-    </div>
+    <div class="consoleWelcome">WELCOME BACK</div>
 
-    <div class="consoleName">
-        BLAKE
-    </div>
+    <div class="consoleName">BLAKE</div>
 
-    <div
-        class="consoleMessage"
-        id="consoleMessage">
-
+    <div class="consoleMessage" id="consoleMessage">
         JARVIS INITIALIZING...
-
     </div>
 
-    <button
-        class="jarvisButton"
-        id="enableVoice">
-
+    <button class="jarvisButton" id="enableVoice">
         ENABLE JARVIS VOICE
-
     </button>
 
-    <button
-        class="jarvisButton"
-        id="openAI">
-
+    <button class="jarvisButton" id="openAI">
         OPEN JARVIS AI
-
     </button>
 
-    <button
-        class="jarvisButton"
-        id="closeConsole">
-
+    <button class="jarvisButton" id="closeConsole">
         RETURN TO SYSTEM
-
     </button>
 
 </div>
 
-
-<!-- AI -->
+<!-- AI SCREEN -->
 
 <div id="aiScreen">
 
@@ -1376,55 +671,32 @@ body {
     <div class="aiHeader">
 
         <div>
-
-            <div class="aiSmall">
-                JARVIS ARTIFICIAL INTELLIGENCE
-            </div>
-
-            <div class="aiTitle">
-                AI CORE
-            </div>
-
+            <div class="aiSmall">JARVIS ARTIFICIAL INTELLIGENCE</div>
+            <div class="aiTitle">AI CORE</div>
         </div>
 
-        <div
-            id="aiStatus"
-            class="aiStatus">
-
+        <div id="aiStatus" class="aiStatus">
             ONLINE
-
         </div>
 
     </div>
-
 
     <div class="aiOrb">
 
         <div class="aiRing aiRing1"></div>
-
         <div class="aiRing aiRing2"></div>
-
         <div class="aiRing aiRing3"></div>
-
         <div class="aiCore"></div>
 
     </div>
 
+    <div id="aiMessages" class="aiMessages">
 
-    <div
-        id="aiMessages"
-        class="aiMessages">
-
-        <div
-            class="aiMessage jarvisMessage">
-
-            JARVIS ONLINE.
-            HOW CAN I HELP?
-
+        <div class="aiMessage jarvisMessage">
+            JARVIS ONLINE. HOW CAN I HELP?
         </div>
 
     </div>
-
 
     <div class="aiInputArea">
 
@@ -1435,16 +707,11 @@ body {
             autocomplete="off"
         >
 
-        <button id="aiSend">
-            SEND
-        </button>
+        <button id="aiSend">SEND</button>
 
-        <button id="aiMic">
-            🎙
-        </button>
+        <button id="aiMic">🎙</button>
 
     </div>
-
 
     <button id="aiBack">
         RETURN TO JARVIS
@@ -1452,272 +719,391 @@ body {
 
 </div>
 
-
 <script>
 
 /* =========================
    CLOCK
 ========================= */
 
-function updateClock() {
+function updateClock(){
 
     const now = new Date();
 
-    document
-        .getElementById("time")
-        .textContent =
-        now.toLocaleTimeString(
-            [],
-            {
-                hour: "2-digit",
-                minute: "2-digit"
-            }
-        );
+    document.getElementById("time").textContent =
+        now.toLocaleTimeString([],{
+            hour:"2-digit",
+            minute:"2-digit"
+        });
 
-    document
-        .getElementById("date")
-        .textContent =
-        now.toLocaleDateString(
-            [],
-            {
-                weekday: "long",
-                month: "long",
-                day: "numeric"
-            }
-        ).toUpperCase();
-
+    document.getElementById("date").textContent =
+        now.toLocaleDateString([],{
+            weekday:"long",
+            month:"long",
+            day:"numeric"
+        }).toUpperCase();
 }
 
 updateClock();
-
-setInterval(updateClock, 1000);
+setInterval(updateClock,1000);
 
 
 /* =========================
-   CAMERA
+   CAMERA + FACE MESH
 ========================= */
 
 const video =
-    document.getElementById("cameraFeed");
+    document.getElementById("cameraVideo");
 
-const cameraOffline =
-    document.getElementById("cameraOffline");
+const faceCanvas =
+    document.getElementById("faceCanvas");
 
-const canvas =
-    document.createElement("canvas");
+const faceCtx =
+    faceCanvas.getContext("2d");
 
-const ctx =
-    canvas.getContext("2d");
+const faceScanner =
+    document.getElementById("faceScanner");
 
-let previousFrame = null;
+const status =
+    document.getElementById("systemStatus");
 
+const substatus =
+    document.getElementById("systemSubstatus");
+
+let faceDetected = false;
 let scanning = false;
-
 let lastScan = 0;
 
 
-async function startCamera() {
+/* Green facial mesh */
 
-    if (
-        !navigator.mediaDevices ||
-        !navigator.mediaDevices.getUserMedia
-    ) {
+function drawFaceMesh(landmarks){
 
-        cameraOffline.classList.add("show");
+    faceCtx.clearRect(
+        0,
+        0,
+        faceCanvas.width,
+        faceCanvas.height
+    );
+
+    if(!landmarks) return;
+
+    const w = faceCanvas.width;
+    const h = faceCanvas.height;
+
+    faceCtx.strokeStyle =
+        "rgba(60,255,120,.85)";
+
+    faceCtx.fillStyle =
+        "rgba(60,255,120,.85)";
+
+    faceCtx.lineWidth = 0.8;
+
+    /*
+       Draw facial landmark connections.
+       The landmarks themselves create the
+       green mesh effect over the detected face.
+    */
+
+    const connections = [
+        [10,338],[338,297],[297,332],[332,284],
+        [284,251],[251,389],[389,356],[356,454],
+        [454,323],[323,361],[361,288],[288,397],
+        [397,365],[365,379],[379,378],[378,400],
+        [400,377],[377,152],[152,148],[148,176],
+        [176,149],[149,150],[150,136],[136,172],
+        [172,58],[58,132],[132,93],[93,234],
+        [234,127],[127,162],[162,21],[21,54],
+        [54,103],[103,67],[67,109],[109,10],
+
+        [33,7],[7,163],[163,144],[144,145],
+        [145,153],[153,154],[154,155],[155,133],
+        [133,173],[173,157],[157,158],[158,159],
+        [159,160],[160,161],[161,246],
+
+        [263,249],[249,390],[390,373],[373,374],
+        [374,380],[380,381],[381,382],[382,362],
+        [362,398],[398,384],[384,385],[385,386],
+        [386,387],[387,388],[388,466]
+    ];
+
+    connections.forEach(pair=>{
+
+        const a = landmarks[pair[0]];
+        const b = landmarks[pair[1]];
+
+        if(!a || !b) return;
+
+        faceCtx.beginPath();
+
+        faceCtx.moveTo(
+            a.x * w,
+            a.y * h
+        );
+
+        faceCtx.lineTo(
+            b.x * w,
+            b.y * h
+        );
+
+        faceCtx.stroke();
+
+    });
+
+
+    /* Landmark points */
+
+    landmarks.forEach(point=>{
+
+        faceCtx.beginPath();
+
+        faceCtx.arc(
+            point.x * w,
+            point.y * h,
+            1.1,
+            0,
+            Math.PI * 2
+        );
+
+        faceCtx.fill();
+
+    });
+
+
+    /* Face targeting box */
+
+    const xs = landmarks.map(p=>p.x*w);
+    const ys = landmarks.map(p=>p.y*h);
+
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+
+    faceCtx.strokeStyle =
+        "rgba(80,255,130,.55)";
+
+    faceCtx.lineWidth = 1;
+
+    faceCtx.strokeRect(
+        minX - 5,
+        minY - 5,
+        maxX-minX+10,
+        maxY-minY+10
+    );
+}
+
+
+/* MediaPipe */
+
+const faceMesh =
+    new FaceMesh({
+        locateFile:file=>{
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+        }
+    });
+
+
+faceMesh.setOptions({
+
+    maxNumFaces:1,
+
+    refineLandmarks:true,
+
+    minDetectionConfidence:.5,
+
+    minTrackingConfidence:.5
+
+});
+
+
+faceMesh.onResults(results=>{
+
+    if(
+        !results.multiFaceLandmarks ||
+        results.multiFaceLandmarks.length === 0
+    ){
+
+        faceDetected = false;
+
+        faceScanner.classList.remove(
+            "faceDetected"
+        );
+
+        faceCtx.clearRect(
+            0,
+            0,
+            faceCanvas.width,
+            faceCanvas.height
+        );
+
+        status.textContent =
+            "SYSTEM READY";
+
+        substatus.textContent =
+            "SEARCHING FOR FACE";
 
         return;
 
     }
 
-    try {
+
+    faceDetected = true;
+
+    faceScanner.classList.add(
+        "faceDetected"
+    );
+
+    drawFaceMesh(
+        results.multiFaceLandmarks[0]
+    );
+
+
+    if(
+        !scanning &&
+        Date.now()-lastScan > 10000
+    ){
+
+        runFaceScan();
+
+    }
+
+});
+
+
+/* Start camera */
+
+async function startCamera(){
+
+    try{
 
         const stream =
-            await navigator
-                .mediaDevices
-                .getUserMedia({
+            await navigator.mediaDevices.getUserMedia({
 
-                    video: {
+                video:{
+                    facingMode:"user",
+                    width:{ideal:640},
+                    height:{ideal:480}
+                },
 
-                        facingMode: "user",
+                audio:false
 
-                        width: {
-                            ideal: 1280
-                        },
-
-                        height: {
-                            ideal: 720
-                        }
-
-                    },
-
-                    audio: false
-
-                });
+            });
 
         video.srcObject = stream;
 
         await video.play();
 
-        canvas.width = 64;
-        canvas.height = 48;
+        faceCanvas.width =
+            video.videoWidth || 640;
 
-        cameraOffline.classList.remove("show");
+        faceCanvas.height =
+            video.videoHeight || 480;
 
-        setTimeout(checkMotion, 1000);
+        processCamera();
 
-    } catch(error) {
+    }catch(error){
 
-        console.log(
+        console.error(
             "Camera error:",
             error
         );
 
-        cameraOffline.classList.add("show");
+        status.textContent =
+            "CAMERA ERROR";
 
-        document
-            .getElementById("systemStatus")
-            .textContent =
-            "CAMERA OFFLINE";
-
-        document
-            .getElementById("systemSubstatus")
-            .textContent =
-            "CAMERA PERMISSION REQUIRED";
+        substatus.textContent =
+            "CAMERA ACCESS REQUIRED";
 
     }
 
 }
 
 
-/* =========================
-   MOTION DETECTION
-========================= */
+/* Continuously process camera */
 
-function checkMotion() {
+async function processCamera(){
 
-    if (!video.videoWidth) {
+    if(
+        video.readyState >= 2 &&
+        !video.paused
+    ){
 
-        setTimeout(
-            checkMotion,
-            500
-        );
+        try{
 
-        return;
+            await faceMesh.send({
+                image:video
+            });
 
-    }
+        }catch(error){
 
-    ctx.drawImage(
-        video,
-        0,
-        0,
-        64,
-        48
-    );
-
-    const frame =
-        ctx.getImageData(
-            0,
-            0,
-            64,
-            48
-        );
-
-    if (previousFrame) {
-
-        let difference = 0;
-
-        for (
-            let i = 0;
-            i < frame.data.length;
-            i += 16
-        ) {
-
-            difference +=
-                Math.abs(
-                    frame.data[i] -
-                    previousFrame.data[i]
-                );
-
-        }
-
-        difference /=
-            frame.data.length / 16;
-
-        if (
-            difference > 10 &&
-            !scanning &&
-            Date.now() - lastScan > 10000
-        ) {
-
-            lastScan =
-                Date.now();
-
-            runScan();
+            console.error(error);
 
         }
 
     }
 
-    previousFrame =
-        frame;
-
-    setTimeout(
-        checkMotion,
-        400
+    requestAnimationFrame(
+        processCamera
     );
 
 }
 
 
 /* =========================
-   SCAN
+   FACE SCAN
 ========================= */
 
-function runScan() {
+function runFaceScan(){
 
     scanning = true;
 
-    const status =
-        document.getElementById(
-            "systemStatus"
-        );
-
-    const sub =
-        document.getElementById(
-            "systemSubstatus"
-        );
+    lastScan = Date.now();
 
     status.textContent =
-        "MOTION DETECTED";
+        "FACE DETECTED";
 
-    sub.textContent =
-        "ANALYZING SUBJECT";
+    substatus.textContent =
+        "LOCKING SUBJECT";
 
-    setTimeout(() => {
+    setTimeout(()=>{
+
+        if(!faceDetected) return;
 
         status.textContent =
             "SCANNING...";
 
-        sub.textContent =
-            "IDENTITY ANALYSIS";
+        substatus.textContent =
+            "ANALYZING FACIAL FEATURES";
 
-    }, 2000);
+    },1200);
 
-    setTimeout(() => {
+
+    setTimeout(()=>{
+
+        if(!faceDetected) return;
 
         status.textContent =
             "IDENTITY VERIFIED";
 
-        sub.textContent =
+        substatus.textContent =
             "ACCESS AUTHORIZED";
 
-    }, 5000);
+    },3500);
 
-    setTimeout(() => {
 
-        openConsole();
+    setTimeout(()=>{
 
-    }, 7000);
+        if(faceDetected){
+
+            openConsole();
+
+        }else{
+
+            scanning = false;
+
+        }
+
+    },5000);
 
 }
 
@@ -1727,30 +1113,20 @@ function runScan() {
 ========================= */
 
 let voiceEnabled = false;
-
 let jarvisVoice = null;
 
+function loadJarvisVoice(){
 
-function loadJarvisVoice() {
-
-    if (
-        !("speechSynthesis" in window)
-    ) {
-
+    if(!("speechSynthesis" in window))
         return;
-
-    }
 
     const voices =
         speechSynthesis.getVoices();
 
-    if (!voices.length) {
-
+    if(!voices.length)
         return;
 
-    }
-
-    const preferred = [
+    const preferred=[
         "Daniel",
         "Alex",
         "Fred",
@@ -1758,39 +1134,35 @@ function loadJarvisVoice() {
         "Arthur"
     ];
 
-    for (
-        const name of preferred
-    ) {
+    for(const name of preferred){
 
         const found =
             voices.find(
                 voice =>
                     voice.name
-                        .toLowerCase()
-                        .includes(
-                            name.toLowerCase()
-                        )
+                    .toLowerCase()
+                    .includes(
+                        name.toLowerCase()
+                    )
             );
 
-        if (found) {
+        if(found){
 
-            jarvisVoice =
-                found;
-
+            jarvisVoice=found;
             break;
 
         }
 
     }
 
-    if (!jarvisVoice) {
+    if(!jarvisVoice){
 
         jarvisVoice =
             voices.find(
                 voice =>
                     voice.lang
-                        .toLowerCase()
-                        .startsWith("en")
+                    .toLowerCase()
+                    .startsWith("en")
             );
 
     }
@@ -1799,40 +1171,34 @@ function loadJarvisVoice() {
 
 loadJarvisVoice();
 
-speechSynthesis.onvoiceschanged =
-    loadJarvisVoice;
+if("speechSynthesis" in window){
+
+    speechSynthesis.onvoiceschanged =
+        loadJarvisVoice;
+
+}
 
 
-function speak(text) {
+function speak(text){
 
-    if (
+    if(
         !voiceEnabled ||
         !("speechSynthesis" in window)
-    ) {
-
-        return;
-
-    }
+    ) return;
 
     loadJarvisVoice();
 
     speechSynthesis.cancel();
 
     const utterance =
-        new SpeechSynthesisUtterance(
-            text
-        );
+        new SpeechSynthesisUtterance(text);
 
-    if (jarvisVoice) {
+    if(jarvisVoice)
+        utterance.voice=jarvisVoice;
 
-        utterance.voice =
-            jarvisVoice;
-
-    }
-
-    utterance.rate = .82;
-    utterance.pitch = .72;
-    utterance.volume = 1;
+    utterance.rate=.82;
+    utterance.pitch=.72;
+    utterance.volume=1;
 
     speechSynthesis.speak(
         utterance
@@ -1841,43 +1207,40 @@ function speak(text) {
 }
 
 
-/* ENABLE VOICE */
+/* Enable voice */
 
 document
-    .getElementById("enableVoice")
-    .addEventListener(
-        "click",
-        function() {
+.getElementById("enableVoice")
+.addEventListener("click",function(){
 
-            voiceEnabled = true;
+    voiceEnabled=true;
 
-            speak(
-                "JARVIS voice online."
-            );
-
-            this.textContent =
-                "JARVIS VOICE ONLINE";
-
-        }
+    speak(
+        "JARVIS voice online."
     );
+
+    this.textContent =
+        "JARVIS VOICE ONLINE";
+
+});
 
 
 /* =========================
-   WELCOME
+   WELCOME SCREEN
 ========================= */
 
-function openConsole() {
+function openConsole(){
 
     document
-        .getElementById("jarvisConsole")
-        .classList.add("open");
+    .getElementById("jarvisConsole")
+    .classList.add("open");
 
     document
-        .getElementById("consoleMessage")
-        .textContent =
+    .getElementById("consoleMessage")
+    .textContent =
         "JARVIS ONLINE. ALL SYSTEMS ARE OPERATIONAL.";
 
-    if (voiceEnabled) {
+    if(voiceEnabled){
 
         speak(
             "Welcome back, Blake. All systems are operational."
@@ -1889,29 +1252,24 @@ function openConsole() {
 
 
 document
-    .getElementById("closeConsole")
-    .addEventListener(
-        "click",
-        function() {
+.getElementById("closeConsole")
+.addEventListener("click",function(){
 
-            document
-                .getElementById("jarvisConsole")
-                .classList.remove("open");
+    document
+    .getElementById("jarvisConsole")
+    .classList.remove("open");
 
-            document
-                .getElementById("systemStatus")
-                .textContent =
-                "SYSTEM READY";
+    status.textContent =
+        "SYSTEM READY";
 
-            document
-                .getElementById("systemSubstatus")
-                .textContent =
-                "MONITORING ENVIRONMENT";
+    substatus.textContent =
+        "MONITORING ENVIRONMENT";
 
-            scanning = false;
+    scanning=false;
 
-        }
-    );
+    lastScan=Date.now();
+
+});
 
 
 /* =========================
@@ -1919,43 +1277,29 @@ document
 ========================= */
 
 const aiScreen =
-    document.getElementById(
-        "aiScreen"
-    );
+    document.getElementById("aiScreen");
 
 const aiInput =
-    document.getElementById(
-        "aiInput"
-    );
+    document.getElementById("aiInput");
 
 const aiMessages =
-    document.getElementById(
-        "aiMessages"
-    );
+    document.getElementById("aiMessages");
 
 const aiStatus =
-    document.getElementById(
-        "aiStatus"
-    );
+    document.getElementById("aiStatus");
 
 
-function addMessage(
-    text,
-    isUser
-) {
+function addMessage(text,isUser){
 
     const message =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     message.className =
         isUser
         ? "aiMessage userMessage"
         : "aiMessage jarvisMessage";
 
-    message.textContent =
-        text;
+    message.textContent=text;
 
     aiMessages.appendChild(
         message
@@ -1967,60 +1311,46 @@ function addMessage(
 }
 
 
-/* =========================
-   REAL AI REQUEST
-========================= */
+/* AI REQUEST */
 
-async function sendMessage() {
+async function sendMessage(){
 
     const text =
         aiInput.value.trim();
 
-    if (!text) {
-
+    if(!text)
         return;
 
-    }
+    addMessage(text,true);
 
-    addMessage(
-        text,
-        true
-    );
-
-    aiInput.value = "";
+    aiInput.value="";
 
     aiStatus.textContent =
         "THINKING...";
 
-    try {
+    try{
 
         const response =
             await fetch(
                 "https://jarvis-wall-two.vercel.app/api/chat",
                 {
+                    method:"POST",
 
-                    method: "POST",
-
-                    headers: {
-
+                    headers:{
                         "Content-Type":
                             "application/json"
-
                     },
 
-                    body: JSON.stringify({
-
-                        message: text
-
+                    body:JSON.stringify({
+                        message:text
                     })
-
                 }
             );
 
         const data =
             await response.json();
 
-        if (!response.ok) {
+        if(!response.ok){
 
             throw new Error(
                 data.error ||
@@ -2034,14 +1364,12 @@ async function sendMessage() {
             false
         );
 
-        speak(
-            data.reply
-        );
+        speak(data.reply);
 
         aiStatus.textContent =
             "ONLINE";
 
-    } catch(error) {
+    }catch(error){
 
         console.error(error);
 
@@ -2058,63 +1386,48 @@ async function sendMessage() {
 }
 
 
-/* OPEN AI */
+/* Open AI */
 
 document
-    .getElementById("openAI")
-    .addEventListener(
-        "click",
-        function() {
+.getElementById("openAI")
+.addEventListener("click",function(){
 
-            aiScreen
-                .classList
-                .add("open");
+    aiScreen.classList.add("open");
 
-            aiInput.focus();
+    aiInput.focus();
 
-        }
-    );
+});
 
 
-/* BACK */
+/* Back */
 
 document
-    .getElementById("aiBack")
-    .addEventListener(
-        "click",
-        function() {
+.getElementById("aiBack")
+.addEventListener("click",function(){
 
-            aiScreen
-                .classList
-                .remove("open");
+    aiScreen.classList.remove("open");
 
-        }
-    );
+});
 
 
-/* SEND */
+/* Send */
 
 document
-    .getElementById("aiSend")
-    .addEventListener(
-        "click",
-        sendMessage
-    );
+.getElementById("aiSend")
+.addEventListener(
+    "click",
+    sendMessage
+);
 
 
-/* ENTER */
+/* Enter */
 
 aiInput.addEventListener(
     "keydown",
-    function(event) {
+    function(event){
 
-        if (
-            event.key === "Enter"
-        ) {
-
+        if(event.key==="Enter")
             sendMessage();
-
-        }
 
     }
 );
@@ -2128,49 +1441,42 @@ const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
-
-if (SpeechRecognition) {
+if(SpeechRecognition){
 
     const recognition =
         new SpeechRecognition();
 
-    recognition.lang =
-        "en-US";
-
-    recognition.continuous =
-        false;
-
-    recognition.interimResults =
-        false;
+    recognition.lang="en-US";
+    recognition.continuous=false;
+    recognition.interimResults=false;
 
     document
-        .getElementById("aiMic")
-        .addEventListener(
-            "click",
-            function() {
+    .getElementById("aiMic")
+    .addEventListener("click",function(){
 
-                aiStatus.textContent =
-                    "LISTENING...";
+        aiStatus.textContent =
+            "LISTENING...";
 
-                recognition.start();
+        recognition.start();
 
-            }
-        );
+    });
+
 
     recognition.onresult =
-        function(event) {
+        function(event){
 
             aiInput.value =
                 event
-                    .results[0][0]
-                    .transcript;
+                .results[0][0]
+                .transcript;
 
             sendMessage();
 
         };
 
+
     recognition.onerror =
-        function() {
+        function(){
 
             aiStatus.textContent =
                 "ONLINE";
@@ -2189,5 +1495,4 @@ startCamera();
 </script>
 
 </body>
-
 </html>

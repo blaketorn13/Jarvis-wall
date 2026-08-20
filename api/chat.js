@@ -13,15 +13,15 @@ export default async function handler(req, res) {
     });
   }
 
+  const apiKey = process.env.OPENAI_API_KEY;
+
+  if (!apiKey) {
+    return res.status(500).json({
+      error: "OPENAI_API_KEY is missing from Vercel."
+    });
+  }
+
   try {
-    const apiKey = process.env.OPENAI_API_KEY;
-
-    if (!apiKey) {
-      return res.status(500).json({
-        error: "OPENAI_API_KEY is missing from Vercel."
-      });
-    }
-
     const { message } = req.body || {};
 
     if (!message) {
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
         },
 
         body: JSON.stringify({
-          model: "gpt-5.6-luna",
+          model: "gpt-5.6",
           input: message
         })
       }
@@ -50,11 +50,10 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("OpenAI API error:", data);
+      console.error("OpenAI error:", data);
 
-      return res.status(500).json({
-        error: "OpenAI API error",
-        details: data
+      return res.status(response.status).json({
+        error: data.error?.message || "OpenAI request failed."
       });
     }
 
@@ -63,11 +62,10 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
-
-    console.error("Backend error:", error);
+    console.error("Server error:", error);
 
     return res.status(500).json({
-      error: "Backend connection failed."
+      error: "Server could not contact OpenAI."
     });
   }
 }

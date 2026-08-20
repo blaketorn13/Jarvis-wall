@@ -463,7 +463,6 @@ body {
 <script>
 
 function updateClock() {
-
     const now = new Date();
 
     document.getElementById("time").textContent =
@@ -481,24 +480,21 @@ function updateClock() {
 }
 
 updateClock();
-
 setInterval(updateClock, 1000);
 
 
-/* =========================
-   CAMERA SENSOR
-========================= */
+/* CAMERA */
 
-let video = document.createElement("video");
+const video = document.createElement("video");
 
 video.setAttribute("playsinline", "");
 video.muted = true;
 
-let canvas = document.createElement("canvas");
-let ctx = canvas.getContext("2d");
+const canvas = document.createElement("canvas");
+const ctx = canvas.getContext("2d");
 
-let previousFrame = null;
-let lastMotion = 0;
+let previous = null;
+let lastScan = 0;
 let scanning = false;
 
 
@@ -510,51 +506,43 @@ async function startCamera() {
 
         const stream =
             await navigator.mediaDevices.getUserMedia({
-
                 video: {
                     facingMode: "user",
                     width: 320,
                     height: 240
                 },
-
                 audio: false
-
             });
 
         video.srcObject = stream;
 
         await video.play();
 
-        canvas.width = 80;
-        canvas.height = 60;
+        canvas.width = 64;
+        canvas.height = 48;
 
-        console.log("JARVIS CAMERA ONLINE");
+        document.querySelector(".substatus").textContent =
+            "CAMERA SENSOR ONLINE";
 
         setTimeout(checkMotion, 1000);
 
+    } catch (error) {
+
+        document.querySelector(".substatus").textContent =
+            "CAMERA SENSOR OFFLINE";
+
+        console.log(error);
     }
-
-    catch(error) {
-
-        console.log(
-            "Camera unavailable:",
-            error
-        );
-
-    }
-
 }
 
 
-/* =========================
-   MOTION DETECTION
-========================= */
+/* MOTION SENSOR */
 
 function checkMotion() {
 
     if (!video.videoWidth) {
 
-        setTimeout(checkMotion, 500);
+        setTimeout(checkMotion, 300);
 
         return;
     }
@@ -564,91 +552,90 @@ function checkMotion() {
         video,
         0,
         0,
-        80,
-        60
+        64,
+        48
     );
 
 
-    const currentFrame =
+    const frame =
         ctx.getImageData(
             0,
             0,
-            80,
-            60
+            64,
+            48
         );
 
 
-    if (previousFrame) {
+    if (previous) {
 
         let difference = 0;
 
-
         for (
             let i = 0;
-            i < currentFrame.data.length;
-            i += 20
+            i < frame.data.length;
+            i += 16
         ) {
 
             difference +=
                 Math.abs(
-                    currentFrame.data[i] -
-                    previousFrame.data[i]
+                    frame.data[i] -
+                    previous.data[i]
                 );
 
         }
 
 
-        difference /=
-            currentFrame.data.length / 20;
+        difference =
+            difference /
+            (frame.data.length / 16);
 
+
+        /*
+        Lower threshold makes
+        the detector easier to trigger.
+        */
 
         if (
-            difference > 25 &&
+            difference > 10 &&
             !scanning &&
-            Date.now() - lastMotion > 8000
+            Date.now() - lastScan > 7000
         ) {
 
-            lastMotion = Date.now();
+            lastScan = Date.now();
 
-            runJarvisScan();
+            runScan();
 
         }
 
     }
 
 
-    previousFrame =
-        currentFrame;
-
+    previous = frame;
 
     setTimeout(
         checkMotion,
-        500
+        300
     );
-
 }
 
 
-/* =========================
-   JARVIS SCAN
-========================= */
+/* JARVIS EFFECT */
 
-function runJarvisScan() {
+function runScan() {
 
     scanning = true;
-
 
     const status =
         document.querySelector(".status");
 
-    const substatus =
+    const sub =
         document.querySelector(".substatus");
 
 
     status.textContent =
         "MOTION DETECTED";
 
-    substatus.textContent =
+    sub.textContent =
         "ANALYZING SUBJECT";
 
 
@@ -657,10 +644,10 @@ function runJarvisScan() {
         status.textContent =
             "SCANNING...";
 
-        substatus.textContent =
+        sub.textContent =
             "IDENTITY ANALYSIS";
 
-    }, 1200);
+    }, 1000);
 
 
     setTimeout(() => {
@@ -668,10 +655,10 @@ function runJarvisScan() {
         status.textContent =
             "IDENTITY VERIFIED";
 
-        substatus.textContent =
+        sub.textContent =
             "ACCESS AUTHORIZED";
 
-    }, 2500);
+    }, 2200);
 
 
     setTimeout(() => {
@@ -679,10 +666,10 @@ function runJarvisScan() {
         status.textContent =
             "WELCOME BACK";
 
-        substatus.textContent =
+        sub.textContent =
             "BLAKE // ACCESS GRANTED";
 
-    }, 3500);
+    }, 3200);
 
 
     setTimeout(() => {
@@ -690,17 +677,14 @@ function runJarvisScan() {
         status.textContent =
             "SYSTEM READY";
 
-        substatus.textContent =
-            "MONITORING ENVIRONMENT";
+        sub.textContent =
+            "CAMERA SENSOR ONLINE";
 
         scanning = false;
 
-    }, 6000);
-
+    }, 5500);
 }
 
-
-/* START */
 
 startCamera();
 

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +9,11 @@
 <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -40,11 +37,6 @@ button,
 input,
 select {
     font-family: inherit;
-}
-
-button:disabled {
-    opacity: .35;
-    cursor: not-allowed;
 }
 
 .grid {
@@ -191,7 +183,6 @@ button:disabled {
 }
 
 @keyframes scan {
-
     0% {
         top: 0;
     }
@@ -716,146 +707,250 @@ button:disabled {
     cursor: pointer;
 }
 
-/* LOCKDOWN */
+/* =====================================================
+   LOCKDOWN SCREEN
+===================================================== */
 
-#lockdown {
+#lockdownOverlay {
     position: fixed;
     inset: 0;
 
-    z-index: 999;
+    z-index: 1000;
 
-    display: flex;
-
-    flex-direction: column;
+    display: none;
 
     align-items: center;
     justify-content: center;
-
-    padding: 25px;
-
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(120,0,0,.25),
-            #050000 70%
-        );
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition:
-        opacity .25s;
-}
-
-#lockdown.open {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.lockIcon {
-    width: 90px;
-    height: 90px;
-
-    border:
-        2px solid #ff4d4d;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 42px;
-
-    color: #ff4d4d;
-
-    box-shadow:
-        0 0 25px rgba(255,50,50,.35);
-
-    margin-bottom: 25px;
-}
-
-.lockTitle {
-    color: #ff5a5a;
-
-    font-size: 32px;
-
-    letter-spacing: 7px;
-
-    text-align: center;
-
-    text-shadow:
-        0 0 20px rgba(255,50,50,.55);
-}
-
-.lockSub {
-    margin-top: 14px;
-
-    color: #ffaaaa;
-
-    font-size: 10px;
-
-    letter-spacing: 3px;
-
-    text-align: center;
-}
-
-.lockScan {
-    margin-top: 30px;
-
-    font-size: 9px;
-
-    letter-spacing: 3px;
-
-    opacity: .55;
-
-    text-align: center;
-}
-
-.lockCamera {
-    position: relative;
-
-    width: min(300px, 85vw);
-    height: 210px;
-
-    margin-top: 25px;
 
     overflow: hidden;
 
-    border:
-        1px solid rgba(255,70,70,.5);
+    background:
+        radial-gradient(
+            circle,
+            rgba(100,0,0,.55),
+            rgba(5,0,0,.98) 75%
+        );
 
-    background: #000;
+    animation:
+        lockdownPulse .8s infinite alternate;
 }
 
-#lockVideo {
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    transform: scaleX(-1);
+#lockdownOverlay.open {
+    display: flex;
 }
 
-#lockCanvas {
+@keyframes lockdownPulse {
+    from {
+        box-shadow:
+            inset 0 0 50px rgba(255,0,0,.25);
+    }
+
+    to {
+        box-shadow:
+            inset 0 0 150px rgba(255,0,0,.75);
+    }
+}
+
+/* RED WARNING GRID */
+
+.lockdownGrid {
     position: absolute;
     inset: 0;
 
-    width: 100%;
-    height: 100%;
+    opacity: .25;
 
-    transform: scaleX(-1);
+    background-image:
+        linear-gradient(
+            rgba(255,0,0,.25) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,0,0,.25) 1px,
+            transparent 1px
+        );
 
-    pointer-events: none;
+    background-size: 45px 45px;
 }
 
-.lockStatus {
-    margin-top: 15px;
+/* GIANT LOCKDOWN TEXT */
 
-    color: #ff6b6b;
+.lockdownText {
+    position: relative;
+
+    z-index: 20;
+
+    text-align: center;
+
+    color: #ff3030;
+
+    font-size:
+        clamp(50px, 13vw, 150px);
+
+    font-weight: 900;
+
+    letter-spacing: 10px;
+
+    text-shadow:
+        0 0 10px #ff0000,
+        0 0 30px #ff0000,
+        0 0 70px rgba(255,0,0,.8);
+
+    animation:
+        lockdownTextPulse .6s infinite alternate;
+}
+
+@keyframes lockdownTextPulse {
+    from {
+        transform: scale(1);
+        opacity: .85;
+    }
+
+    to {
+        transform: scale(1.03);
+        opacity: 1;
+    }
+}
+
+.lockdownSubtext {
+    margin-top: 15px;
 
     font-size: 12px;
 
-    letter-spacing: 3px;
+    letter-spacing: 5px;
+
+    color: #ffaaaa;
+}
+
+/* VAULT DOORS */
+
+.vaultDoor {
+    position: absolute;
+
+    top: 0;
+
+    width: 50%;
+    height: 100%;
+
+    z-index: 10;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #111 0px,
+            #252525 25px,
+            #090909 50px
+        );
+
+    border:
+        3px solid #555;
+
+    box-shadow:
+        inset 0 0 40px #000,
+        0 0 30px #000;
+
+    transition:
+        transform 1.2s cubic-bezier(.7,0,.2,1);
+}
+
+.vaultLeft {
+    left: 0;
+
+    transform:
+        translateX(-100%);
+}
+
+.vaultRight {
+    right: 0;
+
+    transform:
+        translateX(100%);
+}
+
+#lockdownOverlay.open .vaultLeft {
+    animation:
+        vaultLeftClose 1.2s forwards;
+}
+
+#lockdownOverlay.open .vaultRight {
+    animation:
+        vaultRightClose 1.2s forwards;
+}
+
+@keyframes vaultLeftClose {
+    from {
+        transform:
+            translateX(-100%);
+    }
+
+    to {
+        transform:
+            translateX(0);
+    }
+}
+
+@keyframes vaultRightClose {
+    from {
+        transform:
+            translateX(100%);
+    }
+
+    to {
+        transform:
+            translateX(0);
+    }
+}
+
+/* VAULT DETAILS */
+
+.vaultLeft::after,
+.vaultRight::after {
+    content: "";
+
+    position: absolute;
+
+    top: 50%;
+
+    width: 70px;
+    height: 70px;
+
+    border:
+        4px solid #777;
+
+    border-radius: 50%;
+
+    transform:
+        translateY(-50%);
+
+    box-shadow:
+        inset 0 0 20px #000,
+        0 0 20px #000;
+}
+
+.vaultLeft::after {
+    right: 15px;
+}
+
+.vaultRight::after {
+    left: 15px;
+}
+
+/* LOCKDOWN STATUS */
+
+.lockdownStatus {
+    position: absolute;
+
+    bottom: 35px;
+
+    z-index: 30;
+
+    color: #ff5555;
+
+    font-size: 10px;
+
+    letter-spacing: 4px;
+
+    text-align: center;
 }
 
 /* MOBILE */
@@ -891,12 +986,10 @@ button:disabled {
         padding: 18px;
     }
 
-    .lockTitle {
-        font-size: 25px;
+    .lockdownText {
+        letter-spacing: 5px;
     }
-
 }
-
 </style>
 </head>
 
@@ -906,7 +999,7 @@ button:disabled {
 
 <!-- MAIN -->
 
-<div class="main" id="mainInterface">
+<div class="main">
 
     <div class="header">
 
@@ -924,17 +1017,22 @@ button:disabled {
 
         <div class="clock">
 
-            <div id="time" class="time">
+            <div
+                id="time"
+                class="time">
                 --:--
             </div>
 
-            <div id="date" class="date">
+            <div
+                id="date"
+                class="date">
                 ---
             </div>
 
         </div>
 
     </div>
+
 
     <div class="center">
 
@@ -960,17 +1058,20 @@ button:disabled {
 
         </div>
 
+
         <div
             id="systemStatus"
             class="status">
             STARTING CAMERA
         </div>
 
+
         <div
             id="systemSubstatus"
             class="substatus">
             INITIALIZING
         </div>
+
 
         <div class="buttonRow">
 
@@ -990,6 +1091,7 @@ button:disabled {
 
     </div>
 
+
     <div class="panels">
 
         <div class="panel">
@@ -1006,6 +1108,7 @@ button:disabled {
 
         </div>
 
+
         <div class="panel">
 
             <div class="panel-title">
@@ -1019,6 +1122,7 @@ button:disabled {
             </div>
 
         </div>
+
 
         <div class="panel">
 
@@ -1038,6 +1142,7 @@ button:disabled {
 
 </div>
 
+
 <!-- REGISTER -->
 
 <div
@@ -1054,6 +1159,7 @@ button:disabled {
             CREATE A NEW JARVIS IDENTITY
         </div>
 
+
         <div class="formGroup">
 
             <label>
@@ -1068,6 +1174,7 @@ button:disabled {
 
         </div>
 
+
         <div class="formGroup">
 
             <label>
@@ -1081,6 +1188,7 @@ button:disabled {
                 autocomplete="off">
 
         </div>
+
 
         <div class="registerCamera">
 
@@ -1097,11 +1205,13 @@ button:disabled {
 
         </div>
 
+
         <div
             id="registerStatus"
             class="substatus">
             LOOK AT THE CAMERA
         </div>
+
 
         <div class="modalButtons">
 
@@ -1121,6 +1231,7 @@ button:disabled {
 
 </div>
 
+
 <!-- MANAGE -->
 
 <div
@@ -1137,10 +1248,12 @@ button:disabled {
             MANAGE JARVIS IDENTITIES
         </div>
 
+
         <div
             id="peopleList"
             class="peopleList">
         </div>
+
 
         <div class="modalButtons">
 
@@ -1154,6 +1267,7 @@ button:disabled {
     </div>
 
 </div>
+
 
 <!-- WELCOME -->
 
@@ -1183,6 +1297,7 @@ button:disabled {
             WELCOME BACK TO JARVIS.
         </div>
 
+
         <div class="modalButtons">
 
             <button
@@ -1201,6 +1316,7 @@ button:disabled {
 
 </div>
 
+
 <!-- AI SCREEN -->
 
 <div
@@ -1209,6 +1325,7 @@ button:disabled {
     <div class="aiTitle">
         JARVIS // AI CORE
     </div>
+
 
     <div
         id="aiMessages"
@@ -1219,6 +1336,7 @@ button:disabled {
         </div>
 
     </div>
+
 
     <div class="aiInputArea">
 
@@ -1235,6 +1353,7 @@ button:disabled {
 
     </div>
 
+
     <button
         id="aiBack"
         style="margin:12px auto;">
@@ -1243,81 +1362,80 @@ button:disabled {
 
 </div>
 
+
 <!-- LOCKDOWN -->
 
-<div id="lockdown">
+<div id="lockdownOverlay">
 
-    <div class="lockIcon">
-        🔒
-    </div>
+    <div class="lockdownGrid"></div>
 
-    <div class="lockTitle">
-        ACCESS DENIED
-    </div>
-
-    <div class="lockSub">
-        UNKNOWN USER DETECTED
-    </div>
-
-    <div class="lockCamera">
-
-        <video
-            id="lockVideo"
-            autoplay
-            muted
-            playsinline>
-        </video>
-
-        <canvas
-            id="lockCanvas">
-        </canvas>
-
-    </div>
+    <div class="vaultDoor vaultLeft"></div>
+    <div class="vaultDoor vaultRight"></div>
 
     <div
-        id="lockStatus"
-        class="lockStatus">
-        SCANNING FOR AUTHORIZED USER
+        class="lockdownText">
+
+        LOCKDOWN
+
+        <div class="lockdownSubtext">
+            UNAUTHORIZED FACE DETECTED
+        </div>
+
     </div>
 
-    <div class="lockScan">
-        SYSTEM LOCKED
+    <div class="lockdownStatus">
+        SECURITY SYSTEM ACTIVE
     </div>
 
 </div>
 
+
 <script>
 
-/* =========================
+/* =====================================================
    CLOCK
-========================= */
+===================================================== */
 
 function updateClock() {
 
     const now = new Date();
 
-    document.getElementById("time").textContent =
-        now.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit"
-        });
+    document
+        .getElementById("time")
+        .textContent =
+        now.toLocaleTimeString(
+            [],
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
 
-    document.getElementById("date").textContent =
-        now.toLocaleDateString([], {
-            weekday: "long",
-            month: "long",
-            day: "numeric"
-        }).toUpperCase();
+    document
+        .getElementById("date")
+        .textContent =
+        now.toLocaleDateString(
+            [],
+            {
+                weekday: "long",
+                month: "long",
+                day: "numeric"
+            }
+        )
+        .toUpperCase();
 }
 
 updateClock();
 
-setInterval(updateClock, 1000);
+setInterval(
+    updateClock,
+    1000
+);
 
 
-/* =========================
-   MAIN ELEMENTS
-========================= */
+/* =====================================================
+   MAIN CAMERA
+===================================================== */
 
 const video =
     document.getElementById("camera");
@@ -1340,41 +1458,12 @@ const cameraStatus =
 const securityStatus =
     document.getElementById("securityStatus");
 
-const lockdown =
-    document.getElementById("lockdown");
 
-const lockVideo =
-    document.getElementById("lockVideo");
-
-const lockCanvas =
-    document.getElementById("lockCanvas");
-
-const lockCtx =
-    lockCanvas.getContext("2d");
-
-const lockStatus =
-    document.getElementById("lockStatus");
-
-
-/* =========================
-   LOCKDOWN STATE
-========================= */
-
-let systemLocked = false;
-
-let lastDeniedTime = 0;
-
-let lastVerifiedTime = 0;
-
-const DENIED_COOLDOWN = 3500;
-
-
-/* =========================
+/* =====================================================
    FACE DATABASE
-========================= */
+===================================================== */
 
 let registeredFaces = [];
-
 
 function loadRegisteredFaces() {
 
@@ -1409,22 +1498,12 @@ function loadRegisteredFaces() {
 
 function saveRegisteredFaces() {
 
-    try {
-
-        localStorage.setItem(
-            "jarvisRegisteredFaces",
-            JSON.stringify(
-                registeredFaces
-            )
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Could not save faces:",
-            error
-        );
-    }
+    localStorage.setItem(
+        "jarvisRegisteredFaces",
+        JSON.stringify(
+            registeredFaces
+        )
+    );
 
     updateUserCount();
 }
@@ -1432,9 +1511,9 @@ function saveRegisteredFaces() {
 
 function updateUserCount() {
 
-    document.getElementById(
-        "userCount"
-    ).textContent =
+    document
+        .getElementById("userCount")
+        .textContent =
         registeredFaces.length;
 }
 
@@ -1442,9 +1521,9 @@ function updateUserCount() {
 loadRegisteredFaces();
 
 
-/* =========================
+/* =====================================================
    CAMERA
-========================= */
+===================================================== */
 
 async function startCamera() {
 
@@ -1457,31 +1536,28 @@ async function startCamera() {
             "REQUESTING ACCESS";
 
         const stream =
-            await navigator.mediaDevices.getUserMedia({
+            await navigator
+                .mediaDevices
+                .getUserMedia({
 
-                video: {
-                    facingMode: "user",
-                    width: {
-                        ideal: 640
+                    video: {
+                        facingMode: "user",
+                        width: {
+                            ideal: 640
+                        },
+                        height: {
+                            ideal: 480
+                        }
                     },
-                    height: {
-                        ideal: 480
-                    }
-                },
 
-                audio: false
+                    audio: false
 
-            });
+                });
 
         video.srcObject =
             stream;
 
-        lockVideo.srcObject =
-            stream;
-
         await video.play();
-
-        await lockVideo.play();
 
         cameraStatus.textContent =
             "ONLINE";
@@ -1493,8 +1569,6 @@ async function startCamera() {
             "LOADING FACE SYSTEM";
 
         resizeCanvas();
-
-        resizeLockCanvas();
 
         loadFaceModels();
 
@@ -1529,32 +1603,15 @@ function resizeCanvas() {
 }
 
 
-function resizeLockCanvas() {
-
-    if (!lockVideo.videoWidth) {
-        return;
-    }
-
-    lockCanvas.width =
-        lockVideo.videoWidth;
-
-    lockCanvas.height =
-        lockVideo.videoHeight;
-}
-
-
 video.addEventListener(
     "loadedmetadata",
-    () => {
-        resizeCanvas();
-        resizeLockCanvas();
-    }
+    resizeCanvas
 );
 
 
-/* =========================
+/* =====================================================
    FACE MODELS
-========================= */
+===================================================== */
 
 const MODEL_URL =
     "https://justadudewhohacks.github.io/face-api.js/models";
@@ -1611,35 +1668,29 @@ async function loadFaceModels() {
 }
 
 
-/* =========================
-   DRAW FACE MESH
-========================= */
+/* =====================================================
+   FACE MESH
+===================================================== */
 
-function drawFaceMesh(
-    detection,
-    targetCtx
-) {
+function drawFaceMesh(detection) {
 
-    const targetCanvas =
-        targetCtx.canvas;
-
-    targetCtx.clearRect(
+    ctx.clearRect(
         0,
         0,
-        targetCanvas.width,
-        targetCanvas.height
+        canvas.width,
+        canvas.height
     );
 
     const points =
         detection.landmarks.positions;
 
-    targetCtx.strokeStyle =
+    ctx.strokeStyle =
         "#39ff88";
 
-    targetCtx.fillStyle =
+    ctx.fillStyle =
         "#39ff88";
 
-    targetCtx.lineWidth = 1;
+    ctx.lineWidth = 1;
 
     const connections = [
 
@@ -1657,40 +1708,38 @@ function drawFaceMesh(
     connections.forEach(
         pair => {
 
-            targetCtx.beginPath();
+            ctx.beginPath();
 
-            targetCtx.moveTo(
+            ctx.moveTo(
                 points[pair[0]].x,
                 points[pair[0]].y
             );
 
             for (
-                let i =
-                    pair[0] + 1;
-
+                let i = pair[0] + 1;
                 i <= pair[1];
-
                 i++
             ) {
 
-                targetCtx.lineTo(
+                ctx.lineTo(
                     points[i].x,
                     points[i].y
                 );
 
             }
 
-            targetCtx.stroke();
+            ctx.stroke();
 
         }
     );
 
+
     points.forEach(
         point => {
 
-            targetCtx.beginPath();
+            ctx.beginPath();
 
-            targetCtx.arc(
+            ctx.arc(
                 point.x,
                 point.y,
                 1.5,
@@ -1698,117 +1747,24 @@ function drawFaceMesh(
                 Math.PI * 2
             );
 
-            targetCtx.fill();
+            ctx.fill();
 
         }
     );
 }
 
 
-/* =========================
-   LOCKDOWN
-========================= */
-
-function enterLockdown() {
-
-    if (systemLocked) {
-        return;
-    }
-
-    systemLocked = true;
-
-    lastDeniedTime =
-        Date.now();
-
-    status.textContent =
-        "ACCESS DENIED";
-
-    substatus.textContent =
-        "UNKNOWN USER";
-
-    securityStatus.textContent =
-        "LOCKED";
-
-    lockStatus.textContent =
-        "SCANNING FOR AUTHORIZED USER";
-
-    lockdown.classList.add("open");
-
-    disableControls();
-
-}
-
-
-function exitLockdown(person) {
-
-    if (!systemLocked) {
-        return;
-    }
-
-    systemLocked = false;
-
-    lastVerifiedTime =
-        Date.now();
-
-    lockdown.classList.remove("open");
-
-    securityStatus.textContent =
-        person.name.toUpperCase();
-
-    status.textContent =
-        "ACCESS GRANTED";
-
-    substatus.textContent =
-        "IDENTITY VERIFIED";
-
-    enableControls();
-
-    showWelcome(person);
-
-}
-
-
-function disableControls() {
-
-    document.getElementById(
-        "registerFaceButton"
-    ).disabled = true;
-
-    document.getElementById(
-        "manageFacesButton"
-    ).disabled = true;
-
-    document.getElementById(
-        "openAI"
-    ).disabled = true;
-
-}
-
-
-function enableControls() {
-
-    document.getElementById(
-        "registerFaceButton"
-    ).disabled = false;
-
-    document.getElementById(
-        "manageFacesButton"
-    ).disabled = false;
-
-    document.getElementById(
-        "openAI"
-    ).disabled = false;
-
-}
-
-
-/* =========================
+/* =====================================================
    FACE TRACKING
-========================= */
+===================================================== */
 
 let faceBusy = false;
 
 let lastAuthentication = 0;
+
+let lockdownActive = false;
+
+let lockdownTimer = null;
 
 
 async function beginFaceTracking() {
@@ -1817,7 +1773,8 @@ async function beginFaceTracking() {
 
         if (
             video.readyState >= 2 &&
-            !faceBusy
+            !faceBusy &&
+            !lockdownActive
         ) {
 
             faceBusy = true;
@@ -1828,10 +1785,11 @@ async function beginFaceTracking() {
                     await faceapi
                         .detectSingleFace(
                             video,
-                            new faceapi.TinyFaceDetectorOptions({
-                                inputSize: 320,
-                                scoreThreshold: .35
-                            })
+                            new faceapi
+                                .TinyFaceDetectorOptions({
+                                    inputSize: 320,
+                                    scoreThreshold: .35
+                                })
                         )
                         .withFaceLandmarks(true)
                         .withFaceDescriptor();
@@ -1843,99 +1801,44 @@ async function beginFaceTracking() {
                     canvas.height
                 );
 
-                lockCtx.clearRect(
-                    0,
-                    0,
-                    lockCanvas.width,
-                    lockCanvas.height
-                );
-
-
-                /* NO FACE */
-
                 if (!result) {
 
-                    if (!systemLocked) {
+                    status.textContent =
+                        registeredFaces.length
+                        ? "SCANNING..."
+                        : "NO FACE FOUND";
 
-                        status.textContent =
-                            registeredFaces.length
-                            ? "SCANNING..."
-                            : "NO FACE FOUND";
+                    substatus.textContent =
+                        registeredFaces.length
+                        ? "LOOK AT THE CAMERA"
+                        : "REGISTER A FACE";
 
-                        substatus.textContent =
-                            registeredFaces.length
-                            ? "LOOK AT THE CAMERA"
-                            : "REGISTER A FACE";
+                } else {
 
-                    } else {
-
-                        lockStatus.textContent =
-                            "NO FACE DETECTED";
-
-                    }
-
-                }
-
-
-                /* FACE FOUND */
-
-                else {
-
-                    if (!systemLocked) {
-
-                        drawFaceMesh(
-                            result,
-                            ctx
-                        );
-
-                    } else {
-
-                        drawFaceMesh(
-                            result,
-                            lockCtx
-                        );
-
-                    }
-
+                    drawFaceMesh(result);
 
                     if (
                         registeredFaces.length === 0
                     ) {
 
-                        if (!systemLocked) {
+                        status.textContent =
+                            "FACE DETECTED";
 
-                            status.textContent =
-                                "FACE DETECTED";
+                        substatus.textContent =
+                            "NO REGISTERED USERS";
 
-                            substatus.textContent =
-                                "NO REGISTERED USERS";
+                    } else {
 
-                        }
+                        status.textContent =
+                            "FACE DETECTED";
 
-                    }
-
-                    else {
-
-                        if (!systemLocked) {
-
-                            status.textContent =
-                                "FACE DETECTED";
-
-                            substatus.textContent =
-                                "ANALYZING IDENTITY";
-
-                        } else {
-
-                            lockStatus.textContent =
-                                "ANALYZING IDENTITY";
-
-                        }
-
+                        substatus.textContent =
+                            "ANALYZING IDENTITY";
 
                         if (
                             Date.now() -
                             lastAuthentication >
-                            1500
+                            4000
                         ) {
 
                             authenticateFace(
@@ -1958,7 +1861,6 @@ async function beginFaceTracking() {
             }
 
             faceBusy = false;
-
         }
 
         requestAnimationFrame(loop);
@@ -1968,9 +1870,207 @@ async function beginFaceTracking() {
 }
 
 
-/* =========================
+/* =====================================================
+   LOCKDOWN ALARM
+===================================================== */
+
+let alarmContext = null;
+let alarmTimer = null;
+
+
+function startAlarm() {
+
+    try {
+
+        if (!alarmContext) {
+
+            alarmContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
+        }
+
+        if (
+            alarmContext.state ===
+            "suspended"
+        ) {
+
+            alarmContext.resume();
+
+        }
+
+        stopAlarm();
+
+        function beep() {
+
+            if (!lockdownActive) {
+                return;
+            }
+
+            const oscillator =
+                alarmContext.createOscillator();
+
+            const gain =
+                alarmContext.createGain();
+
+            oscillator.type =
+                "square";
+
+            oscillator.frequency.value =
+                720;
+
+            gain.gain.setValueAtTime(
+                .0001,
+                alarmContext.currentTime
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                .16,
+                alarmContext.currentTime + .03
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                .0001,
+                alarmContext.currentTime + .25
+            );
+
+            oscillator.connect(gain);
+
+            gain.connect(
+                alarmContext.destination
+            );
+
+            oscillator.start();
+
+            oscillator.stop(
+                alarmContext.currentTime + .25
+            );
+        }
+
+        beep();
+
+        alarmTimer =
+            setInterval(
+                beep,
+                550
+            );
+
+    } catch (error) {
+
+        console.warn(
+            "Alarm unavailable:",
+            error
+        );
+
+    }
+}
+
+
+function stopAlarm() {
+
+    if (alarmTimer) {
+
+        clearInterval(
+            alarmTimer
+        );
+
+        alarmTimer = null;
+
+    }
+}
+
+
+/* =====================================================
+   LOCKDOWN
+===================================================== */
+
+function triggerLockdown() {
+
+    if (lockdownActive) {
+        return;
+    }
+
+    lockdownActive = true;
+
+    const overlay =
+        document.getElementById(
+            "lockdownOverlay"
+        );
+
+    overlay.classList.add(
+        "open"
+    );
+
+    status.textContent =
+        "LOCKDOWN";
+
+    substatus.textContent =
+        "UNAUTHORIZED USER";
+
+    securityStatus.textContent =
+        "LOCKED";
+
+    startAlarm();
+
+    /*
+       Test-friendly automatic reset.
+       The system returns to scanning after
+       6 seconds.
+    */
+
+    lockdownTimer =
+        setTimeout(
+            clearLockdown,
+            6000
+        );
+}
+
+
+function clearLockdown() {
+
+    lockdownActive = false;
+
+    if (lockdownTimer) {
+
+        clearTimeout(
+            lockdownTimer
+        );
+
+        lockdownTimer = null;
+
+    }
+
+    stopAlarm();
+
+    document
+        .getElementById(
+            "lockdownOverlay"
+        )
+        .classList
+        .remove("open");
+
+    securityStatus.textContent =
+        registeredFaces.length
+        ? "READY"
+        : "NO USERS";
+
+    status.textContent =
+        "SYSTEM READY";
+
+    substatus.textContent =
+        "SCANNING";
+
+    lastAuthentication =
+        Date.now();
+
+}
+
+
+/* =====================================================
    AUTHENTICATE
-========================= */
+===================================================== */
 
 function authenticateFace(result) {
 
@@ -1992,8 +2092,11 @@ function authenticateFace(result) {
             !person.descriptor ||
             !person.descriptor.length
         ) {
+
             continue;
+
         }
+
 
         const distance =
             faceapi.euclideanDistance(
@@ -2002,6 +2105,7 @@ function authenticateFace(result) {
                 ),
                 result.descriptor
             );
+
 
         if (
             distance <
@@ -2019,19 +2123,9 @@ function authenticateFace(result) {
     }
 
 
-    /*
-       Lower = stricter.
-       0.50 is the current
-       recognition threshold.
-    */
-
     const MATCH_THRESHOLD =
         0.50;
 
-
-    /* =========================
-       RECOGNIZED
-    ========================= */
 
     if (
         bestMatch &&
@@ -2039,40 +2133,11 @@ function authenticateFace(result) {
         MATCH_THRESHOLD
     ) {
 
-        if (systemLocked) {
-
-            exitLockdown(
-                bestMatch
-            );
-
-            return;
-
-        }
-
-
-        /*
-           Don't repeatedly open
-           the welcome screen.
-        */
-
-        if (
-            Date.now() -
-            lastVerifiedTime <
-            5000
-        ) {
-
-            return;
-
-        }
-
-        lastVerifiedTime =
-            Date.now();
-
         status.textContent =
-            "ACCESS GRANTED";
+            "IDENTITY VERIFIED";
 
         substatus.textContent =
-            "IDENTITY VERIFIED";
+            "ACCESS AUTHORIZED";
 
         securityStatus.textContent =
             bestMatch.name
@@ -2082,52 +2147,26 @@ function authenticateFace(result) {
             bestMatch
         );
 
-    }
+    } else {
 
+        status.textContent =
+            "ACCESS DENIED";
 
-    /* =========================
-       UNKNOWN
-    ========================= */
+        substatus.textContent =
+            "UNKNOWN USER";
 
-    else {
+        securityStatus.textContent =
+            "UNKNOWN";
 
-        if (
-            systemLocked
-        ) {
-
-            lockStatus.textContent =
-                "ACCESS DENIED";
-
-            return;
-
-        }
-
-
-        /*
-           Prevent the screen from
-           repeatedly flashing.
-        */
-
-        if (
-            Date.now() -
-            lastDeniedTime <
-            DENIED_COOLDOWN
-        ) {
-
-            return;
-
-        }
-
-        enterLockdown();
+        triggerLockdown();
 
     }
-
 }
 
 
-/* =========================
+/* =====================================================
    REGISTER FACE
-========================= */
+===================================================== */
 
 const registerOverlay =
     document.getElementById(
@@ -2144,11 +2183,6 @@ const registerCanvas =
         "registerCanvas"
     );
 
-const registerCtx =
-    registerCanvas.getContext(
-        "2d"
-    );
-
 
 document
     .getElementById(
@@ -2157,10 +2191,6 @@ document
     .addEventListener(
         "click",
         () => {
-
-            if (systemLocked) {
-                return;
-            }
 
             document
                 .getElementById(
@@ -2216,15 +2246,17 @@ async function startRegisterCamera() {
     try {
 
         const stream =
-            await navigator.mediaDevices.getUserMedia({
+            await navigator
+                .mediaDevices
+                .getUserMedia({
 
-                video: {
-                    facingMode: "user"
-                },
+                    video: {
+                        facingMode: "user"
+                    },
 
-                audio: false
+                    audio: false
 
-            });
+                });
 
         registerVideo.srcObject =
             stream;
@@ -2244,9 +2276,9 @@ async function startRegisterCamera() {
 }
 
 
-/* =========================
+/* =====================================================
    CAPTURE FACE
-========================= */
+===================================================== */
 
 document
     .getElementById(
@@ -2255,10 +2287,6 @@ document
     .addEventListener(
         "click",
         async () => {
-
-            if (systemLocked) {
-                return;
-            }
 
             const name =
                 document
@@ -2305,10 +2333,11 @@ document
                     await faceapi
                         .detectSingleFace(
                             registerVideo,
-                            new faceapi.TinyFaceDetectorOptions({
-                                inputSize: 320,
-                                scoreThreshold: .35
-                            })
+                            new faceapi
+                                .TinyFaceDetectorOptions({
+                                    inputSize: 320,
+                                    scoreThreshold: .35
+                                })
                         )
                         .withFaceLandmarks(true)
                         .withFaceDescriptor();
@@ -2409,9 +2438,9 @@ document
     );
 
 
-/* =========================
+/* =====================================================
    CANCEL REGISTER
-========================= */
+===================================================== */
 
 document
     .getElementById(
@@ -2421,10 +2450,6 @@ document
         "click",
         () => {
 
-            if (systemLocked) {
-                return;
-            }
-
             registerOverlay
                 .classList
                 .remove("open");
@@ -2433,9 +2458,9 @@ document
     );
 
 
-/* =========================
+/* =====================================================
    MANAGE FACES
-========================= */
+===================================================== */
 
 const manageOverlay =
     document.getElementById(
@@ -2450,10 +2475,6 @@ document
     .addEventListener(
         "click",
         () => {
-
-            if (systemLocked) {
-                return;
-            }
 
             renderPeopleList();
 
@@ -2581,15 +2602,11 @@ function renderPeopleList() {
 }
 
 
-/* =========================
+/* =====================================================
    DELETE PERSON
-========================= */
+===================================================== */
 
 function deletePerson(id) {
-
-    if (systemLocked) {
-        return;
-    }
 
     const person =
         registeredFaces.find(
@@ -2634,9 +2651,9 @@ function deletePerson(id) {
 }
 
 
-/* =========================
+/* =====================================================
    CLOSE MANAGE
-========================= */
+===================================================== */
 
 document
     .getElementById(
@@ -2654,9 +2671,9 @@ document
     );
 
 
-/* =========================
+/* =====================================================
    WELCOME
-========================= */
+===================================================== */
 
 const welcomeOverlay =
     document.getElementById(
@@ -2691,9 +2708,9 @@ function showWelcome(person) {
 }
 
 
-/* =========================
+/* =====================================================
    CLOSE WELCOME
-========================= */
+===================================================== */
 
 document
     .getElementById(
@@ -2717,9 +2734,9 @@ document
     );
 
 
-/* =========================
+/* =====================================================
    AI
-========================= */
+===================================================== */
 
 const aiScreen =
     document.getElementById(
@@ -2734,10 +2751,6 @@ document
     .addEventListener(
         "click",
         () => {
-
-            if (systemLocked) {
-                return;
-            }
 
             welcomeOverlay
                 .classList
@@ -2767,9 +2780,9 @@ document
     );
 
 
-/* =========================
+/* =====================================================
    AI CHAT
-========================= */
+===================================================== */
 
 const aiInput =
     document.getElementById(
@@ -2816,10 +2829,6 @@ function addAIMessage(
 
 
 async function sendAIMessage() {
-
-    if (systemLocked) {
-        return;
-    }
 
     const text =
         aiInput.value.trim();
@@ -2878,7 +2887,9 @@ async function sendAIMessage() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
         addAIMessage(
             "I couldn't connect to my AI core.",
@@ -2915,9 +2926,9 @@ aiInput.addEventListener(
 );
 
 
-/* =========================
+/* =====================================================
    START
-========================= */
+===================================================== */
 
 startCamera();
 

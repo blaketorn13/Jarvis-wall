@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +9,11 @@
 <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -29,11 +26,9 @@ body {
 
 body {
     background:
-        radial-gradient(
-            circle at center,
-            rgba(0,150,255,.20),
-            #020810 70%
-        );
+        radial-gradient(circle at center,
+        rgba(0,150,255,.20),
+        #020810 70%);
 }
 
 .grid {
@@ -54,8 +49,6 @@ body {
     background-size: 45px 45px;
 }
 
-/* MAIN */
-
 .main {
     position: relative;
     z-index: 2;
@@ -63,7 +56,7 @@ body {
     width: 100%;
     height: 100%;
 
-    padding: 25px;
+    padding: 22px;
 
     display: flex;
     flex-direction: column;
@@ -105,7 +98,7 @@ body {
     opacity: .4;
 }
 
-/* FACE SCANNER */
+/* CAMERA */
 
 .center {
     display: flex;
@@ -113,20 +106,21 @@ body {
     align-items: center;
 }
 
-.faceScanner {
+.cameraBox {
     position: relative;
 
-    width: 300px;
+    width: min(320px, 88vw);
     height: 240px;
-
-    border: 1px solid rgba(90,220,255,.7);
-
-    background: rgba(0,30,50,.5);
 
     overflow: hidden;
 
+    border:
+        1px solid rgba(80,220,255,.7);
+
+    background: #000;
+
     box-shadow:
-        0 0 25px rgba(0,180,255,.15),
+        0 0 25px rgba(0,180,255,.18),
         inset 0 0 30px rgba(0,180,255,.08);
 }
 
@@ -139,97 +133,64 @@ body {
     object-fit: cover;
 
     transform: scaleX(-1);
-
-    opacity: .9;
 }
 
-.scannerCorners {
-    position: absolute;
-    inset: 10px;
-
-    pointer-events: none;
-}
-
-.scannerCorners::before,
-.scannerCorners::after {
-    content: "";
-
+.corner {
     position: absolute;
 
-    width: 25px;
-    height: 25px;
+    width: 28px;
+    height: 28px;
 
-    border: 2px solid #67e8ff;
+    border: 2px solid #7de5ff;
+
+    z-index: 5;
 }
 
-.scannerCorners::before {
-    top: 0;
-    left: 0;
+.tl {
+    top: 8px;
+    left: 8px;
 
     border-right: 0;
     border-bottom: 0;
 }
 
-.scannerCorners::after {
-    top: 0;
-    right: 0;
+.tr {
+    top: 8px;
+    right: 8px;
 
     border-left: 0;
     border-bottom: 0;
 }
 
-.faceBox {
+.bl {
+    bottom: 8px;
+    left: 8px;
+
+    border-right: 0;
+    border-top: 0;
+}
+
+.br {
+    bottom: 8px;
+    right: 8px;
+
+    border-left: 0;
+    border-top: 0;
+}
+
+#faceCanvas {
     position: absolute;
 
-    border: 1px solid #39ff88;
+    inset: 0;
 
-    box-shadow:
-        0 0 10px rgba(57,255,136,.7),
-        inset 0 0 15px rgba(57,255,136,.08);
+    width: 100%;
+    height: 100%;
 
-    display: none;
+    transform: scaleX(-1);
+
+    z-index: 4;
 
     pointer-events: none;
-}
-
-.faceBox.active {
-    display: block;
-}
-
-.faceMesh {
-    position: absolute;
-
-    pointer-events: none;
-
-    display: none;
-}
-
-.faceMesh.active {
-    display: block;
-}
-
-.meshPoint {
-    position: absolute;
-
-    width: 3px;
-    height: 3px;
-
-    background: #39ff88;
-
-    border-radius: 50%;
-
-    box-shadow:
-        0 0 5px #39ff88;
-}
-
-.meshLine {
-    position: absolute;
-
-    height: 1px;
-
-    background: rgba(57,255,136,.65);
-
-    transform-origin: left center;
 }
 
 .scanLine {
@@ -246,13 +207,15 @@ body {
         0 0 8px #39ff88,
         0 0 20px #39ff88;
 
-    animation: scanLine 2.5s linear infinite;
+    opacity: .65;
 
-    opacity: .7;
+    animation:
+        scan 2.5s linear infinite;
+
+    z-index: 6;
 }
 
-@keyframes scanLine {
-
+@keyframes scan {
     0% {
         top: 0;
     }
@@ -271,13 +234,13 @@ body {
 
     font-size: 14px;
 
-    letter-spacing: 5px;
+    letter-spacing: 4px;
 
     text-align: center;
 }
 
 .substatus {
-    margin-top: 8px;
+    margin-top: 7px;
 
     font-size: 9px;
 
@@ -289,23 +252,23 @@ body {
 }
 
 .faceButton {
-    margin-top: 15px;
+    margin-top: 14px;
 
-    padding: 12px 18px;
+    padding: 11px 18px;
 
     border:
-        1px solid rgba(70,220,255,.4);
+        1px solid rgba(80,220,255,.4);
 
     background:
         rgba(0,100,160,.12);
 
     color: #aeeeff;
 
+    cursor: pointer;
+
     font-size: 9px;
 
     letter-spacing: 3px;
-
-    cursor: pointer;
 }
 
 /* PANELS */
@@ -321,11 +284,11 @@ body {
     grid-template-columns:
         repeat(3, 1fr);
 
-    gap: 12px;
+    gap: 10px;
 }
 
 .panel {
-    padding: 14px;
+    padding: 12px;
 
     border:
         1px solid rgba(80,210,255,.2);
@@ -341,14 +304,13 @@ body {
 }
 
 .panel-value {
-    margin-top: 10px;
-    font-size: 11px;
+    margin-top: 8px;
+    font-size: 10px;
 }
 
 /* CONSOLE */
 
 #jarvisConsole {
-
     position: fixed;
     inset: 0;
 
@@ -373,44 +335,16 @@ body {
 
     pointer-events: none;
 
-    transition: opacity .6s;
+    transition: opacity .5s;
 }
 
 #jarvisConsole.open {
-
     opacity: 1;
-
     pointer-events: auto;
 }
 
-.consoleGrid {
-
-    position: absolute;
-    inset: 0;
-
-    background-image:
-
-        linear-gradient(
-            rgba(50,190,255,.12) 1px,
-            transparent 1px
-        ),
-
-        linear-gradient(
-            90deg,
-            rgba(50,190,255,.12) 1px,
-            transparent 1px
-        );
-
-    background-size: 45px 45px;
-
-    opacity: .3;
-}
-
 .consoleWelcome {
-
-    position: relative;
-
-    font-size: 34px;
+    font-size: 32px;
 
     letter-spacing: 7px;
 
@@ -419,9 +353,6 @@ body {
 }
 
 .consoleName {
-
-    position: relative;
-
     margin-top: 10px;
 
     font-size: 15px;
@@ -430,13 +361,10 @@ body {
 }
 
 .consoleMessage {
-
-    position: relative;
-
-    margin-top: 35px;
+    margin-top: 30px;
 
     width: 80%;
-    max-width: 650px;
+    max-width: 600px;
 
     padding: 20px;
 
@@ -450,15 +378,10 @@ body {
 
     font-size: 12px;
 
-    letter-spacing: 2px;
-
-    line-height: 1.8;
+    line-height: 1.7;
 }
 
 .jarvisButton {
-
-    position: relative;
-
     margin-top: 12px;
 
     padding: 12px 20px;
@@ -471,14 +394,12 @@ body {
 
     color: #aeeeff;
 
+    cursor: pointer;
+
     font-size: 9px;
 
     letter-spacing: 3px;
-
-    cursor: pointer;
 }
-
-/* MOBILE */
 
 @media(max-width:700px) {
 
@@ -486,25 +407,19 @@ body {
         padding: 18px;
     }
 
-    .faceScanner {
-        width: min(300px, 90vw);
-        height: 225px;
-    }
-
     .panels {
         grid-template-columns: 1fr;
-        gap: 7px;
+        gap: 6px;
     }
 
     .panel {
-        padding: 9px;
+        padding: 8px;
     }
 
     .consoleWelcome {
-        font-size: 25px;
+        font-size: 24px;
     }
 }
-
 </style>
 </head>
 
@@ -517,7 +432,6 @@ body {
     <div class="header">
 
         <div>
-
             <div class="system">
                 PERSONAL INTERFACE
             </div>
@@ -525,16 +439,15 @@ body {
             <div class="logo">
                 JARVIS // CORE
             </div>
-
         </div>
 
         <div class="clock">
 
-            <div class="time" id="time">
+            <div id="time" class="time">
                 --:--
             </div>
 
-            <div class="date" id="date">
+            <div id="date" class="date">
                 ---
             </div>
 
@@ -542,9 +455,10 @@ body {
 
     </div>
 
+
     <div class="center">
 
-        <div class="faceScanner">
+        <div class="cameraBox">
 
             <video
                 id="camera"
@@ -553,61 +467,47 @@ body {
                 playsinline>
             </video>
 
-            <div class="scannerCorners"></div>
+            <canvas id="faceCanvas"></canvas>
 
-            <div
-                id="faceBox"
-                class="faceBox">
-            </div>
-
-            <div
-                id="faceMesh"
-                class="faceMesh">
-            </div>
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
 
             <div class="scanLine"></div>
 
         </div>
 
-        <div
-            id="systemStatus"
-            class="status">
 
-            INITIALIZING
-
+        <div id="systemStatus" class="status">
+            STARTING CAMERA
         </div>
 
-        <div
-            id="systemSubstatus"
-            class="substatus">
-
-            LOADING FACE SYSTEM
-
+        <div id="systemSubstatus" class="substatus">
+            CAMERA INITIALIZATION
         </div>
 
-        <button
-            id="setupFace"
-            class="faceButton">
-
+        <button id="setupFace" class="faceButton">
             SET UP FACE
-
         </button>
 
     </div>
+
 
     <div class="panels">
 
         <div class="panel">
 
             <div class="panel-title">
-                CORE STATUS
+                CAMERA
             </div>
 
-            <div class="panel-value">
-                ONLINE
+            <div id="cameraStatus" class="panel-value">
+                STARTING
             </div>
 
         </div>
+
 
         <div class="panel">
 
@@ -615,14 +515,12 @@ body {
                 SECURITY
             </div>
 
-            <div class="panel-value"
-                 id="securityStatus">
-
-                FACE AUTHENTICATION
-
+            <div id="securityStatus" class="panel-value">
+                INITIALIZING
             </div>
 
         </div>
+
 
         <div class="panel">
 
@@ -631,7 +529,7 @@ body {
             </div>
 
             <div class="panel-value">
-                ALL SYSTEMS NOMINAL
+                ONLINE
             </div>
 
         </div>
@@ -641,11 +539,9 @@ body {
 </div>
 
 
-<!-- CONSOLE -->
+<!-- WELCOME -->
 
 <div id="jarvisConsole">
-
-    <div class="consoleGrid"></div>
 
     <div class="consoleWelcome">
         WELCOME BACK
@@ -655,29 +551,16 @@ body {
         BLAKE
     </div>
 
-    <div
-        id="consoleMessage"
-        class="consoleMessage">
-
-        IDENTITY VERIFIED.
-        JARVIS ONLINE.
-
+    <div id="consoleMessage" class="consoleMessage">
+        IDENTITY VERIFIED. JARVIS ONLINE.
     </div>
 
-    <button
-        id="openAI"
-        class="jarvisButton">
-
+    <button id="openAI" class="jarvisButton">
         OPEN JARVIS AI
-
     </button>
 
-    <button
-        id="closeConsole"
-        class="jarvisButton">
-
+    <button id="closeConsole" class="jarvisButton">
         RETURN TO SYSTEM
-
     </button>
 
 </div>
@@ -685,7 +568,9 @@ body {
 
 <script>
 
-/* CLOCK */
+/* =========================
+   CLOCK
+========================= */
 
 function updateClock() {
 
@@ -712,16 +597,18 @@ updateClock();
 setInterval(updateClock, 1000);
 
 
-/* CAMERA */
+/* =========================
+   ELEMENTS
+========================= */
 
 const video =
     document.getElementById("camera");
 
-const faceBox =
-    document.getElementById("faceBox");
+const canvas =
+    document.getElementById("faceCanvas");
 
-const faceMesh =
-    document.getElementById("faceMesh");
+const ctx =
+    canvas.getContext("2d");
 
 const status =
     document.getElementById("systemStatus");
@@ -729,38 +616,152 @@ const status =
 const substatus =
     document.getElementById("systemSubstatus");
 
-const setupButton =
-    document.getElementById("setupFace");
+const cameraStatus =
+    document.getElementById("cameraStatus");
 
 const securityStatus =
     document.getElementById("securityStatus");
 
-let referenceDescriptor = null;
-
-let scanning = false;
-
-let lastAuthentication = 0;
+const setupButton =
+    document.getElementById("setupFace");
 
 
-/* LOAD FACE MODELS */
+/* =========================
+   CAMERA FIRST
+========================= */
 
-async function loadFaceSystem() {
+async function startCamera() {
+
+    status.textContent =
+        "STARTING CAMERA";
+
+    substatus.textContent =
+        "REQUESTING CAMERA ACCESS";
 
     try {
 
+        if (
+            !navigator.mediaDevices ||
+            !navigator.mediaDevices.getUserMedia
+        ) {
+
+            throw new Error(
+                "Camera API unavailable"
+            );
+
+        }
+
+        const stream =
+            await navigator.mediaDevices.getUserMedia({
+
+                video: {
+                    facingMode: "user",
+                    width: {
+                        ideal: 640
+                    },
+                    height: {
+                        ideal: 480
+                    }
+                },
+
+                audio: false
+
+            });
+
+        video.srcObject = stream;
+
+        await video.play();
+
+        cameraStatus.textContent =
+            "ONLINE";
+
         status.textContent =
-            "LOADING";
+            "CAMERA ONLINE";
 
         substatus.textContent =
-            "LOADING FACE MODELS";
+            "LOADING FACE SYSTEM";
+
+        resizeCanvas();
+
+        loadFaceModels();
+
+    } catch (error) {
+
+        console.error(error);
+
+        cameraStatus.textContent =
+            "ERROR";
+
+        status.textContent =
+            "CAMERA ERROR";
+
+        substatus.textContent =
+            error.message ||
+            "ALLOW CAMERA ACCESS";
+
+    }
+}
+
+
+/* =========================
+   RESIZE CANVAS
+========================= */
+
+function resizeCanvas() {
+
+    if (!video.videoWidth) {
+        return;
+    }
+
+    canvas.width =
+        video.videoWidth;
+
+    canvas.height =
+        video.videoHeight;
+}
+
+video.addEventListener(
+    "loadedmetadata",
+    resizeCanvas
+);
+
+
+/* =========================
+   REMOTE MODELS
+========================= */
+
+/*
+   These are hosted model assets.
+
+   No /models folder is required
+   for this version.
+*/
+
+const MODEL_URL =
+    "https://justadudewhohacks.github.io/face-api.js/models";
+
+
+async function loadFaceModels() {
+
+    securityStatus.textContent =
+        "LOADING";
+
+    try {
 
         await faceapi.nets.tinyFaceDetector.loadFromUri(
-            "./models"
+            MODEL_URL
         );
 
         await faceapi.nets.faceLandmark68TinyNet.loadFromUri(
-            "./models"
+            MODEL_URL
         );
+
+        await faceapi.nets.faceRecognitionNet.loadFromUri(
+            MODEL_URL
+        );
+
+        securityStatus.textContent =
+            "READY";
 
         status.textContent =
             "FACE SYSTEM READY";
@@ -768,344 +769,352 @@ async function loadFaceSystem() {
         substatus.textContent =
             "LOOK AT THE CAMERA";
 
-        startCamera();
+        beginFaceTracking();
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "FACE MODEL ERROR:",
+            error
+        );
 
-        status.textContent =
+        securityStatus.textContent =
             "MODEL ERROR";
 
+        status.textContent =
+            "CAMERA WORKING";
+
         substatus.textContent =
-            "CHECK /models FOLDER";
+            "FACE MODELS FAILED TO LOAD";
 
     }
-
 }
 
 
-/* START CAMERA */
+/* =========================
+   FACE STORAGE
+========================= */
 
-async function startCamera() {
+let savedDescriptor =
+    null;
+
+const saved =
+    localStorage.getItem(
+        "jarvisFaceDescriptor"
+    );
+
+if (saved) {
 
     try {
 
-        const stream =
-            await navigator.mediaDevices.getUserMedia({
+        savedDescriptor =
+            new Float32Array(
+                JSON.parse(saved)
+            );
 
-                video: {
-                    facingMode: "user",
-                    width: 640,
-                    height: 480
-                },
-
-                audio: false
-
-            });
-
-        video.srcObject =
-            stream;
-
-        await video.play();
-
-        detectFace();
+        securityStatus.textContent =
+            "FACE SAVED";
 
     } catch (error) {
 
         console.error(error);
 
-        status.textContent =
-            "CAMERA ERROR";
-
-        substatus.textContent =
-            "CAMERA ACCESS REQUIRED";
-
     }
-
 }
 
 
-/* DRAW FACE MESH */
+/* =========================
+   FACE MESH
+========================= */
 
-function drawMesh(points) {
+function drawFaceMesh(
+    detection
+) {
 
-    faceMesh.innerHTML = "";
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
 
-    const box =
-        faceBox.getBoundingClientRect();
+    const points =
+        detection.landmarks.positions;
 
-    const scanner =
-        document
-            .querySelector(".faceScanner")
-            .getBoundingClientRect();
+    /*
+       Draw the green mesh only around
+       the actual detected face.
+    */
 
-    const scaleX =
-        scanner.width / video.videoWidth;
+    ctx.strokeStyle =
+        "#39ff88";
 
-    const scaleY =
-        scanner.height / video.videoHeight;
+    ctx.fillStyle =
+        "#39ff88";
 
-    points.forEach(point => {
+    ctx.lineWidth = 1;
 
-        const dot =
-            document.createElement("div");
+    const connections = [
 
-        dot.className =
-            "meshPoint";
+        [0,16],
+        [17,21],
+        [22,26],
+        [27,35],
+        [36,41],
+        [42,47],
+        [48,59],
+        [60,67]
 
-        dot.style.left =
-            (point.x * scaleX) + "px";
+    ];
 
-        dot.style.top =
-            (point.y * scaleY) + "px";
+    connections.forEach(
+        pair => {
 
-        faceMesh.appendChild(dot);
+            ctx.beginPath();
 
-    });
+            const start =
+                points[pair[0]];
 
-    faceMesh.classList.add("active");
-}
-
-
-/* FACE DETECTION */
-
-async function detectFace() {
-
-    if (!video.videoWidth) {
-
-        requestAnimationFrame(
-            detectFace
-        );
-
-        return;
-
-    }
-
-    const detection =
-        await faceapi
-            .detectSingleFace(
-                video,
-                new faceapi.TinyFaceDetectorOptions({
-                    inputSize: 320,
-                    scoreThreshold: 0.35
-                })
-            )
-            .withFaceLandmarks(true);
-
-    if (!detection) {
-
-        faceBox.classList.remove("active");
-        faceMesh.classList.remove("active");
-
-        status.textContent =
-            "NO FACE FOUND";
-
-        substatus.textContent =
-            "LOOK AT THE CAMERA";
-
-    } else {
-
-        const box =
-            detection.detection.box;
-
-        const scaleX =
-            document.querySelector(
-                ".faceScanner"
-            ).clientWidth /
-            video.videoWidth;
-
-        const scaleY =
-            document.querySelector(
-                ".faceScanner"
-            ).clientHeight /
-            video.videoHeight;
-
-        faceBox.style.left =
-            (box.x * scaleX) + "px";
-
-        faceBox.style.top =
-            (box.y * scaleY) + "px";
-
-        faceBox.style.width =
-            (box.width * scaleX) + "px";
-
-        faceBox.style.height =
-            (box.height * scaleY) + "px";
-
-        faceBox.classList.add("active");
-
-        drawMesh(
-            detection.landmarks.positions
-        );
-
-        if (!scanning) {
-
-            status.textContent =
-                "FACE DETECTED";
-
-            substatus.textContent =
-                "ANALYZING IDENTITY";
-
-            authenticate(
-                detection
+            ctx.moveTo(
+                start.x,
+                start.y
             );
 
+            for (
+                let i = pair[0] + 1;
+                i <= pair[1];
+                i++
+            ) {
+
+                ctx.lineTo(
+                    points[i].x,
+                    points[i].y
+                );
+
+            }
+
+            ctx.stroke();
+
         }
+    );
 
-    }
 
-    requestAnimationFrame(
-        detectFace
+    points.forEach(
+        point => {
+
+            ctx.beginPath();
+
+            ctx.arc(
+                point.x,
+                point.y,
+                1.5,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+        }
     );
 }
 
 
-/* SAVE FACE */
+/* =========================
+   FACE TRACKING
+========================= */
+
+let faceBusy = false;
+
+let lastAuth =
+    0;
+
+async function beginFaceTracking() {
+
+    async function loop() {
+
+        if (
+            video.readyState >= 2 &&
+            !faceBusy
+        ) {
+
+            faceBusy = true;
+
+            try {
+
+                const result =
+                    await faceapi
+                        .detectSingleFace(
+                            video,
+                            new faceapi.TinyFaceDetectorOptions({
+                                inputSize: 320,
+                                scoreThreshold: 0.35
+                            })
+                        )
+                        .withFaceLandmarks(true)
+                        .withFaceDescriptor();
+
+                ctx.clearRect(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                if (!result) {
+
+                    status.textContent =
+                        "NO FACE FOUND";
+
+                    substatus.textContent =
+                        "LOOK AT THE CAMERA";
+
+                } else {
+
+                    drawFaceMesh(result);
+
+                    status.textContent =
+                        "FACE DETECTED";
+
+                    substatus.textContent =
+                        "ANALYZING IDENTITY";
+
+                    if (
+                        savedDescriptor &&
+                        Date.now() - lastAuth > 5000
+                    ) {
+
+                        authenticate(
+                            result
+                        );
+
+                    }
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "FACE TRACKING ERROR:",
+                    error
+                );
+
+            }
+
+            faceBusy = false;
+
+        }
+
+        requestAnimationFrame(loop);
+
+    }
+
+    loop();
+}
+
+
+/* =========================
+   SAVE FACE
+========================= */
 
 setupButton.addEventListener(
     "click",
-    async function() {
+    async () => {
 
         if (!video.videoWidth) {
+
+            status.textContent =
+                "CAMERA NOT READY";
+
             return;
+
         }
 
         status.textContent =
-            "CAPTURING";
+            "CAPTURING FACE";
 
         substatus.textContent =
             "HOLD STILL";
 
-        const detection =
-            await faceapi
-                .detectSingleFace(
-                    video,
-                    new faceapi.TinyFaceDetectorOptions({
-                        inputSize: 320,
-                        scoreThreshold: 0.35
-                    })
-                )
-                .withFaceLandmarks(true)
-                .withFaceDescriptor();
+        try {
 
-        if (!detection) {
+            const result =
+                await faceapi
+                    .detectSingleFace(
+                        video,
+                        new faceapi.TinyFaceDetectorOptions({
+                            inputSize: 320,
+                            scoreThreshold: 0.35
+                        })
+                    )
+                    .withFaceLandmarks(true)
+                    .withFaceDescriptor();
+
+            if (!result) {
+
+                status.textContent =
+                    "NO FACE FOUND";
+
+                substatus.textContent =
+                    "MOVE CLOSER AND TRY AGAIN";
+
+                return;
+
+            }
+
+            savedDescriptor =
+                new Float32Array(
+                    result.descriptor
+                );
+
+            localStorage.setItem(
+                "jarvisFaceDescriptor",
+                JSON.stringify(
+                    Array.from(
+                        savedDescriptor
+                    )
+                )
+            );
+
+            securityStatus.textContent =
+                "FACE REGISTERED";
 
             status.textContent =
-                "NO FACE FOUND";
+                "FACE SAVED";
+
+            substatus.textContent =
+                "IDENTITY READY";
+
+        } catch (error) {
+
+            console.error(error);
+
+            status.textContent =
+                "SETUP ERROR";
 
             substatus.textContent =
                 "TRY AGAIN";
 
-            return;
-
         }
-
-        referenceDescriptor =
-            Array.from(
-                detection.descriptor
-            );
-
-        localStorage.setItem(
-            "jarvisFaceDescriptor",
-            JSON.stringify(
-                referenceDescriptor
-            )
-        );
-
-        securityStatus.textContent =
-            "FACE REGISTERED";
-
-        status.textContent =
-            "FACE SAVED";
-
-        substatus.textContent =
-            "JARVIS CAN NOW VERIFY YOU";
 
     }
 );
 
 
-/* LOAD SAVED FACE */
-
-const savedFace =
-    localStorage.getItem(
-        "jarvisFaceDescriptor"
-    );
-
-if (savedFace) {
-
-    try {
-
-        referenceDescriptor =
-            new Float32Array(
-                JSON.parse(savedFace)
-            );
-
-        securityStatus.textContent =
-            "FACE REGISTERED";
-
-    } catch(error) {
-
-        console.error(error);
-
-    }
-
-}
-
-
-/* AUTHENTICATION */
+/* =========================
+   AUTHENTICATION
+========================= */
 
 async function authenticate(
-    detection
+    result
 ) {
 
-    if (
-        !referenceDescriptor ||
-        scanning ||
-        Date.now() -
-        lastAuthentication <
-        4000
-    ) {
-
-        return;
-
-    }
-
-    lastAuthentication =
+    lastAuth =
         Date.now();
-
-    scanning = true;
-
-    status.textContent =
-        "SCANNING";
-
-    substatus.textContent =
-        "COMPARING IDENTITY";
-
-    const fullDetection =
-        await faceapi
-            .detectSingleFace(
-                video,
-                new faceapi.TinyFaceDetectorOptions({
-                    inputSize: 320,
-                    scoreThreshold: 0.35
-                })
-            )
-            .withFaceLandmarks(true)
-            .withFaceDescriptor();
-
-    if (!fullDetection) {
-
-        scanning = false;
-        return;
-
-    }
 
     const distance =
         faceapi.euclideanDistance(
-            referenceDescriptor,
-            fullDetection.descriptor
+            savedDescriptor,
+            result.descriptor
         );
 
     console.log(
@@ -1114,9 +1123,9 @@ async function authenticate(
     );
 
     /*
-       Lower number = closer match.
-
-       0.50 is intentionally conservative.
+       This is only a demo-style
+       browser face match, not high-security
+       biometric authentication.
     */
 
     if (distance < 0.50) {
@@ -1132,7 +1141,7 @@ async function authenticate(
 
         setTimeout(
             openConsole,
-            1200
+            1000
         );
 
     } else {
@@ -1146,24 +1155,13 @@ async function authenticate(
         securityStatus.textContent =
             "UNKNOWN USER";
 
-        setTimeout(() => {
-
-            status.textContent =
-                "FACE DETECTED";
-
-            substatus.textContent =
-                "ANALYZING IDENTITY";
-
-            scanning = false;
-
-        }, 2500);
-
     }
-
 }
 
 
-/* CONSOLE */
+/* =========================
+   CONSOLE
+========================= */
 
 function openConsole() {
 
@@ -1174,17 +1172,12 @@ function openConsole() {
         .classList
         .add("open");
 
-    document
-        .getElementById(
-            "consoleMessage"
-        )
-        .textContent =
-        "IDENTITY VERIFIED. JARVIS ONLINE.";
-
 }
 
 
-/* CLOSE */
+/* =========================
+   CLOSE
+========================= */
 
 document
     .getElementById(
@@ -1192,7 +1185,7 @@ document
     )
     .addEventListener(
         "click",
-        function() {
+        () => {
 
             document
                 .getElementById(
@@ -1201,15 +1194,40 @@ document
                 .classList
                 .remove("open");
 
-            scanning = false;
+        }
+    );
+
+
+/* =========================
+   JARVIS AI BUTTON
+========================= */
+
+document
+    .getElementById(
+        "openAI"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            /*
+               Keep your existing AI screen
+               code here if you already have it.
+            */
+
+            alert(
+                "JARVIS AI screen goes here."
+            );
 
         }
     );
 
 
-/* START */
+/* =========================
+   START
+========================= */
 
-loadFaceSystem();
+startCamera();
 
 </script>
 

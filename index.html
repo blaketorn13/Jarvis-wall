@@ -463,6 +463,7 @@ body {
 <script>
 
 function updateClock() {
+
     const now = new Date();
 
     document.getElementById("time").textContent =
@@ -494,8 +495,8 @@ const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d");
 
 let previous = null;
-let lastScan = 0;
 let scanning = false;
+let lastScan = 0;
 
 
 /* START CAMERA */
@@ -521,30 +522,29 @@ async function startCamera() {
         canvas.width = 64;
         canvas.height = 48;
 
-        document.querySelector(".substatus").textContent =
-            "CAMERA SENSOR ONLINE";
-
         setTimeout(checkMotion, 1000);
 
-    } catch (error) {
+    }
 
-        document.querySelector(".substatus").textContent =
-            "CAMERA SENSOR OFFLINE";
+    catch(error) {
 
         console.log(error);
+
     }
+
 }
 
 
-/* MOTION SENSOR */
+/* MOTION DETECTION */
 
 function checkMotion() {
 
     if (!video.videoWidth) {
 
-        setTimeout(checkMotion, 300);
+        setTimeout(checkMotion, 500);
 
         return;
+
     }
 
 
@@ -570,6 +570,7 @@ function checkMotion() {
 
         let difference = 0;
 
+
         for (
             let i = 0;
             i < frame.data.length;
@@ -585,25 +586,19 @@ function checkMotion() {
         }
 
 
-        difference =
-            difference /
-            (frame.data.length / 16);
+        difference /=
+            frame.data.length / 16;
 
-
-        /*
-        Lower threshold makes
-        the detector easier to trigger.
-        */
 
         if (
             difference > 10 &&
             !scanning &&
-            Date.now() - lastScan > 7000
+            Date.now() - lastScan > 10000
         ) {
 
             lastScan = Date.now();
 
-            runScan();
+            runJarvisSequence();
 
         }
 
@@ -612,18 +607,21 @@ function checkMotion() {
 
     previous = frame;
 
+
     setTimeout(
         checkMotion,
-        300
+        400
     );
+
 }
 
 
-/* JARVIS EFFECT */
+/* JARVIS SEQUENCE */
 
-function runScan() {
+function runJarvisSequence() {
 
     scanning = true;
+
 
     const status =
         document.querySelector(".status");
@@ -636,7 +634,7 @@ function runScan() {
         "MOTION DETECTED";
 
     sub.textContent =
-        "ANALYZING SUBJECT";
+        "MOVEMENT DETECTED";
 
 
     setTimeout(() => {
@@ -645,9 +643,9 @@ function runScan() {
             "SCANNING...";
 
         sub.textContent =
-            "IDENTITY ANALYSIS";
+            "ANALYZING SUBJECT";
 
-    }, 1000);
+    }, 2000);
 
 
     setTimeout(() => {
@@ -656,9 +654,9 @@ function runScan() {
             "IDENTITY VERIFIED";
 
         sub.textContent =
-            "ACCESS AUTHORIZED";
+            "MATCH CONFIRMED";
 
-    }, 2200);
+    }, 5000);
 
 
     setTimeout(() => {
@@ -669,7 +667,7 @@ function runScan() {
         sub.textContent =
             "BLAKE // ACCESS GRANTED";
 
-    }, 3200);
+    }, 7500);
 
 
     setTimeout(() => {
@@ -678,11 +676,12 @@ function runScan() {
             "SYSTEM READY";
 
         sub.textContent =
-            "CAMERA SENSOR ONLINE";
+            "MONITORING ENVIRONMENT";
 
         scanning = false;
 
-    }, 5500);
+    }, 11000);
+
 }
 
 

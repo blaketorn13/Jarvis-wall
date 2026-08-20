@@ -1,1 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JARVIS">
+<title>JARVIS // CORE</title>
 
+<style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #05070a;
+  color: #eaf7ff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background:
+    radial-gradient(circle at 50% 45%, rgba(70,150,190,.10), transparent 35%),
+    #05070a;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  opacity: .08;
+  background-image:
+    linear-gradient(rgba(180,230,255,.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180,230,255,.5) 1px, transparent 1px);
+  background-size: 45px 45px;
+  pointer-events: none;
+}
+
+.system {
+  width: 100%;
+  height: 100%;
+  padding: 28px 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.system-title {
+  font-size: 12px;
+  letter-spacing: 4px;
+  opacity: .55;
+}
+
+.system-name {
+  font-size: 20px;
+  letter-spacing: 3px;
+  margin-top: 6px;
+}
+
+.clock {
+  text-align: right;
+}
+
+.time {
+  font-size: 34px;
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+.date {
+  font-size: 11px;
+  letter-spacing: 2px;
+  opacity: .45;
+  margin-top: 4px;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.scanner {
+  width: 270px;
+  height: 270px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(190,235,255,.35);
+}
+
+.circle.one {
+  width: 245px;
+  height: 245px;
+}
+
+.circle.two {
+  width: 205px;
+  height: 205px;
+  border-style: dashed;
+  opacity: .45;
+  animation: rotate 18s linear infinite;
+}
+
+.circle.three {
+  width: 155px;
+  height: 155px;
+  opacity: .5;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.corner {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-color: #d9f5ff;
+  border-style: solid;
+  opacity: .8;
+}
+
+.tl {
+  top: 5px;
+  left: 5px;
+  border-width: 2px 0 0 2px;
+}
+
+.tr {
+  top: 5px;
+  right: 5px;
+  border-width: 2px 2px 0 0;
+}
+
+.bl {
+  bottom: 5px;
+  left: 5px;
+  border-width: 0 0 2px 2px;
+}
+
+.br {
+  bottom: 5px;
+  right: 5px;
+  border-width: 0 2px 2px 0;
+}
+
+.scan {
+  position: absolute;
+  width: 190px;
+  height: 1px;
+  background: #d8f6ff;
+  box-shadow: 0 0 12px rgba(190,240,255,.9);
+  animation: scan 2.8s ease-in-out infinite;
+}
+
+@keyframes scan {
+  0%, 100% {
+    transform: translateY(-90px);
+    opacity: .2;
+  }
+
+  50% {
+    transform: translateY(90px);
+    opacity: 1;
+  }
+}
+
+.center-label {
+  font-size: 13px;
+  letter-spacing: 5px;
+  margin-top: 20px;
+}
+
+.center-status {
+  font-size: 10px;
+  letter-spacing: 3px;
+  opacity: .45;
+  margin-top: 9px;
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.panel {
+  border: 1px solid rgba(190,230,255,.14);
+  background: rgba(255,255,255,.025);
+  padding: 15px;
+  min-height: 72px;
+}
+
+.panel-title {
+  font-size: 9px;
+  letter-spacing: 2px;
+  opacity: .4;
+  margin-bottom: 9px;
+}
+
+.panel-value {
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.online {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #c9f3ff;
+  box-shadow: 0 0 8px rgba(190,240,255,.8);
+  margin-right: 7px;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  letter-spacing: 2px;
+  opacity: .35;
+}
+
+.welcome-screen {
+  position: fixed;
+  inset: 0;
+  background: #05070a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .5s ease;
+  z-index: 10;
+}
+
+.welcome-screen.active {
+  opacity: 1;
+}
+
+.welcome-small {
+  font-size: 11px;
+  letter-spacing: 5px;
+  opacity: .45;
+  margin-bottom: 18px;
+}
+
+.welcome-big {
+  font-size: 42px;
+  font-weight: 300;
+  letter-spacing: 8px;
+}
+
+.welcome-name {
+  margin-top: 14px;
+  font-size: 14px;
+  letter-spacing: 5px;
+  opacity: .65;
+}
+
+.access {
+  margin-top: 30px;
+  font-size: 10px;
+  letter-spacing: 4px;
+  opacity: .5;
+}
+
+@media (max-width: 700px) {
+  .system {
+    padding: 20px;
+  }
+
+  .panels {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    min-height: 55px;
+  }
+
+  .scanner {
+    transform: scale(.8);
+  }
+
+  .welcome-big {
+    font-size: 27px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="system">
+
+  <div class="topbar">
+
+    <div>
+      <div class="system-title">PERSONAL INTERFACE</div>
+      <div class="system-name">JARVIS // CORE</div>
+    </div>
+
+    <div class="clock">
+      <div class="time" id="time">--:--</div>
+      <div class="date" id="date">---</div>
+    </div>
+
+  </div>
+
+  <div class="center">
+
+    <div class="scanner">
+
+      <div class="circle one"></div>
+      <div class="circle two"></div>
+      <div class="circle three"></div>
+
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
+
+      <div class="scan"></div>
+
+    </div>
+
+    <div class="center-label" id="mainStatus">
+      SYSTEM READY
+    </div>
+
+    <div class="center-status">
+      AWAITING USER
+    </div>
+
+  </div>
+
+  <div class="panels">
+
+    <div class="panel">
+      <div class="panel-title">CORE STATUS</div>
+      <div class="panel-value">
+        <span class="online"></span>
+        ONLINE
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">SECURITY</div>
+      <div class="panel-value">
+        AUTHENTICATION READY
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">NETWORK</div>
+      <div class="panel-value">
+        CONNECTED
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom">
+    <div>JARVIS CORE 01</div>
+    <div>LOCAL SYSTEM</div>
+    <div>v1.0</div>
+  </div>
+
+</div>
+
+<div class="welcome-screen" id="welcomeScreen">
+
+  <div class="welcome-small">
+    IDENTITY VERIFIED
+  </div>
+
+  <div class="welcome-big">
+    WELCOME BACK
+  </div>
+
+  <div class="welcome-name">
+    BLAKE
+  </div>
+
+  <div class="access">
+    ACCESS GRANTED
+  </div>
+
+</div>
+
+<script>
+
+function updateClock() {
+
+  const now = new Date();
+
+  document.getElementById("time").textContent =
+    now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+  document.getElementById("date").textContent =
+    now.toLocaleDateString([], {
+      weekday: "long",
+      month: "long",
+      day: "numeric"
+    }).toUpperCase();
+
+}
+
+updateClock();
+
+setInterval(updateClock, 1000);
+
+
+function runScan() {
+
+  const status =
+    document.getElementById("mainStatus");
+
+  const welcome =
+    document.getElementById("welcomeScreen");
+
+  status.textContent = "SCANNING...";
+
+  setTimeout(function() {
+    status.textContent = "IDENTITY VERIFIED";
+  }, 1800);
+
+  setTimeout(function() {
+    welcome.classList.add("active");
+  }, 2600);
+
+  setTimeout(function() {
+    welcome.classList.remove("active");
+    status.textContent = "SYSTEM READY";
+  }, 5200);
+
+}
+
+document.addEventListener("click", runScan);
+
+</script>
+
+</body>
+</html>

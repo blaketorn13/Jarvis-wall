@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JARVIS</title>
 
-<!-- MediaPipe Face Mesh -->
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
 
 <style>
 *{box-sizing:border-box}
@@ -24,7 +22,11 @@ html,body{
 }
 
 body{
-    background:radial-gradient(circle at center,rgba(0,150,255,.20),#020810 70%);
+    background:radial-gradient(
+        circle at center,
+        rgba(0,150,255,.20),
+        #020810 70%
+    );
 }
 
 .grid{
@@ -82,16 +84,13 @@ body{
 }
 
 /* =========================
-   FACE SCANNER
+   CAMERA
 ========================= */
 
 .faceScanner{
     position:relative;
     width:250px;
     height:190px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
     overflow:hidden;
     background:#010b12;
     border:1px solid rgba(90,220,255,.5);
@@ -100,17 +99,16 @@ body{
         inset 0 0 30px rgba(0,170,255,.08);
 }
 
-/* Camera image */
 #cameraVideo{
     position:absolute;
+    inset:0;
     width:100%;
     height:100%;
     object-fit:cover;
     transform:scaleX(-1);
-    opacity:.75;
+    opacity:.78;
 }
 
-/* Face mesh canvas */
 #faceCanvas{
     position:absolute;
     inset:0;
@@ -120,7 +118,6 @@ body{
     pointer-events:none;
 }
 
-/* Scanner corners */
 .scannerCorner{
     position:absolute;
     width:25px;
@@ -157,7 +154,6 @@ body{
     border-top:0;
 }
 
-/* Thin scanning line */
 .faceScanLine{
     position:absolute;
     left:8px;
@@ -177,18 +173,26 @@ body{
     50%{top:88%;opacity:1}
 }
 
-/* Green face detection glow */
 .faceDetected{
+    border-color:#57ff91;
     box-shadow:
         0 0 15px rgba(50,255,120,.35),
         0 0 40px rgba(50,255,120,.15),
         inset 0 0 25px rgba(50,255,120,.12);
 }
 
+.faceDenied{
+    border-color:#ff4040;
+    box-shadow:
+        0 0 20px rgba(255,40,40,.4),
+        inset 0 0 30px rgba(255,40,40,.15);
+}
+
 .status{
     margin-top:12px;
     font-size:14px;
     letter-spacing:5px;
+    text-align:center;
 }
 
 .substatus{
@@ -196,6 +200,7 @@ body{
     font-size:9px;
     letter-spacing:3px;
     opacity:.4;
+    text-align:center;
 }
 
 .panels{
@@ -225,7 +230,28 @@ body{
 }
 
 /* =========================
-   WELCOME SCREEN
+   ENROLLMENT
+========================= */
+
+#enrollButton{
+    position:relative;
+    margin-top:12px;
+    padding:10px 18px;
+    border:1px solid rgba(80,255,130,.45);
+    background:rgba(0,120,60,.12);
+    color:#8affb1;
+    font-size:9px;
+    letter-spacing:3px;
+    cursor:pointer;
+    z-index:10;
+}
+
+#enrollButton:hover{
+    background:rgba(0,180,80,.2);
+}
+
+/* =========================
+   WELCOME
 ========================= */
 
 #jarvisConsole{
@@ -236,7 +262,12 @@ body{
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    background:radial-gradient(circle at center,rgba(0,150,255,.18),#020810 65%);
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(0,150,255,.18),
+            #020810 65%
+        );
     opacity:0;
     pointer-events:none;
     transition:opacity .6s;
@@ -296,7 +327,10 @@ body{
     height:14px;
     border-radius:50%;
     background:white;
-    box-shadow:0 0 15px white,0 0 35px #22c8ff,0 0 60px #008bd0;
+    box-shadow:
+        0 0 15px white,
+        0 0 35px #22c8ff,
+        0 0 60px #008bd0;
 }
 
 @keyframes spin{
@@ -310,8 +344,14 @@ body{
 }
 
 @keyframes pulse{
-    0%,100%{transform:scale(.9);opacity:.4}
-    50%{transform:scale(1.08);opacity:1}
+    0%,100%{
+        transform:scale(.9);
+        opacity:.4;
+    }
+    50%{
+        transform:scale(1.08);
+        opacity:1;
+    }
 }
 
 .consoleStatus{
@@ -374,7 +414,12 @@ body{
     display:flex;
     flex-direction:column;
     align-items:center;
-    background:radial-gradient(circle at center,rgba(0,150,255,.18),#020810 70%);
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(0,150,255,.18),
+            #020810 70%
+        );
     opacity:0;
     pointer-events:none;
     transition:opacity .5s;
@@ -461,7 +506,10 @@ body{
     height:20px;
     border-radius:50%;
     background:white;
-    box-shadow:0 0 15px white,0 0 35px #21caff,0 0 70px #008bd0;
+    box-shadow:
+        0 0 15px white,
+        0 0 35px #21caff,
+        0 0 70px #008bd0;
 }
 
 .aiMessages{
@@ -537,7 +585,10 @@ body{
 }
 
 @media(max-width:700px){
-    .main{padding:18px}
+
+    .main{
+        padding:18px;
+    }
 
     .faceScanner{
         width:230px;
@@ -549,9 +600,13 @@ body{
         gap:7px;
     }
 
-    .panel{padding:9px}
+    .panel{
+        padding:9px;
+    }
 
-    .consoleWelcome{font-size:25px}
+    .consoleWelcome{
+        font-size:25px;
+    }
 }
 </style>
 </head>
@@ -565,23 +620,40 @@ body{
     <div class="header">
 
         <div>
-            <div class="system">PERSONAL INTERFACE</div>
-            <div class="logo">JARVIS // CORE</div>
+            <div class="system">
+                PERSONAL INTERFACE
+            </div>
+
+            <div class="logo">
+                JARVIS // CORE
+            </div>
         </div>
 
         <div class="clock">
-            <div class="time" id="time">--:--</div>
-            <div class="date" id="date">---</div>
+
+            <div class="time" id="time">
+                --:--
+            </div>
+
+            <div class="date" id="date">
+                ---
+            </div>
+
         </div>
 
     </div>
 
+
     <div class="center">
 
-        <!-- SMALL CAMERA / FACE SCANNER -->
         <div class="faceScanner" id="faceScanner">
 
-            <video id="cameraVideo" autoplay playsinline muted></video>
+            <video
+                id="cameraVideo"
+                autoplay
+                playsinline
+                muted>
+            </video>
 
             <canvas id="faceCanvas"></canvas>
 
@@ -594,36 +666,74 @@ body{
 
         </div>
 
-        <div class="status" id="systemStatus">
+
+        <div
+            class="status"
+            id="systemStatus">
             SYSTEM READY
         </div>
 
-        <div class="substatus" id="systemSubstatus">
-            MONITORING ENVIRONMENT
+
+        <div
+            class="substatus"
+            id="systemSubstatus">
+            SEARCHING FOR FACE
         </div>
 
+
+        <button id="enrollButton">
+            ENROLL BLAKE
+        </button>
+
     </div>
+
 
     <div class="panels">
 
         <div class="panel">
-            <div class="panel-title">CORE STATUS</div>
-            <div class="panel-value">ONLINE</div>
+
+            <div class="panel-title">
+                CORE STATUS
+            </div>
+
+            <div class="panel-value">
+                ONLINE
+            </div>
+
         </div>
 
-        <div class="panel">
-            <div class="panel-title">SECURITY</div>
-            <div class="panel-value">AUTHENTICATION READY</div>
-        </div>
 
         <div class="panel">
-            <div class="panel-title">SYSTEM</div>
-            <div class="panel-value">ALL SYSTEMS NOMINAL</div>
+
+            <div class="panel-title">
+                SECURITY
+            </div>
+
+            <div
+                class="panel-value"
+                id="securityStatus">
+                FACE AUTHENTICATION READY
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="panel-title">
+                SYSTEM
+            </div>
+
+            <div class="panel-value">
+                ALL SYSTEMS NOMINAL
+            </div>
+
         </div>
 
     </div>
 
 </div>
+
 
 <!-- WELCOME SCREEN -->
 
@@ -632,35 +742,68 @@ body{
     <div class="consoleGrid"></div>
 
     <div class="consoleCore">
+
         <div class="consoleRing ringA"></div>
         <div class="consoleRing ringB"></div>
         <div class="consoleRing ringC"></div>
+
         <div class="consoleDot"></div>
+
     </div>
 
-    <div class="consoleStatus">IDENTITY VERIFIED</div>
 
-    <div class="consoleWelcome">WELCOME BACK</div>
+    <div class="consoleStatus">
+        IDENTITY VERIFIED
+    </div>
 
-    <div class="consoleName">BLAKE</div>
 
-    <div class="consoleMessage" id="consoleMessage">
+    <div class="consoleWelcome">
+        WELCOME BACK
+    </div>
+
+
+    <div class="consoleName">
+        BLAKE
+    </div>
+
+
+    <div
+        class="consoleMessage"
+        id="consoleMessage">
+
         JARVIS INITIALIZING...
+
     </div>
 
-    <button class="jarvisButton" id="enableVoice">
+
+    <button
+        class="jarvisButton"
+        id="enableVoice">
+
         ENABLE JARVIS VOICE
+
     </button>
 
-    <button class="jarvisButton" id="openAI">
+
+    <button
+        class="jarvisButton"
+        id="openAI">
+
         OPEN JARVIS AI
+
     </button>
 
-    <button class="jarvisButton" id="closeConsole">
+
+    <button
+        class="jarvisButton"
+        id="closeConsole">
+
         RETURN TO SYSTEM
+
     </button>
 
 </div>
+
 
 <!-- AI SCREEN -->
 
@@ -668,35 +811,57 @@ body{
 
     <div class="aiGrid"></div>
 
+
     <div class="aiHeader">
 
         <div>
-            <div class="aiSmall">JARVIS ARTIFICIAL INTELLIGENCE</div>
-            <div class="aiTitle">AI CORE</div>
+
+            <div class="aiSmall">
+                JARVIS ARTIFICIAL INTELLIGENCE
+            </div>
+
+            <div class="aiTitle">
+                AI CORE
+            </div>
+
         </div>
 
-        <div id="aiStatus" class="aiStatus">
+
+        <div
+            id="aiStatus"
+            class="aiStatus">
+
             ONLINE
+
         </div>
 
     </div>
+
 
     <div class="aiOrb">
 
         <div class="aiRing aiRing1"></div>
         <div class="aiRing aiRing2"></div>
         <div class="aiRing aiRing3"></div>
+
         <div class="aiCore"></div>
 
     </div>
 
-    <div id="aiMessages" class="aiMessages">
+
+    <div
+        id="aiMessages"
+        class="aiMessages">
 
         <div class="aiMessage jarvisMessage">
-            JARVIS ONLINE. HOW CAN I HELP?
+
+            JARVIS ONLINE.
+            HOW CAN I HELP?
+
         </div>
 
     </div>
+
 
     <div class="aiInputArea">
 
@@ -704,20 +869,25 @@ body{
             id="aiInput"
             type="text"
             placeholder="Talk to JARVIS..."
-            autocomplete="off"
-        >
+            autocomplete="off">
 
-        <button id="aiSend">SEND</button>
+        <button id="aiSend">
+            SEND
+        </button>
 
-        <button id="aiMic">🎙</button>
+        <button id="aiMic">
+            🎙
+        </button>
 
     </div>
+
 
     <button id="aiBack">
         RETURN TO JARVIS
     </button>
 
 </div>
+
 
 <script>
 
@@ -730,176 +900,99 @@ function updateClock(){
     const now = new Date();
 
     document.getElementById("time").textContent =
-        now.toLocaleTimeString([],{
-            hour:"2-digit",
-            minute:"2-digit"
-        });
+        now.toLocaleTimeString(
+            [],
+            {
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        );
 
     document.getElementById("date").textContent =
-        now.toLocaleDateString([],{
-            weekday:"long",
-            month:"long",
-            day:"numeric"
-        }).toUpperCase();
+        now.toLocaleDateString(
+            [],
+            {
+                weekday:"long",
+                month:"long",
+                day:"numeric"
+            }
+        ).toUpperCase();
+
 }
 
 updateClock();
-setInterval(updateClock,1000);
+
+setInterval(
+    updateClock,
+    1000
+);
 
 
 /* =========================
-   CAMERA + FACE MESH
+   CAMERA
 ========================= */
 
 const video =
-    document.getElementById("cameraVideo");
+    document.getElementById(
+        "cameraVideo"
+    );
 
 const faceCanvas =
-    document.getElementById("faceCanvas");
+    document.getElementById(
+        "faceCanvas"
+    );
 
 const faceCtx =
-    faceCanvas.getContext("2d");
+    faceCanvas.getContext(
+        "2d"
+    );
 
 const faceScanner =
-    document.getElementById("faceScanner");
+    document.getElementById(
+        "faceScanner"
+    );
 
 const status =
-    document.getElementById("systemStatus");
+    document.getElementById(
+        "systemStatus"
+    );
 
 const substatus =
-    document.getElementById("systemSubstatus");
+    document.getElementById(
+        "systemSubstatus"
+    );
 
-let faceDetected = false;
+const securityStatus =
+    document.getElementById(
+        "securityStatus"
+    );
+
+let currentFace = null;
+
 let scanning = false;
-let lastScan = 0;
 
+let lastAuthentication = 0;
 
-/* Green facial mesh */
-
-function drawFaceMesh(landmarks){
-
-    faceCtx.clearRect(
-        0,
-        0,
-        faceCanvas.width,
-        faceCanvas.height
+let enrolledTemplate =
+    localStorage.getItem(
+        "jarvisFaceTemplate"
     );
 
-    if(!landmarks) return;
 
-    const w = faceCanvas.width;
-    const h = faceCanvas.height;
-
-    faceCtx.strokeStyle =
-        "rgba(60,255,120,.85)";
-
-    faceCtx.fillStyle =
-        "rgba(60,255,120,.85)";
-
-    faceCtx.lineWidth = 0.8;
-
-    /*
-       Draw facial landmark connections.
-       The landmarks themselves create the
-       green mesh effect over the detected face.
-    */
-
-    const connections = [
-        [10,338],[338,297],[297,332],[332,284],
-        [284,251],[251,389],[389,356],[356,454],
-        [454,323],[323,361],[361,288],[288,397],
-        [397,365],[365,379],[379,378],[378,400],
-        [400,377],[377,152],[152,148],[148,176],
-        [176,149],[149,150],[150,136],[136,172],
-        [172,58],[58,132],[132,93],[93,234],
-        [234,127],[127,162],[162,21],[21,54],
-        [54,103],[103,67],[67,109],[109,10],
-
-        [33,7],[7,163],[163,144],[144,145],
-        [145,153],[153,154],[154,155],[155,133],
-        [133,173],[173,157],[157,158],[158,159],
-        [159,160],[160,161],[161,246],
-
-        [263,249],[249,390],[390,373],[373,374],
-        [374,380],[380,381],[381,382],[382,362],
-        [362,398],[398,384],[384,385],[385,386],
-        [386,387],[387,388],[388,466]
-    ];
-
-    connections.forEach(pair=>{
-
-        const a = landmarks[pair[0]];
-        const b = landmarks[pair[1]];
-
-        if(!a || !b) return;
-
-        faceCtx.beginPath();
-
-        faceCtx.moveTo(
-            a.x * w,
-            a.y * h
-        );
-
-        faceCtx.lineTo(
-            b.x * w,
-            b.y * h
-        );
-
-        faceCtx.stroke();
-
-    });
-
-
-    /* Landmark points */
-
-    landmarks.forEach(point=>{
-
-        faceCtx.beginPath();
-
-        faceCtx.arc(
-            point.x * w,
-            point.y * h,
-            1.1,
-            0,
-            Math.PI * 2
-        );
-
-        faceCtx.fill();
-
-    });
-
-
-    /* Face targeting box */
-
-    const xs = landmarks.map(p=>p.x*w);
-    const ys = landmarks.map(p=>p.y*h);
-
-    const minX = Math.min(...xs);
-    const maxX = Math.max(...xs);
-    const minY = Math.min(...ys);
-    const maxY = Math.max(...ys);
-
-    faceCtx.strokeStyle =
-        "rgba(80,255,130,.55)";
-
-    faceCtx.lineWidth = 1;
-
-    faceCtx.strokeRect(
-        minX - 5,
-        minY - 5,
-        maxX-minX+10,
-        maxY-minY+10
-    );
-}
-
-
-/* MediaPipe */
+/* =========================
+   FACE MESH
+========================= */
 
 const faceMesh =
     new FaceMesh({
-        locateFile:file=>{
-            return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+
+        locateFile:function(file){
+
+            return
+                `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+
         }
+
     });
 
 
@@ -916,82 +1009,397 @@ faceMesh.setOptions({
 });
 
 
-faceMesh.onResults(results=>{
+/*
+   These connections create the
+   green facial mesh.
+*/
+
+const connections = [
+
+    [10,338],[338,297],[297,332],
+    [332,284],[284,251],[251,389],
+    [389,356],[356,454],[454,323],
+    [323,361],[361,288],[288,397],
+    [397,365],[365,379],[379,378],
+    [378,400],[400,377],[377,152],
+    [152,148],[148,176],[176,149],
+    [149,150],[150,136],[136,172],
+    [172,58],[58,132],[132,93],
+    [93,234],[234,127],[127,162],
+    [162,21],[21,54],[54,103],
+    [103,67],[67,109],[109,10],
+
+    [33,7],[7,163],[163,144],
+    [144,145],[145,153],[153,154],
+    [154,155],[155,133],[133,173],
+    [173,157],[157,158],[158,159],
+    [159,160],[160,161],[161,246],
+
+    [263,249],[249,390],[390,373],
+    [373,374],[374,380],[380,381],
+    [381,382],[382,362],[362,398],
+    [398,384],[384,385],[385,386],
+    [386,387],[387,388],[388,466]
+
+];
+
+
+function drawFaceMesh(
+    landmarks
+){
+
+    faceCtx.clearRect(
+        0,
+        0,
+        faceCanvas.width,
+        faceCanvas.height
+    );
+
+    if(!landmarks)
+        return;
+
+
+    const w =
+        faceCanvas.width;
+
+    const h =
+        faceCanvas.height;
+
+
+    faceCtx.strokeStyle =
+        "rgba(60,255,120,.85)";
+
+    faceCtx.fillStyle =
+        "rgba(60,255,120,.85)";
+
+    faceCtx.lineWidth =
+        0.8;
+
+
+    connections.forEach(
+        function(pair){
+
+            const a =
+                landmarks[pair[0]];
+
+            const b =
+                landmarks[pair[1]];
+
+            if(!a || !b)
+                return;
+
+            faceCtx.beginPath();
+
+            faceCtx.moveTo(
+                a.x*w,
+                a.y*h
+            );
+
+            faceCtx.lineTo(
+                b.x*w,
+                b.y*h
+            );
+
+            faceCtx.stroke();
+
+        }
+    );
+
+
+    landmarks.forEach(
+        function(point){
+
+            faceCtx.beginPath();
+
+            faceCtx.arc(
+                point.x*w,
+                point.y*h,
+                1.1,
+                0,
+                Math.PI*2
+            );
+
+            faceCtx.fill();
+
+        }
+    );
+
+}
+
+
+/* =========================
+   FACE TEMPLATE
+========================= */
+
+
+/*
+   We don't save a picture.
+
+   We create a small numerical
+   template from the face landmarks.
+*/
+
+function createTemplate(
+    landmarks
+){
+
+    if(!landmarks)
+        return null;
+
+
+    const nose =
+        landmarks[1];
+
+    const leftEye =
+        landmarks[33];
+
+    const rightEye =
+        landmarks[263];
+
+    const leftCheek =
+        landmarks[234];
+
+    const rightCheek =
+        landmarks[454];
+
+    const chin =
+        landmarks[152];
+
+    const forehead =
+        landmarks[10];
+
 
     if(
-        !results.multiFaceLandmarks ||
-        results.multiFaceLandmarks.length === 0
+        !nose ||
+        !leftEye ||
+        !rightEye ||
+        !leftCheek ||
+        !rightCheek ||
+        !chin ||
+        !forehead
     ){
 
-        faceDetected = false;
+        return null;
+
+    }
+
+
+    const points = [
+
+        nose.x,
+        nose.y,
+
+        leftEye.x,
+        leftEye.y,
+
+        rightEye.x,
+        rightEye.y,
+
+        leftCheek.x,
+        leftCheek.y,
+
+        rightCheek.x,
+        rightCheek.y,
+
+        chin.x,
+        chin.y,
+
+        forehead.x,
+        forehead.y
+
+    ];
+
+
+    /*
+       Normalize the coordinates
+       around the nose so small
+       movements don't completely
+       change the template.
+    */
+
+    const normalized = [];
+
+    for(
+        let i=0;
+        i<points.length;
+        i+=2
+    ){
+
+        normalized.push(
+            points[i]-nose.x
+        );
+
+        normalized.push(
+            points[i+1]-nose.y
+        );
+
+    }
+
+
+    return normalized;
+
+}
+
+
+/* Distance between templates */
+
+function templateDistance(
+    a,
+    b
+){
+
+    if(
+        !a ||
+        !b ||
+        a.length !== b.length
+    ){
+
+        return Infinity;
+
+    }
+
+
+    let total = 0;
+
+
+    for(
+        let i=0;
+        i<a.length;
+        i++
+    ){
+
+        const difference =
+            a[i]-b[i];
+
+        total +=
+            difference*difference;
+
+    }
+
+
+    return Math.sqrt(
+        total/a.length
+    );
+
+}
+
+
+/* =========================
+   FACE RESULTS
+========================= */
+
+faceMesh.onResults(
+    function(results){
+
+        if(
+            !results.multiFaceLandmarks ||
+            results.multiFaceLandmarks.length === 0
+        ){
+
+            currentFace = null;
+
+            faceScanner.classList.remove(
+                "faceDetected"
+            );
+
+            faceCtx.clearRect(
+                0,
+                0,
+                faceCanvas.width,
+                faceCanvas.height
+            );
+
+            status.textContent =
+                "SYSTEM READY";
+
+            substatus.textContent =
+                enrolledTemplate
+                ? "SEARCHING FOR BLAKE"
+                : "FACE NOT ENROLLED";
+
+            return;
+
+        }
+
+
+        currentFace =
+            results.multiFaceLandmarks[0];
+
 
         faceScanner.classList.remove(
+            "faceDenied"
+        );
+
+        faceScanner.classList.add(
             "faceDetected"
         );
 
-        faceCtx.clearRect(
-            0,
-            0,
-            faceCanvas.width,
-            faceCanvas.height
+
+        drawFaceMesh(
+            currentFace
         );
 
-        status.textContent =
-            "SYSTEM READY";
 
-        substatus.textContent =
-            "SEARCHING FOR FACE";
+        /*
+           Only authenticate automatically
+           if Blake has already been enrolled.
+        */
 
-        return;
+        if(
+            enrolledTemplate &&
+            !scanning &&
+            Date.now()-lastAuthentication > 8000
+        ){
 
-    }
+            authenticateFace();
 
-
-    faceDetected = true;
-
-    faceScanner.classList.add(
-        "faceDetected"
-    );
-
-    drawFaceMesh(
-        results.multiFaceLandmarks[0]
-    );
+        }
 
 
-    if(
-        !scanning &&
-        Date.now()-lastScan > 10000
-    ){
+        if(!enrolledTemplate){
 
-        runFaceScan();
+            status.textContent =
+                "FACE DETECTED";
+
+            substatus.textContent =
+                "PRESS ENROLL BLAKE";
+
+        }
 
     }
+);
 
-});
 
-
-/* Start camera */
+/* =========================
+   START CAMERA
+========================= */
 
 async function startCamera(){
 
     try{
 
         const stream =
-            await navigator.mediaDevices.getUserMedia({
+            await navigator
+                .mediaDevices
+                .getUserMedia({
 
-                video:{
-                    facingMode:"user",
-                    width:{ideal:640},
-                    height:{ideal:480}
-                },
+                    video:{
+                        facingMode:"user",
+                        width:{ideal:640},
+                        height:{ideal:480}
+                    },
 
-                audio:false
+                    audio:false
 
-            });
+                });
 
-        video.srcObject = stream;
+
+        video.srcObject =
+            stream;
+
 
         await video.play();
+
 
         faceCanvas.width =
             video.videoWidth || 640;
@@ -999,7 +1407,9 @@ async function startCamera(){
         faceCanvas.height =
             video.videoHeight || 480;
 
+
         processCamera();
+
 
     }catch(error){
 
@@ -1019,8 +1429,6 @@ async function startCamera(){
 }
 
 
-/* Continuously process camera */
-
 async function processCamera(){
 
     if(
@@ -1036,7 +1444,9 @@ async function processCamera(){
 
         }catch(error){
 
-            console.error(error);
+            console.error(
+                error
+            );
 
         }
 
@@ -1050,60 +1460,270 @@ async function processCamera(){
 
 
 /* =========================
-   FACE SCAN
+   ENROLL BLAKE
 ========================= */
 
-function runFaceScan(){
+document
+.getElementById("enrollButton")
+.addEventListener(
+    "click",
+    enrollFace
+);
+
+
+function enrollFace(){
+
+    if(!currentFace){
+
+        status.textContent =
+            "NO FACE FOUND";
+
+        substatus.textContent =
+            "LOOK INTO CAMERA";
+
+        return;
+
+    }
+
+
+    const template =
+        createTemplate(
+            currentFace
+        );
+
+
+    if(!template){
+
+        status.textContent =
+            "ENROLLMENT ERROR";
+
+        substatus.textContent =
+            "TRY AGAIN";
+
+        return;
+
+    }
+
+
+    /*
+       Save only the numerical
+       face template locally.
+    */
+
+    localStorage.setItem(
+        "jarvisFaceTemplate",
+        JSON.stringify(template)
+    );
+
+
+    enrolledTemplate =
+        JSON.stringify(template);
+
+
+    securityStatus.textContent =
+        "BLAKE ENROLLED";
+
+
+    status.textContent =
+        "FACE ENROLLED";
+
+    substatus.textContent =
+        "JARVIS SECURITY ACTIVE";
+
+
+    document
+    .getElementById("enrollButton")
+    .textContent =
+        "BLAKE ENROLLED";
+
+
+    setTimeout(
+        function(){
+
+            status.textContent =
+                "SYSTEM READY";
+
+            substatus.textContent =
+                "SEARCHING FOR BLAKE";
+
+        },
+        2000
+    );
+
+}
+
+
+/* =========================
+   AUTHENTICATION
+========================= */
+
+function authenticateFace(){
+
+    if(
+        !currentFace ||
+        !enrolledTemplate ||
+        scanning
+    ){
+
+        return;
+
+    }
+
 
     scanning = true;
 
-    lastScan = Date.now();
+    lastAuthentication =
+        Date.now();
+
 
     status.textContent =
-        "FACE DETECTED";
+        "SCANNING FACE";
 
     substatus.textContent =
-        "LOCKING SUBJECT";
-
-    setTimeout(()=>{
-
-        if(!faceDetected) return;
-
-        status.textContent =
-            "SCANNING...";
-
-        substatus.textContent =
-            "ANALYZING FACIAL FEATURES";
-
-    },1200);
+        "COMPARING IDENTITY";
 
 
-    setTimeout(()=>{
-
-        if(!faceDetected) return;
-
-        status.textContent =
-            "IDENTITY VERIFIED";
-
-        substatus.textContent =
-            "ACCESS AUTHORIZED";
-
-    },3500);
+    const template =
+        createTemplate(
+            currentFace
+        );
 
 
-    setTimeout(()=>{
+    const saved =
+        JSON.parse(
+            enrolledTemplate
+        );
 
-        if(faceDetected){
+
+    const distance =
+        templateDistance(
+            template,
+            saved
+        );
+
+
+    /*
+       This threshold controls
+       how close the face template
+       must be.
+
+       Lower = stricter.
+    */
+
+    const MATCH_THRESHOLD =
+        0.035;
+
+
+    setTimeout(
+        function(){
+
+            if(
+                distance <=
+                MATCH_THRESHOLD
+            ){
+
+                grantAccess();
+
+            }else{
+
+                denyAccess();
+
+            }
+
+        },
+        1200
+    );
+
+}
+
+
+/* =========================
+   ACCESS GRANTED
+========================= */
+
+function grantAccess(){
+
+    faceScanner.classList.remove(
+        "faceDenied"
+    );
+
+    faceScanner.classList.add(
+        "faceDetected"
+    );
+
+
+    status.textContent =
+        "ACCESS GRANTED";
+
+    substatus.textContent =
+        "IDENTITY VERIFIED";
+
+
+    securityStatus.textContent =
+        "BLAKE VERIFIED";
+
+
+    setTimeout(
+        function(){
 
             openConsole();
 
-        }else{
+            scanning=false;
 
-            scanning = false;
+        },
+        1200
+    );
 
-        }
+}
 
-    },5000);
+
+/* =========================
+   ACCESS DENIED
+========================= */
+
+function denyAccess(){
+
+    faceScanner.classList.remove(
+        "faceDetected"
+    );
+
+    faceScanner.classList.add(
+        "faceDenied"
+    );
+
+
+    status.textContent =
+        "ACCESS DENIED";
+
+    substatus.textContent =
+        "UNKNOWN FACE";
+
+
+    securityStatus.textContent =
+        "IDENTITY REJECTED";
+
+
+    setTimeout(
+        function(){
+
+            faceScanner.classList.remove(
+                "faceDenied"
+            );
+
+            status.textContent =
+                "SYSTEM READY";
+
+            substatus.textContent =
+                "SEARCHING FOR BLAKE";
+
+            securityStatus.textContent =
+                "FACE AUTHENTICATION READY";
+
+            scanning=false;
+
+        },
+        2500
+    );
 
 }
 
@@ -1112,19 +1732,25 @@ function runFaceScan(){
    VOICE
 ========================= */
 
-let voiceEnabled = false;
-let jarvisVoice = null;
+let voiceEnabled=false;
+let jarvisVoice=null;
+
 
 function loadJarvisVoice(){
 
-    if(!("speechSynthesis" in window))
+    if(
+        !("speechSynthesis" in window)
+    )
         return;
+
 
     const voices =
         speechSynthesis.getVoices();
 
+
     if(!voices.length)
         return;
+
 
     const preferred=[
         "Daniel",
@@ -1134,7 +1760,10 @@ function loadJarvisVoice(){
         "Arthur"
     ];
 
-    for(const name of preferred){
+
+    for(
+        const name of preferred
+    ){
 
         const found =
             voices.find(
@@ -1146,6 +1775,7 @@ function loadJarvisVoice(){
                     )
             );
 
+
         if(found){
 
             jarvisVoice=found;
@@ -1154,6 +1784,7 @@ function loadJarvisVoice(){
         }
 
     }
+
 
     if(!jarvisVoice){
 
@@ -1169,9 +1800,13 @@ function loadJarvisVoice(){
 
 }
 
+
 loadJarvisVoice();
 
-if("speechSynthesis" in window){
+
+if(
+    "speechSynthesis" in window
+){
 
     speechSynthesis.onvoiceschanged =
         loadJarvisVoice;
@@ -1184,21 +1819,33 @@ function speak(text){
     if(
         !voiceEnabled ||
         !("speechSynthesis" in window)
-    ) return;
+    )
+        return;
+
 
     loadJarvisVoice();
 
     speechSynthesis.cancel();
 
-    const utterance =
-        new SpeechSynthesisUtterance(text);
 
-    if(jarvisVoice)
-        utterance.voice=jarvisVoice;
+    const utterance =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+
+    if(jarvisVoice){
+
+        utterance.voice =
+            jarvisVoice;
+
+    }
+
 
     utterance.rate=.82;
     utterance.pitch=.72;
     utterance.volume=1;
+
 
     speechSynthesis.speak(
         utterance
@@ -1207,26 +1854,27 @@ function speak(text){
 }
 
 
-/* Enable voice */
-
 document
 .getElementById("enableVoice")
-.addEventListener("click",function(){
+.addEventListener(
+    "click",
+    function(){
 
-    voiceEnabled=true;
+        voiceEnabled=true;
 
-    speak(
-        "JARVIS voice online."
-    );
+        speak(
+            "JARVIS voice online."
+        );
 
-    this.textContent =
-        "JARVIS VOICE ONLINE";
+        this.textContent =
+            "JARVIS VOICE ONLINE";
 
-});
+    }
+);
 
 
 /* =========================
-   WELCOME SCREEN
+   WELCOME
 ========================= */
 
 function openConsole(){
@@ -1235,10 +1883,12 @@ function openConsole(){
     .getElementById("jarvisConsole")
     .classList.add("open");
 
+
     document
     .getElementById("consoleMessage")
     .textContent =
         "JARVIS ONLINE. ALL SYSTEMS ARE OPERATIONAL.";
+
 
     if(voiceEnabled){
 
@@ -1253,23 +1903,21 @@ function openConsole(){
 
 document
 .getElementById("closeConsole")
-.addEventListener("click",function(){
+.addEventListener(
+    "click",
+    function(){
 
-    document
-    .getElementById("jarvisConsole")
-    .classList.remove("open");
+        document
+        .getElementById("jarvisConsole")
+        .classList.remove("open");
 
-    status.textContent =
-        "SYSTEM READY";
+        scanning=false;
 
-    substatus.textContent =
-        "MONITORING ENVIRONMENT";
+        lastAuthentication =
+            Date.now();
 
-    scanning=false;
-
-    lastScan=Date.now();
-
-});
+    }
+);
 
 
 /* =========================
@@ -1277,33 +1925,51 @@ document
 ========================= */
 
 const aiScreen =
-    document.getElementById("aiScreen");
+    document.getElementById(
+        "aiScreen"
+    );
 
 const aiInput =
-    document.getElementById("aiInput");
+    document.getElementById(
+        "aiInput"
+    );
 
 const aiMessages =
-    document.getElementById("aiMessages");
+    document.getElementById(
+        "aiMessages"
+    );
 
 const aiStatus =
-    document.getElementById("aiStatus");
+    document.getElementById(
+        "aiStatus"
+    );
 
 
-function addMessage(text,isUser){
+function addMessage(
+    text,
+    isUser
+){
 
     const message =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     message.className =
         isUser
         ? "aiMessage userMessage"
         : "aiMessage jarvisMessage";
 
-    message.textContent=text;
+
+    message.textContent =
+        text;
+
 
     aiMessages.appendChild(
         message
     );
+
 
     aiMessages.scrollTop =
         aiMessages.scrollHeight;
@@ -1311,22 +1977,28 @@ function addMessage(text,isUser){
 }
 
 
-/* AI REQUEST */
-
 async function sendMessage(){
 
     const text =
         aiInput.value.trim();
 
+
     if(!text)
         return;
 
-    addMessage(text,true);
+
+    addMessage(
+        text,
+        true
+    );
+
 
     aiInput.value="";
 
+
     aiStatus.textContent =
         "THINKING...";
+
 
     try{
 
@@ -1334,6 +2006,7 @@ async function sendMessage(){
             await fetch(
                 "https://jarvis-wall-two.vercel.app/api/chat",
                 {
+
                     method:"POST",
 
                     headers:{
@@ -1344,11 +2017,14 @@ async function sendMessage(){
                     body:JSON.stringify({
                         message:text
                     })
+
                 }
             );
 
+
         const data =
             await response.json();
+
 
         if(!response.ok){
 
@@ -1359,24 +2035,34 @@ async function sendMessage(){
 
         }
 
+
         addMessage(
             data.reply,
             false
         );
 
-        speak(data.reply);
+
+        speak(
+            data.reply
+        );
+
 
         aiStatus.textContent =
             "ONLINE";
 
+
     }catch(error){
 
-        console.error(error);
+        console.error(
+            error
+        );
+
 
         addMessage(
             "I couldn't connect to my AI core. Check the backend connection.",
             false
         );
+
 
         aiStatus.textContent =
             "CONNECTION ERROR";
@@ -1390,24 +2076,34 @@ async function sendMessage(){
 
 document
 .getElementById("openAI")
-.addEventListener("click",function(){
+.addEventListener(
+    "click",
+    function(){
 
-    aiScreen.classList.add("open");
+        aiScreen
+        .classList
+        .add("open");
 
-    aiInput.focus();
+        aiInput.focus();
 
-});
+    }
+);
 
 
 /* Back */
 
 document
 .getElementById("aiBack")
-.addEventListener("click",function(){
+.addEventListener(
+    "click",
+    function(){
 
-    aiScreen.classList.remove("open");
+        aiScreen
+        .classList
+        .remove("open");
 
-});
+    }
+);
 
 
 /* Send */
@@ -1426,8 +2122,14 @@ aiInput.addEventListener(
     "keydown",
     function(event){
 
-        if(event.key==="Enter")
+        if(
+            event.key ===
+            "Enter"
+        ){
+
             sendMessage();
+
+        }
 
     }
 );
@@ -1441,25 +2143,36 @@ const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
+
 if(SpeechRecognition){
 
     const recognition =
         new SpeechRecognition();
 
-    recognition.lang="en-US";
-    recognition.continuous=false;
-    recognition.interimResults=false;
+
+    recognition.lang =
+        "en-US";
+
+    recognition.continuous =
+        false;
+
+    recognition.interimResults =
+        false;
+
 
     document
     .getElementById("aiMic")
-    .addEventListener("click",function(){
+    .addEventListener(
+        "click",
+        function(){
 
-        aiStatus.textContent =
-            "LISTENING...";
+            aiStatus.textContent =
+                "LISTENING...";
 
-        recognition.start();
+            recognition.start();
 
-    });
+        }
+    );
 
 
     recognition.onresult =
@@ -1482,6 +2195,29 @@ if(SpeechRecognition){
                 "ONLINE";
 
         };
+
+}
+
+
+/* =========================
+   INITIAL STATUS
+========================= */
+
+if(enrolledTemplate){
+
+    securityStatus.textContent =
+        "BLAKE ENROLLED";
+
+    substatus.textContent =
+        "SEARCHING FOR BLAKE";
+
+}else{
+
+    securityStatus.textContent =
+        "FACE NOT ENROLLED";
+
+    substatus.textContent =
+        "PRESS ENROLL BLAKE";
 
 }
 

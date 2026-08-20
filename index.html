@@ -1,32 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width,
-initial-scale=1,
-viewport-fit=cover">
+      content="width=device-width,
+      initial-scale=1,
+      viewport-fit=cover">
 
 <meta name="apple-mobile-web-app-capable"
-content="yes">
+      content="yes">
 
 <meta name="apple-mobile-web-app-status-bar-style"
-content="black-translucent">
+      content="black-translucent">
 
 <meta name="apple-mobile-web-app-title"
-content="JARVIS">
+      content="JARVIS">
 
-<title>JARVIS CORE</title>
-
+<title>JARVIS // CORE</title>
 
 <style>
 
-/* ==============================
-   BASIC SETUP
-============================== */
+/* =========================
+   BASE
+========================= */
 
 * {
   box-sizing: border-box;
@@ -35,17 +32,20 @@ content="JARVIS">
 
 html,
 body {
-
+  margin: 0;
   width: 100%;
   height: 100%;
-
-  margin: 0;
-
   overflow: hidden;
 
-  background: #02070b;
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(70,150,190,.13),
+      transparent 38%
+    ),
+    #030509;
 
-  color: #dff8ff;
+  color: #eaf7ff;
 
   font-family:
     Arial,
@@ -54,245 +54,218 @@ body {
 }
 
 
-/* ==============================
-   BACKGROUND
-============================== */
+/* =========================
+   GRID
+========================= */
 
-body {
-
-  background:
-
-    radial-gradient(
-      circle at center,
-      rgba(0,150,220,.20),
-      transparent 40%
-    ),
-
-    #02070b;
-}
-
-
-.grid {
+body::before {
+  content: "";
 
   position: fixed;
-
   inset: 0;
 
-  background-image:
+  opacity: .075;
 
+  background-image:
     linear-gradient(
-      rgba(80,200,255,.25) 1px,
+      rgba(180,230,255,.45) 1px,
       transparent 1px
     ),
-
     linear-gradient(
       90deg,
-      rgba(80,200,255,.25) 1px,
+      rgba(180,230,255,.45) 1px,
       transparent 1px
     );
 
   background-size: 45px 45px;
 
-  opacity: .12;
-
   pointer-events: none;
 }
 
 
-/* ==============================
+/* =========================
+   SCANLINES
+========================= */
+
+body::after {
+  content: "";
+
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.015),
+      rgba(255,255,255,.015) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+
+  opacity: .35;
+}
+
+
+/* =========================
    MAIN INTERFACE
-============================== */
+========================= */
 
-.interface {
-
-  position: relative;
-
-  z-index: 2;
-
+.system {
   width: 100%;
   height: 100%;
 
-  padding: 25px;
+  padding:
+    28px
+    34px
+    20px;
 
   display: flex;
-
   flex-direction: column;
-
   justify-content: space-between;
+
+  position: relative;
 }
 
 
-/* ==============================
-   HEADER
-============================== */
+/* =========================
+   TOP BAR
+========================= */
 
-.header {
-
+.topbar {
   display: flex;
-
   justify-content: space-between;
-
   align-items: flex-start;
 }
 
+.system-title {
+  font-size: 11px;
+  letter-spacing: 4px;
+  opacity: .42;
+}
 
-.small-title {
+.system-name {
+  margin-top: 6px;
 
-  font-size: 10px;
-
+  font-size: 21px;
   letter-spacing: 4px;
 
-  opacity: .45;
-}
-
-
-.logo {
-
-  margin-top: 7px;
-
-  font-size: 23px;
-
-  letter-spacing: 5px;
-
   text-shadow:
-    0 0 15px
-    rgba(100,220,255,.35);
+    0 0 15px rgba(210,245,255,.25);
 }
-
 
 .clock {
-
   text-align: right;
 }
 
-
 .time {
-
-  font-size: 32px;
-
+  font-size: 34px;
+  font-weight: 300;
   letter-spacing: 2px;
 }
-
 
 .date {
-
   margin-top: 4px;
 
-  font-size: 9px;
-
+  font-size: 10px;
   letter-spacing: 2px;
 
-  opacity: .4;
+  opacity: .38;
 }
 
 
-/* ==============================
+/* =========================
    CENTER
-============================== */
+========================= */
 
 .center {
-
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
   justify-content: center;
 }
 
 
-/* ==============================
-   JARVIS HUD
-============================== */
+/* =========================
+   SCANNER
+========================= */
 
-.hud {
-
+.scanner {
   width: 300px;
-
   height: 300px;
 
   position: relative;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 }
 
 
-/* ==============================
-   CIRCLES
-============================== */
+/* Main circles */
 
 .circle {
-
   position: absolute;
 
   border-radius: 50%;
 
   border:
     1px solid
-    rgba(100,215,255,.45);
+    rgba(190,235,255,.34);
 }
 
+.circle.one {
+  width: 260px;
+  height: 260px;
 
-.circle1 {
-
-  width: 275px;
-  height: 275px;
+  box-shadow:
+    0 0 35px rgba(150,220,255,.04);
 }
 
-
-.circle2 {
-
-  width: 225px;
-  height: 225px;
+.circle.two {
+  width: 215px;
+  height: 215px;
 
   border-style: dashed;
 
+  opacity: .5;
+
   animation:
-    rotate 15s linear infinite;
+    rotate 16s linear infinite;
+}
+
+.circle.three {
+  width: 165px;
+  height: 165px;
+
+  opacity: .55;
 }
 
 
-.circle3 {
+/* Inner ring */
 
-  width: 175px;
-  height: 175px;
+.circle.four {
+  width: 115px;
+  height: 115px;
 
-  opacity: .7;
-}
-
-
-.circle4 {
-
-  width: 120px;
-  height: 120px;
-
-  border-color:
-    rgba(170,240,255,.7);
+  border:
+    1px solid
+    rgba(220,247,255,.45);
 
   animation:
-    pulse 2.2s ease-in-out infinite;
+    pulse 2.8s ease-in-out infinite;
 }
 
 
 @keyframes rotate {
 
   from {
-
-    transform:
-      rotate(0deg);
-
+    transform: rotate(0deg);
   }
 
   to {
-
-    transform:
-      rotate(360deg);
-
+    transform: rotate(360deg);
   }
 
 }
@@ -302,404 +275,369 @@ body {
 
   0%,
   100% {
-
-    transform:
-      scale(.92);
-
-    opacity: .4;
-
+    transform: scale(.96);
+    opacity: .35;
   }
 
   50% {
-
-    transform:
-      scale(1.08);
-
-    opacity: .9;
-
+    transform: scale(1.04);
+    opacity: .75;
   }
 
 }
 
 
-/* ==============================
-   SCANNING LINE
-============================== */
+/* =========================
+   CORNERS
+========================= */
 
-.scan {
-
+.corner {
   position: absolute;
 
-  width: 220px;
+  width: 34px;
+  height: 34px;
 
-  height: 2px;
+  border-color: #d9f5ff;
+  border-style: solid;
 
-  background:
-    #b9f4ff;
+  opacity: .75;
 
-  box-shadow:
-
-    0 0 10px
-    #64dfff,
-
-    0 0 25px
-    #009bd5;
-
-  animation:
-    scan 2.5s ease-in-out infinite;
+  filter:
+    drop-shadow(
+      0 0 5px
+      rgba(190,240,255,.4)
+    );
 }
 
+.tl {
+  top: 5px;
+  left: 5px;
+
+  border-width:
+    2px
+    0
+    0
+    2px;
+}
+
+.tr {
+  top: 5px;
+  right: 5px;
+
+  border-width:
+    2px
+    2px
+    0
+    0;
+}
+
+.bl {
+  bottom: 5px;
+  left: 5px;
+
+  border-width:
+    0
+    0
+    2px
+    2px;
+}
+
+.br {
+  bottom: 5px;
+  right: 5px;
+
+  border-width:
+    0
+    2px
+    2px
+    0;
+}
+
+
+/* =========================
+   SCANNING LINE
+========================= */
+
+.scan {
+  position: absolute;
+
+  width: 210px;
+  height: 1px;
+
+  background: #d8f6ff;
+
+  box-shadow:
+    0 0 8px #d8f6ff,
+    0 0 18px rgba(190,240,255,.6);
+
+  animation:
+    scan 2.8s ease-in-out infinite;
+}
 
 @keyframes scan {
 
   0%,
   100% {
-
     transform:
       translateY(-105px);
 
-    opacity: .2;
-
+    opacity: .15;
   }
 
   50% {
-
     transform:
       translateY(105px);
 
     opacity: 1;
-
   }
 
 }
 
 
-/* ==============================
-   CENTER CORE
-============================== */
+/* =========================
+   CENTER DOT
+========================= */
 
-.core {
-
-  width: 15px;
-
-  height: 15px;
+.center-dot {
+  width: 7px;
+  height: 7px;
 
   border-radius: 50%;
 
-  background:
-    #eaffff;
+  background: #eafaff;
 
   box-shadow:
-
-    0 0 10px
-    #d5faff,
-
-    0 0 25px
-    #27b9ed,
-
-    0 0 55px
-    rgba(0,180,255,.8);
+    0 0 8px #d8f6ff,
+    0 0 20px rgba(180,240,255,.8);
 }
 
 
-/* ==============================
-   CORNERS
-============================== */
-
-.corner {
-
-  position: absolute;
-
-  width: 30px;
-
-  height: 30px;
-
-  border-color:
-    #a9edff;
-
-  border-style:
-    solid;
-
-  opacity: .75;
-}
-
-
-.tl {
-
-  top: 5px;
-
-  left: 5px;
-
-  border-width:
-    2px 0 0 2px;
-}
-
-
-.tr {
-
-  top: 5px;
-
-  right: 5px;
-
-  border-width:
-    2px 2px 0 0;
-}
-
-
-.bl {
-
-  bottom: 5px;
-
-  left: 5px;
-
-  border-width:
-    0 0 2px 2px;
-}
-
-
-.br {
-
-  bottom: 5px;
-
-  right: 5px;
-
-  border-width:
-    0 2px 2px 0;
-}
-
-
-/* ==============================
+/* =========================
    STATUS
-============================== */
+========================= */
 
 .status {
+  margin-top: 15px;
 
-  margin-top: 5px;
-
-  font-size: 14px;
+  font-size: 13px;
 
   letter-spacing: 5px;
 
   text-align: center;
+
+  transition:
+    opacity .3s ease;
 }
 
-
 .substatus {
-
   margin-top: 9px;
 
   font-size: 9px;
 
   letter-spacing: 3px;
 
-  opacity: .4;
+  opacity: .38;
 
   text-align: center;
 }
 
 
-/* ==============================
+/* =========================
    PANELS
-============================== */
+========================= */
 
 .panels {
-
-  width: 100%;
-
-  max-width: 900px;
-
-  margin: auto;
-
   display: grid;
 
   grid-template-columns:
-    repeat(3,1fr);
+    repeat(3, 1fr);
 
-  gap: 12px;
+  gap: 14px;
+
+  width: 100%;
+  max-width: 900px;
+
+  margin: 0 auto;
 }
 
-
 .panel {
-
-  padding: 13px;
-
-  min-height: 70px;
+  position: relative;
 
   border:
     1px solid
-    rgba(100,215,255,.2);
+    rgba(190,230,255,.13);
 
   background:
-    rgba(0,120,180,.05);
+    rgba(255,255,255,.018);
+
+  padding: 15px;
+
+  min-height: 72px;
+
+  overflow: hidden;
 }
 
+.panel::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 25px;
+  height: 1px;
+
+  background:
+    rgba(220,245,255,.65);
+}
 
 .panel-title {
-
   font-size: 8px;
 
   letter-spacing: 2px;
 
-  opacity: .4;
+  opacity: .35;
+
+  margin-bottom: 9px;
 }
 
-
 .panel-value {
-
-  margin-top: 9px;
-
-  font-size: 11px;
+  font-size: 12px;
 
   letter-spacing: 1px;
 }
 
-
-.status-dot {
-
+.online {
   display: inline-block;
 
   width: 6px;
-
   height: 6px;
 
   border-radius: 50%;
 
-  background:
-    #c8f6ff;
+  background: #c9f3ff;
 
   box-shadow:
-    0 0 10px
-    #45d9ff;
+    0 0 7px
+    rgba(190,240,255,.9);
 
-  margin-right: 6px;
+  margin-right: 7px;
 }
 
 
-/* ==============================
-   FOOTER
-============================== */
+/* =========================
+   BOTTOM
+========================= */
 
-.footer {
-
+.bottom {
   display: flex;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
   font-size: 8px;
 
   letter-spacing: 2px;
 
-  opacity: .3;
+  opacity: .28;
 }
 
 
-/* ==============================
-   WELCOME SCREEN
-============================== */
+/* =========================
+   WELCOME OVERLAY
+========================= */
 
 .welcome {
-
   position: fixed;
 
   inset: 0;
 
-  z-index: 10;
+  background:
+    radial-gradient(
+      circle,
+      rgba(50,130,170,.12),
+      #030509 55%
+    );
 
   display: flex;
 
   align-items: center;
-
   justify-content: center;
 
   flex-direction: column;
-
-  background:
-
-    radial-gradient(
-      circle,
-      rgba(0,150,220,.18),
-      #02070b 60%
-    );
 
   opacity: 0;
 
   pointer-events: none;
 
   transition:
-    opacity .5s;
+    opacity .45s ease;
+
+  z-index: 10;
 }
 
-
 .welcome.show {
-
   opacity: 1;
 }
 
-
-.verified {
-
+.w-small {
   font-size: 10px;
 
   letter-spacing: 5px;
 
-  opacity: .5;
+  opacity: .45;
 }
 
-
-.welcome-title {
-
-  margin-top: 20px;
+.w-big {
+  margin-top: 18px;
 
   font-size: 40px;
 
-  letter-spacing: 7px;
+  font-weight: 300;
+
+  letter-spacing: 8px;
+
+  text-shadow:
+    0 0 25px
+    rgba(210,245,255,.25);
 }
 
-
-.welcome-name {
-
+.w-name {
   margin-top: 15px;
 
-  font-size: 15px;
+  font-size: 14px;
 
   letter-spacing: 6px;
+
+  opacity: .7;
 }
 
-
 .access {
-
-  margin-top: 30px;
+  margin-top: 28px;
 
   font-size: 9px;
 
   letter-spacing: 4px;
 
-  opacity: .5;
+  opacity: .45;
 }
 
 
-/* ==============================
+/* =========================
    CAMERA
-============================== */
+========================= */
 
 /*
-
-The camera is deliberately
-invisible.
-
-It acts as a sensor while
-the JARVIS interface remains
-on the screen.
-
+The camera is intentionally invisible.
+It runs as the sensor while
+the JARVIS interface remains visible.
 */
 
-#camera {
-
+#camera,
+#canvas {
   position: fixed;
 
   width: 1px;
-
   height: 1px;
 
   opacity: 0;
@@ -708,85 +646,159 @@ on the screen.
 }
 
 
-#canvas {
+/* =========================
+   ACTIVATE SCREEN
+========================= */
 
+.activate {
+  position: fixed;
+
+  inset: 0;
+
+  background: #030509;
+
+  z-index: 30;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+}
+
+.activate.hidden {
   display: none;
 }
 
+.activate-title {
+  font-size: 22px;
 
-/* ==============================
-   SMALL SCREENS
-============================== */
+  letter-spacing: 5px;
+}
 
-@media(max-width:700px) {
+.activate-text {
+  margin-top: 14px;
 
-  .interface {
+  font-size: 10px;
 
-    padding: 18px;
+  letter-spacing: 3px;
 
+  opacity: .4;
+}
+
+button {
+  margin-top: 28px;
+
+  padding:
+    14px
+    24px;
+
+  background:
+    rgba(255,255,255,.02);
+
+  color: #eaf7ff;
+
+  border:
+    1px solid
+    rgba(220,245,255,.35);
+
+  font-size: 10px;
+
+  letter-spacing: 3px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+  .system {
+    padding:
+      20px
+      20px
+      15px;
   }
 
-
-  .hud {
-
-    transform:
-      scale(.8);
-
+  .scanner {
+    transform: scale(.78);
   }
-
 
   .panels {
-
-    grid-template-columns:
-      1fr;
-
-    gap: 7px;
-
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
-
 
   .panel {
-
-    min-height: 45px;
-
-    padding: 9px;
-
+    min-height: 48px;
+    padding: 10px;
   }
 
+  .panel-title {
+    margin-bottom: 5px;
+  }
 
-  .welcome-title {
+  .bottom {
+    font-size: 7px;
+  }
 
+  .w-big {
     font-size: 27px;
-
   }
 
 }
 
 </style>
-
 </head>
 
 
 <body>
 
 
-<div class="grid"></div>
+<!-- =========================
+     CAMERA ACTIVATION
+========================= -->
+
+<div
+  class="activate"
+  id="activate">
+
+  <div class="activate-title">
+    JARVIS // CORE
+  </div>
+
+  <div class="activate-text">
+    PROXIMITY SENSOR OFFLINE
+  </div>
+
+  <button id="activateButton">
+    ACTIVATE SENSOR
+  </button>
+
+</div>
 
 
-<div class="interface">
+
+<!-- =========================
+     MAIN INTERFACE
+========================= -->
+
+<div class="system">
 
 
-  <!-- HEADER -->
+  <!-- TOP -->
 
-  <div class="header">
+  <div class="topbar">
 
     <div>
 
-      <div class="small-title">
+      <div class="system-title">
         PERSONAL INTERFACE
       </div>
 
-      <div class="logo">
+      <div class="system-name">
         JARVIS // CORE
       </div>
 
@@ -818,16 +830,16 @@ on the screen.
   <div class="center">
 
 
-    <div class="hud">
+    <div class="scanner">
 
 
-      <div class="circle circle1"></div>
+      <div class="circle one"></div>
 
-      <div class="circle circle2"></div>
+      <div class="circle two"></div>
 
-      <div class="circle circle3"></div>
+      <div class="circle three"></div>
 
-      <div class="circle circle4"></div>
+      <div class="circle four"></div>
 
 
       <div class="corner tl"></div>
@@ -842,7 +854,7 @@ on the screen.
       <div class="scan"></div>
 
 
-      <div class="core"></div>
+      <div class="center-dot"></div>
 
 
     </div>
@@ -861,7 +873,7 @@ on the screen.
       class="substatus"
       id="substatus">
 
-      MONITORING ENVIRONMENT
+      SENSOR STANDBY
 
     </div>
 
@@ -883,7 +895,7 @@ on the screen.
 
       <div class="panel-value">
 
-        <span class="status-dot"></span>
+        <span class="online"></span>
 
         ONLINE
 
@@ -899,9 +911,7 @@ on the screen.
       </div>
 
       <div class="panel-value">
-
         AUTHENTICATION READY
-
       </div>
 
     </div>
@@ -910,14 +920,14 @@ on the screen.
     <div class="panel">
 
       <div class="panel-title">
-        CAMERA SENSOR
+        PROXIMITY SENSOR
       </div>
 
       <div
         class="panel-value"
-        id="sensor">
+        id="sensorStatus">
 
-        STARTING...
+        OFFLINE
 
       </div>
 
@@ -928,9 +938,9 @@ on the screen.
 
 
 
-  <!-- FOOTER -->
+  <!-- BOTTOM -->
 
-  <div class="footer">
+  <div class="bottom">
 
     <div>
       JARVIS CORE 01
@@ -941,7 +951,7 @@ on the screen.
     </div>
 
     <div>
-      v5.0
+      v3.0
     </div>
 
   </div>
@@ -951,33 +961,42 @@ on the screen.
 
 
 
-<!-- WELCOME -->
+<!-- =========================
+     WELCOME
+========================= -->
 
 <div
   class="welcome"
   id="welcome">
 
-  <div class="verified">
+
+  <div class="w-small">
     IDENTITY VERIFIED
   </div>
 
-  <div class="welcome-title">
+
+  <div class="w-big">
     WELCOME BACK
   </div>
 
-  <div class="welcome-name">
+
+  <div class="w-name">
     BLAKE
   </div>
+
 
   <div class="access">
     ACCESS GRANTED
   </div>
 
+
 </div>
 
 
 
-<!-- INVISIBLE CAMERA -->
+<!-- =========================
+     INVISIBLE CAMERA
+========================= -->
 
 <video
   id="camera"
@@ -986,7 +1005,6 @@ on the screen.
   muted>
 </video>
 
-
 <canvas id="canvas"></canvas>
 
 
@@ -994,19 +1012,49 @@ on the screen.
 <script>
 
 
-/* ==============================
+/* =========================
+   ELEMENTS
+========================= */
+
+const video =
+  document.getElementById("camera");
+
+const canvas =
+  document.getElementById("canvas");
+
+const ctx =
+  canvas.getContext("2d");
+
+const activate =
+  document.getElementById("activate");
+
+const activateButton =
+  document.getElementById("activateButton");
+
+const status =
+  document.getElementById("status");
+
+const substatus =
+  document.getElementById("substatus");
+
+const sensorStatus =
+  document.getElementById("sensorStatus");
+
+const welcome =
+  document.getElementById("welcome");
+
+
+/* =========================
    CLOCK
-============================== */
+========================= */
 
 function updateClock() {
 
   const now =
     new Date();
 
-
   document.getElementById("time")
     .textContent =
-
     now.toLocaleTimeString(
       [],
       {
@@ -1018,7 +1066,6 @@ function updateClock() {
 
   document.getElementById("date")
     .textContent =
-
     now.toLocaleDateString(
       [],
       {
@@ -1026,13 +1073,13 @@ function updateClock() {
         month: "long",
         day: "numeric"
       }
-    ).toUpperCase();
+    )
+    .toUpperCase();
 
 }
 
 
 updateClock();
-
 
 setInterval(
   updateClock,
@@ -1040,96 +1087,45 @@ setInterval(
 );
 
 
+/* =========================
+   DETECTION
+========================= */
 
-/* ==============================
+let previousFrame = null;
+
+let scanning = false;
+
+let lastTrigger = 0;
+
+
+/* =========================
    CAMERA
-============================== */
+========================= */
 
-const video =
-  document.getElementById(
-    "camera"
-  );
-
-
-const canvas =
-  document.getElementById(
-    "canvas"
-  );
-
-
-const ctx =
-  canvas.getContext(
-    "2d"
-  );
-
-
-const sensor =
-  document.getElementById(
-    "sensor"
-  );
-
-
-const status =
-  document.getElementById(
-    "status"
-  );
-
-
-const substatus =
-  document.getElementById(
-    "substatus"
-  );
-
-
-const welcome =
-  document.getElementById(
-    "welcome"
-  );
-
-
-let previousFrame =
-  null;
-
-
-let scanning =
-  false;
-
-
-let lastTrigger =
-  0;
-
-
-
-/* ==============================
-   START CAMERA
-============================== */
-
-async function startCamera() {
+async function activateCamera() {
 
   try {
 
 
     const stream =
-
-      await navigator
-        .mediaDevices
+      await navigator.mediaDevices
         .getUserMedia({
 
           video: {
 
-            facingMode:
-              "user",
+            facingMode: "user",
 
-            width:
-              640,
+            width: {
+              ideal: 640
+            },
 
-            height:
-              480
+            height: {
+              ideal: 480
+            }
 
           },
 
-          audio:
-            false
+          audio: false
 
         });
 
@@ -1138,8 +1134,17 @@ async function startCamera() {
       stream;
 
 
-    sensor.textContent =
+    activate.classList
+      .add("hidden");
+
+
+    sensorStatus
+      .textContent =
       "ONLINE";
+
+
+    status.textContent =
+      "SYSTEM READY";
 
 
     substatus.textContent =
@@ -1151,50 +1156,65 @@ async function startCamera() {
 
   }
 
-  catch(error) {
+  catch (error) {
 
 
-    sensor.textContent =
-      "OFFLINE";
+    activateButton
+      .textContent =
+      "CAMERA ACCESS FAILED";
 
 
     substatus.textContent =
-      "SENSOR UNAVAILABLE";
+      "CHECK CAMERA PERMISSIONS";
+
 
   }
 
 }
 
 
+/* =========================
+   BUTTON
+========================= */
 
-/* ==============================
-   MOTION DETECTION
-============================== */
+activateButton
+  .addEventListener(
+    "click",
+    activateCamera
+  );
+
+
+/* =========================
+   START DETECTION
+========================= */
 
 function startDetection() {
 
-  canvas.width =
-    100;
+  canvas.width = 120;
 
-  canvas.height =
-    75;
+  canvas.height = 90;
 
 
-  setInterval(
-    checkMotion,
-    500
+  setTimeout(
+    checkFrame,
+    1500
   );
 
 }
 
 
+/* =========================
+   FRAME CHECK
+========================= */
 
-function checkMotion() {
+function checkFrame() {
 
 
-  if (
-    !video.videoWidth
-  ) {
+  if (!video.videoWidth) {
+
+    requestAnimationFrame(
+      checkFrame
+    );
 
     return;
 
@@ -1205,52 +1225,56 @@ function checkMotion() {
     video,
     0,
     0,
-    100,
-    75
+    canvas.width,
+    canvas.height
   );
 
 
-  const frame =
+  const current =
     ctx.getImageData(
       0,
       0,
-      100,
-      75
+      canvas.width,
+      canvas.height
     );
 
 
   if (previousFrame) {
 
 
-    let difference =
-      0;
+    let difference = 0;
 
 
     for (
       let i = 0;
-      i < frame.data.length;
-      i += 25
+      i < current.data.length;
+      i += 20
     ) {
 
-
       difference +=
-
         Math.abs(
-          frame.data[i] -
+          current.data[i] -
           previousFrame.data[i]
         );
 
     }
 
 
-    difference /=
+    difference =
+      difference /
+      (current.data.length / 20);
 
-      frame.data.length / 25;
 
+    /*
+      Movement threshold.
+
+      Lower = more sensitive.
+      Higher = less sensitive.
+    */
 
     if (
 
-      difference > 25 &&
+      difference > 20 &&
 
       !scanning &&
 
@@ -1268,22 +1292,24 @@ function checkMotion() {
 
 
   previousFrame =
-    frame;
+    current;
+
+
+  requestAnimationFrame(
+    checkFrame
+  );
 
 }
 
 
-
-/* ==============================
-   JARVIS SEQUENCE
-============================== */
+/* =========================
+   JARVIS SCAN
+========================= */
 
 function runScan() {
 
 
-  scanning =
-    true;
-
+  scanning = true;
 
   lastTrigger =
     Date.now();
@@ -1292,13 +1318,12 @@ function runScan() {
   status.textContent =
     "MOTION DETECTED";
 
-
   substatus.textContent =
     "ANALYZING SUBJECT";
 
 
   setTimeout(
-    function() {
+    () => {
 
       status.textContent =
         "SCANNING...";
@@ -1307,12 +1332,12 @@ function runScan() {
         "IDENTITY ANALYSIS";
 
     },
-    1000
+    900
   );
 
 
   setTimeout(
-    function() {
+    () => {
 
       status.textContent =
         "IDENTITY VERIFIED";
@@ -1321,23 +1346,23 @@ function runScan() {
         "ACCESS AUTHORIZED";
 
     },
-    2300
+    2200
   );
 
 
   setTimeout(
-    function() {
+    () => {
 
       welcome.classList
         .add("show");
 
     },
-    2800
+    2700
   );
 
 
   setTimeout(
-    function() {
+    () => {
 
       welcome.classList
         .remove("show");
@@ -1348,7 +1373,7 @@ function runScan() {
 
 
   setTimeout(
-    function() {
+    () => {
 
       status.textContent =
         "SYSTEM READY";
@@ -1356,8 +1381,7 @@ function runScan() {
       substatus.textContent =
         "MONITORING ENVIRONMENT";
 
-      scanning =
-        false;
+      scanning = false;
 
     },
     5700
@@ -1366,16 +1390,7 @@ function runScan() {
 }
 
 
-
-/* ==============================
-   START EVERYTHING
-============================== */
-
-startCamera();
-
 </script>
 
-
 </body>
-
 </html>

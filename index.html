@@ -5,14 +5,16 @@
 
 <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>JARVIS</title>
 
 <style>
+
+* {
+    box-sizing: border-box;
+}
 
 html, body {
 
@@ -26,16 +28,12 @@ html, body {
 
     background: #020810;
 
-    color: #9eeaff;
+    color: #aeeeff;
 
     font-family:
         Arial,
         Helvetica,
         sans-serif;
-}
-
-* {
-    box-sizing: border-box;
 }
 
 body {
@@ -44,13 +42,14 @@ body {
         radial-gradient(
             circle at center,
             rgba(0,150,255,.20),
-            rgba(0,40,70,.12) 35%,
             #020810 70%
         );
 }
 
 
-/* GRID */
+/* =========================
+   MAIN BACKGROUND
+========================= */
 
 .grid {
 
@@ -61,13 +60,13 @@ body {
     background-image:
 
         linear-gradient(
-            rgba(50,190,255,.12) 1px,
+            rgba(50,190,255,.10) 1px,
             transparent 1px
         ),
 
         linear-gradient(
             90deg,
-            rgba(50,190,255,.12) 1px,
+            rgba(50,190,255,.10) 1px,
             transparent 1px
         );
 
@@ -76,7 +75,9 @@ body {
 }
 
 
-/* MAIN */
+/* =========================
+   MAIN INTERFACE
+========================= */
 
 .main {
 
@@ -93,7 +94,8 @@ body {
 
     flex-direction: column;
 
-    justify-content: space-between;
+    justify-content:
+        space-between;
 
 }
 
@@ -147,13 +149,13 @@ body {
 
 .date {
 
+    margin-top: 5px;
+
     font-size: 9px;
 
     letter-spacing: 2px;
 
     opacity: .4;
-
-    margin-top: 5px;
 
 }
 
@@ -171,20 +173,23 @@ body {
 }
 
 
-/* HUD */
+/* =========================
+   MAIN HUD
+========================= */
 
 .hud {
 
     position: relative;
 
     width: 300px;
+
     height: 300px;
 
     display: flex;
 
-    justify-content: center;
-
     align-items: center;
+
+    justify-content: center;
 
 }
 
@@ -203,6 +208,7 @@ body {
 .ring1 {
 
     width: 285px;
+
     height: 285px;
 
 }
@@ -210,6 +216,7 @@ body {
 .ring2 {
 
     width: 230px;
+
     height: 230px;
 
     border-style: dashed;
@@ -222,15 +229,15 @@ body {
 .ring3 {
 
     width: 175px;
-    height: 175px;
 
-    opacity: .7;
+    height: 175px;
 
 }
 
 .ring4 {
 
     width: 120px;
+
     height: 120px;
 
     animation:
@@ -242,11 +249,13 @@ body {
 @keyframes rotate {
 
     from {
-        transform: rotate(0deg);
+        transform:
+            rotate(0deg);
     }
 
     to {
-        transform: rotate(360deg);
+        transform:
+            rotate(360deg);
     }
 
 }
@@ -256,7 +265,8 @@ body {
 
     0%, 100% {
 
-        transform: scale(.9);
+        transform:
+            scale(.9);
 
         opacity: .4;
 
@@ -264,7 +274,8 @@ body {
 
     50% {
 
-        transform: scale(1.08);
+        transform:
+            scale(1.08);
 
         opacity: 1;
 
@@ -273,7 +284,7 @@ body {
 }
 
 
-/* SCAN */
+/* SCANNER */
 
 .scan {
 
@@ -327,6 +338,7 @@ body {
 .core {
 
     width: 18px;
+
     height: 18px;
 
     border-radius: 50%;
@@ -351,53 +363,59 @@ body {
     position: absolute;
 
     width: 28px;
+
     height: 28px;
 
-    border-color:
-        #7de5ff;
-
-    border-style:
-        solid;
+    border:
+        2px solid #7de5ff;
 
 }
 
 .tl {
 
     top: 5px;
+
     left: 5px;
 
-    border-width:
-        2px 0 0 2px;
+    border-right: 0;
+
+    border-bottom: 0;
 
 }
 
 .tr {
 
     top: 5px;
+
     right: 5px;
 
-    border-width:
-        2px 2px 0 0;
+    border-left: 0;
+
+    border-bottom: 0;
 
 }
 
 .bl {
 
     bottom: 5px;
+
     left: 5px;
 
-    border-width:
-        0 0 2px 2px;
+    border-right: 0;
+
+    border-top: 0;
 
 }
 
 .br {
 
     bottom: 5px;
+
     right: 5px;
 
-    border-width:
-        0 2px 2px 0;
+    border-left: 0;
+
+    border-top: 0;
 
 }
 
@@ -475,16 +493,20 @@ body {
 
     font-size: 11px;
 
-    letter-spacing: 1px;
-
 }
+
+
+/* DOT */
 
 .dot {
 
     display: inline-block;
 
     width: 6px;
+
     height: 6px;
+
+    margin-right: 6px;
 
     border-radius: 50%;
 
@@ -492,8 +514,6 @@ body {
 
     box-shadow:
         0 0 10px #42d9ff;
-
-    margin-right: 6px;
 
 }
 
@@ -517,7 +537,7 @@ body {
 
 
 /* =========================
-   JARVIS CONSOLE
+   WELCOME CONSOLE
 ========================= */
 
 #jarvisConsole {
@@ -552,7 +572,6 @@ body {
         opacity .6s;
 
 }
-
 
 #jarvisConsole.open {
 
@@ -594,6 +613,7 @@ body {
     position: relative;
 
     width: 220px;
+
     height: 220px;
 
     display: flex;
@@ -617,10 +637,10 @@ body {
 
 }
 
-
 .ringA {
 
     width: 210px;
+
     height: 210px;
 
     animation:
@@ -629,10 +649,10 @@ body {
 
 }
 
-
 .ringB {
 
     width: 165px;
+
     height: 165px;
 
     border-style: dashed;
@@ -643,10 +663,10 @@ body {
 
 }
 
-
 .ringC {
 
     width: 110px;
+
     height: 110px;
 
     animation:
@@ -659,6 +679,7 @@ body {
 .consoleDot {
 
     width: 14px;
+
     height: 14px;
 
     border-radius: 50%;
@@ -806,14 +827,14 @@ body {
 
 /* BUTTONS */
 
-#enableVoice,
-#closeConsole {
+.jarvisButton {
 
     position: relative;
 
-    margin-top: 15px;
+    margin-top: 12px;
 
-    padding: 12px 20px;
+    padding:
+        12px 20px;
 
     border:
         1px solid
@@ -834,9 +855,434 @@ body {
 }
 
 
-#closeConsole {
+/* =========================
+   AI SCREEN
+========================= */
 
-    margin-top: 10px;
+#aiScreen {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 100;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            rgba(0,150,255,.18),
+            #020810 70%
+        );
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity .5s;
+
+    padding: 25px;
+
+}
+
+
+#aiScreen.open {
+
+    opacity: 1;
+
+    pointer-events: auto;
+
+}
+
+
+.aiGrid {
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+
+        linear-gradient(
+            rgba(50,190,255,.10) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(50,190,255,.10) 1px,
+            transparent 1px
+        );
+
+    background-size: 45px 45px;
+
+}
+
+
+.aiHeader {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+}
+
+
+.aiSmall {
+
+    font-size: 9px;
+
+    letter-spacing: 3px;
+
+    opacity: .4;
+
+}
+
+
+.aiTitle {
+
+    margin-top: 5px;
+
+    font-size: 28px;
+
+    letter-spacing: 6px;
+
+    text-shadow:
+        0 0 20px
+        rgba(70,220,255,.7);
+
+}
+
+
+.aiStatus {
+
+    font-size: 9px;
+
+    letter-spacing: 3px;
+
+}
+
+
+/* AI ORB */
+
+.aiOrb {
+
+    position: relative;
+
+    width: 230px;
+
+    height: 230px;
+
+    margin-top: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.aiRing {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(70,210,255,.5);
+
+}
+
+
+.aiRing1 {
+
+    width: 220px;
+
+    height: 220px;
+
+    animation:
+        aiSpin
+        12s linear infinite;
+
+}
+
+
+.aiRing2 {
+
+    width: 170px;
+
+    height: 170px;
+
+    border-style: dashed;
+
+    animation:
+        aiSpinReverse
+        8s linear infinite;
+
+}
+
+
+.aiRing3 {
+
+    width: 115px;
+
+    height: 115px;
+
+    animation:
+        aiPulse
+        2s infinite;
+
+}
+
+
+.aiCore {
+
+    width: 20px;
+
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    box-shadow:
+
+        0 0 15px white,
+
+        0 0 35px #21caff,
+
+        0 0 70px #008bd0;
+
+}
+
+
+@keyframes aiSpin {
+
+    from {
+        transform:
+            rotate(0deg);
+    }
+
+    to {
+        transform:
+            rotate(360deg);
+    }
+
+}
+
+
+@keyframes aiSpinReverse {
+
+    from {
+        transform:
+            rotate(360deg);
+    }
+
+    to {
+        transform:
+            rotate(0deg);
+    }
+
+}
+
+
+@keyframes aiPulse {
+
+    0%, 100% {
+
+        transform:
+            scale(.9);
+
+        opacity: .4;
+
+    }
+
+    50% {
+
+        transform:
+            scale(1.1);
+
+        opacity: 1;
+
+    }
+
+}
+
+
+/* AI MESSAGES */
+
+.aiMessages {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    max-width: 700px;
+
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding:
+        10px 5px;
+
+}
+
+
+.aiMessage {
+
+    padding:
+        13px 16px;
+
+    margin-bottom: 12px;
+
+    border:
+        1px solid
+        rgba(70,210,255,.2);
+
+    background:
+        rgba(0,100,160,.08);
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+}
+
+
+.jarvisMessage {
+
+    border-left:
+        2px solid
+        #5edcff;
+
+}
+
+
+.userMessage {
+
+    border-right:
+        2px solid
+        #5edcff;
+
+    text-align: right;
+
+}
+
+
+/* AI INPUT */
+
+.aiInputArea {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    max-width: 700px;
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+
+#aiInput {
+
+    flex: 1;
+
+    padding: 15px;
+
+    border:
+        1px solid
+        rgba(70,210,255,.3);
+
+    outline: none;
+
+    background:
+        rgba(0,50,80,.5);
+
+    color:
+        #bdf2ff;
+
+    font-size: 12px;
+
+}
+
+
+#aiInput::placeholder {
+
+    color:
+        rgba(160,230,255,.4);
+
+}
+
+
+#aiSend,
+#aiMic,
+#aiBack {
+
+    border:
+        1px solid
+        rgba(70,210,255,.35);
+
+    background:
+        rgba(0,100,160,.12);
+
+    color:
+        #aeeeff;
+
+    cursor: pointer;
+
+    letter-spacing: 2px;
+
+}
+
+
+#aiSend,
+#aiMic {
+
+    padding:
+        0 16px;
+
+}
+
+
+#aiBack {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 12px;
+
+    margin-bottom: 10px;
+
+    padding:
+        10px 20px;
+
+    font-size: 9px;
 
 }
 
@@ -873,6 +1319,12 @@ body {
 
     }
 
+    .consoleWelcome {
+
+        font-size: 25px;
+
+    }
+
 }
 
 </style>
@@ -886,13 +1338,14 @@ body {
 <div class="grid"></div>
 
 
-<!-- MAIN HUD -->
+<!-- =========================
+     MAIN SYSTEM
+========================= -->
 
 <div class="main">
 
 
     <div class="header">
-
 
         <div>
 
@@ -922,7 +1375,6 @@ body {
             </div>
 
         </div>
-
 
     </div>
 
@@ -957,15 +1409,22 @@ body {
         </div>
 
 
-        <div class="status">
+        <div
+            class="status"
+            id="systemStatus">
+
             SYSTEM READY
+
         </div>
 
 
-        <div class="substatus">
+        <div
+            class="substatus"
+            id="systemSubstatus">
+
             MONITORING ENVIRONMENT
-        </div>
 
+        </div>
 
     </div>
 
@@ -1039,7 +1498,9 @@ body {
 </div>
 
 
-<!-- JARVIS CONSOLE -->
+<!-- =========================
+     WELCOME SCREEN
+========================= -->
 
 <div id="jarvisConsole">
 
@@ -1079,18 +1540,139 @@ body {
         class="consoleMessage"
         id="consoleMessage">
 
-        INITIALIZING JARVIS...
+        JARVIS INITIALIZING...
 
     </div>
 
 
-    <button id="enableVoice">
+    <button
+        class="jarvisButton"
+        id="enableVoice">
+
         ENABLE JARVIS VOICE
+
     </button>
 
 
-    <button id="closeConsole">
+    <button
+        class="jarvisButton"
+        id="openAI">
+
+        OPEN JARVIS AI
+
+    </button>
+
+
+    <button
+        class="jarvisButton"
+        id="closeConsole">
+
         RETURN TO SYSTEM
+
+    </button>
+
+
+</div>
+
+
+<!-- =========================
+     AI SCREEN
+========================= -->
+
+<div id="aiScreen">
+
+
+    <div class="aiGrid"></div>
+
+
+    <div class="aiHeader">
+
+        <div>
+
+            <div class="aiSmall">
+                JARVIS ARTIFICIAL INTELLIGENCE
+            </div>
+
+            <div class="aiTitle">
+                AI CORE
+            </div>
+
+        </div>
+
+
+        <div
+            id="aiStatus"
+            class="aiStatus">
+
+            ONLINE
+
+        </div>
+
+    </div>
+
+
+    <div class="aiOrb">
+
+        <div
+            class="aiRing aiRing1">
+        </div>
+
+        <div
+            class="aiRing aiRing2">
+        </div>
+
+        <div
+            class="aiRing aiRing3">
+        </div>
+
+        <div class="aiCore"></div>
+
+    </div>
+
+
+    <div
+        id="aiMessages"
+        class="aiMessages">
+
+        <div
+            class="aiMessage jarvisMessage">
+
+            JARVIS ONLINE.
+            HOW CAN I HELP?
+
+        </div>
+
+    </div>
+
+
+    <div class="aiInputArea">
+
+
+        <input
+            id="aiInput"
+            type="text"
+            placeholder="Talk to JARVIS..."
+            autocomplete="off"
+        >
+
+
+        <button id="aiSend">
+            SEND
+        </button>
+
+
+        <button id="aiMic">
+            🎙
+        </button>
+
+
+    </div>
+
+
+    <button id="aiBack">
+
+        RETURN TO JARVIS
+
     </button>
 
 
@@ -1157,12 +1739,10 @@ const video =
         "video"
     );
 
-
 video.setAttribute(
     "playsinline",
     ""
 );
-
 
 video.muted = true;
 
@@ -1172,21 +1752,23 @@ const canvas =
         "canvas"
     );
 
-
 const ctx =
     canvas.getContext(
         "2d"
     );
 
 
-let previous = null;
+let previousFrame =
+    null;
 
-let scanning = false;
+let scanning =
+    false;
 
-let lastScan = 0;
+let lastScan =
+    0;
 
 
-/* START CAMERA */
+/* CAMERA START */
 
 async function startCamera() {
 
@@ -1234,9 +1816,7 @@ async function startCamera() {
         );
 
 
-    }
-
-    catch(error) {
+    } catch(error) {
 
         console.log(
             "Camera error:",
@@ -1248,7 +1828,7 @@ async function startCamera() {
 }
 
 
-/* MOTION */
+/* MOTION DETECTION */
 
 function checkMotion() {
 
@@ -1282,27 +1862,23 @@ function checkMotion() {
         );
 
 
-    if (previous) {
+    if (previousFrame) {
 
         let difference =
             0;
 
 
         for (
-
             let i = 0;
-
             i < frame.data.length;
-
             i += 16
-
         ) {
 
             difference +=
 
                 Math.abs(
                     frame.data[i] -
-                    previous.data[i]
+                    previousFrame.data[i]
                 );
 
         }
@@ -1336,7 +1912,7 @@ function checkMotion() {
     }
 
 
-    previous =
+    previousFrame =
         frame;
 
 
@@ -1359,14 +1935,14 @@ function runScan() {
 
 
     const status =
-        document.querySelector(
-            ".status"
+        document.getElementById(
+            "systemStatus"
         );
 
 
     const sub =
-        document.querySelector(
-            ".substatus"
+        document.getElementById(
+            "systemSubstatus"
         );
 
 
@@ -1410,44 +1986,6 @@ function runScan() {
 
 
 /* =========================
-   CONSOLE
-========================= */
-
-function openConsole() {
-
-    const screen =
-        document.getElementById(
-            "jarvisConsole"
-        );
-
-
-    const message =
-        document.getElementById(
-            "consoleMessage"
-        );
-
-
-    screen.classList.add(
-        "open"
-    );
-
-
-    message.textContent =
-        "JARVIS ONLINE. ALL SYSTEMS ARE OPERATIONAL.";
-
-
-    if (voiceEnabled) {
-
-        speak(
-            "Welcome back, Blake. All systems are operational."
-        );
-
-    }
-
-}
-
-
-/* =========================
    VOICE SYSTEM
 ========================= */
 
@@ -1457,11 +1995,6 @@ let voiceEnabled =
 let jarvisVoice =
     null;
 
-
-/*
-   Find the voices available
-   on this iPad.
-*/
 
 function loadJarvisVoice() {
 
@@ -1475,7 +2008,7 @@ function loadJarvisVoice() {
 
 
     const voices =
-        window.speechSynthesis
+        speechSynthesis
             .getVoices();
 
 
@@ -1485,11 +2018,6 @@ function loadJarvisVoice() {
 
     }
 
-
-    /*
-       Prefer a deeper voice
-       when one is available.
-    */
 
     const preferred = [
 
@@ -1502,7 +2030,8 @@ function loadJarvisVoice() {
     ];
 
 
-    jarvisVoice = null;
+    jarvisVoice =
+        null;
 
 
     for (
@@ -1533,11 +2062,6 @@ function loadJarvisVoice() {
     }
 
 
-    /*
-       Otherwise use an
-       English voice.
-    */
-
     if (!jarvisVoice) {
 
         jarvisVoice =
@@ -1551,10 +2075,6 @@ function loadJarvisVoice() {
     }
 
 
-    /*
-       Final fallback.
-    */
-
     if (!jarvisVoice) {
 
         jarvisVoice =
@@ -1565,96 +2085,11 @@ function loadJarvisVoice() {
 }
 
 
-/*
-   iPad/Safari may load voices
-   after the page starts.
-*/
-
 loadJarvisVoice();
 
 
-if (
-    "onvoiceschanged"
-    in window.speechSynthesis
-) {
-
-    window.speechSynthesis
-        .onvoiceschanged =
-        loadJarvisVoice;
-
-}
-
-
-/* ENABLE VOICE */
-
-function enableVoice() {
-
-    if (
-        !("speechSynthesis" in window)
-    ) {
-
-        alert(
-            "Speech is not supported on this device."
-        );
-
-        return;
-
-    }
-
-
-    loadJarvisVoice();
-
-
-    const test =
-        new SpeechSynthesisUtterance(
-            "JARVIS voice online."
-        );
-
-
-    if (jarvisVoice) {
-
-        test.voice =
-            jarvisVoice;
-
-    }
-
-
-    test.lang =
-        "en-US";
-
-
-    test.rate =
-        0.82;
-
-
-    test.pitch =
-        0.72;
-
-
-    test.volume =
-        1;
-
-
-    window.speechSynthesis.cancel();
-
-
-    window.speechSynthesis.speak(
-        test
-    );
-
-
-    voiceEnabled =
-        true;
-
-
-    document
-        .getElementById(
-            "enableVoice"
-        )
-        .textContent =
-        "JARVIS VOICE ONLINE";
-
-}
+speechSynthesis.onvoiceschanged =
+    loadJarvisVoice;
 
 
 /* SPEAK */
@@ -1674,7 +2109,7 @@ function speak(text) {
     loadJarvisVoice();
 
 
-    window.speechSynthesis.cancel();
+    speechSynthesis.cancel();
 
 
     const utterance =
@@ -1696,25 +2131,25 @@ function speak(text) {
 
 
     utterance.rate =
-        0.82;
+        .82;
 
 
     utterance.pitch =
-        0.72;
+        .72;
 
 
     utterance.volume =
         1;
 
 
-    window.speechSynthesis.speak(
+    speechSynthesis.speak(
         utterance
     );
 
 }
 
 
-/* VOICE BUTTON */
+/* ENABLE VOICE */
 
 document
     .getElementById(
@@ -1722,11 +2157,60 @@ document
     )
     .addEventListener(
         "click",
-        enableVoice
+        function() {
+
+            voiceEnabled =
+                true;
+
+
+            speak(
+                "JARVIS voice online."
+            );
+
+
+            this.textContent =
+                "JARVIS VOICE ONLINE";
+
+        }
     );
 
 
-/* RETURN BUTTON */
+/* =========================
+   WELCOME SCREEN
+========================= */
+
+function openConsole() {
+
+    document
+        .getElementById(
+            "jarvisConsole"
+        )
+        .classList.add(
+            "open"
+        );
+
+
+    document
+        .getElementById(
+            "consoleMessage"
+        )
+        .textContent =
+
+        "JARVIS ONLINE. ALL SYSTEMS ARE OPERATIONAL.";
+
+
+    if (voiceEnabled) {
+
+        speak(
+            "Welcome back, Blake. All systems are operational."
+        );
+
+    }
+
+}
+
+
+/* RETURN TO SYSTEM */
 
 document
     .getElementById(
@@ -1735,7 +2219,6 @@ document
     .addEventListener(
         "click",
         function() {
-
 
             document
                 .getElementById(
@@ -1747,16 +2230,16 @@ document
 
 
             document
-                .querySelector(
-                    ".status"
+                .getElementById(
+                    "systemStatus"
                 )
                 .textContent =
                 "SYSTEM READY";
 
 
             document
-                .querySelector(
-                    ".substatus"
+                .getElementById(
+                    "systemSubstatus"
                 )
                 .textContent =
                 "MONITORING ENVIRONMENT";
@@ -1765,12 +2248,273 @@ document
             scanning =
                 false;
 
+        }
+    );
+
+
+/* =========================
+   AI SCREEN
+========================= */
+
+const aiScreen =
+    document.getElementById(
+        "aiScreen"
+    );
+
+
+const aiInput =
+    document.getElementById(
+        "aiInput"
+    );
+
+
+const aiMessages =
+    document.getElementById(
+        "aiMessages"
+    );
+
+
+const aiStatus =
+    document.getElementById(
+        "aiStatus"
+    );
+
+
+/* OPEN AI */
+
+document
+    .getElementById(
+        "openAI"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            aiScreen
+                .classList
+                .add("open");
+
+            aiInput.focus();
 
         }
     );
 
 
-/* START */
+/* RETURN FROM AI */
+
+document
+    .getElementById(
+        "aiBack"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            aiScreen
+                .classList
+                .remove("open");
+
+        }
+    );
+
+
+/* ADD MESSAGE */
+
+function addMessage(
+    text,
+    isUser
+) {
+
+    const message =
+        document.createElement(
+            "div"
+        );
+
+
+    message.className =
+        isUser
+        ? "aiMessage userMessage"
+        : "aiMessage jarvisMessage";
+
+
+    message.textContent =
+        text;
+
+
+    aiMessages.appendChild(
+        message
+    );
+
+
+    aiMessages.scrollTop =
+        aiMessages.scrollHeight;
+
+}
+
+
+/* SEND MESSAGE */
+
+function sendMessage() {
+
+    const text =
+        aiInput.value.trim();
+
+
+    if (!text) {
+
+        return;
+
+    }
+
+
+    addMessage(
+        text,
+        true
+    );
+
+
+    aiInput.value =
+        "";
+
+
+    aiStatus.textContent =
+        "PROCESSING...";
+
+
+    setTimeout(
+        function() {
+
+            addMessage(
+                "I received your message. The JARVIS AI connection is ready to be connected next.",
+                false
+            );
+
+
+            aiStatus.textContent =
+                "ONLINE";
+
+        },
+        700
+    );
+
+}
+
+
+/* SEND BUTTON */
+
+document
+    .getElementById(
+        "aiSend"
+    )
+    .addEventListener(
+        "click",
+        sendMessage
+    );
+
+
+/* ENTER KEY */
+
+aiInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key ===
+            "Enter"
+        ) {
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   MICROPHONE
+========================= */
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+if (SpeechRecognition) {
+
+    const recognition =
+        new SpeechRecognition();
+
+
+    recognition.lang =
+        "en-US";
+
+
+    recognition.continuous =
+        false;
+
+
+    recognition.interimResults =
+        false;
+
+
+    document
+        .getElementById(
+            "aiMic"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                aiStatus.textContent =
+                    "LISTENING...";
+
+
+                recognition.start();
+
+            }
+        );
+
+
+    recognition.onresult =
+        function(event) {
+
+            aiInput.value =
+                event
+                    .results[0][0]
+                    .transcript;
+
+
+            aiStatus.textContent =
+                "PROCESSING...";
+
+
+            sendMessage();
+
+        };
+
+
+    recognition.onerror =
+        function() {
+
+            aiStatus.textContent =
+                "ONLINE";
+
+        };
+
+} else {
+
+    document
+        .getElementById(
+            "aiMic"
+        )
+        .style.display =
+        "none";
+
+}
+
+
+/* START CAMERA */
 
 startCamera();
 

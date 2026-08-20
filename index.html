@@ -1,448 +1,971 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>JARVIS</title>
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1,
+viewport-fit=cover">
+
+<meta name="apple-mobile-web-app-capable"
+content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style"
+content="black-translucent">
+
+<meta name="apple-mobile-web-app-title"
+content="JARVIS">
+
+<title>JARVIS CORE</title>
+
 
 <style>
+
+/* ==============================
+   BASIC SETUP
+============================== */
+
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
-  margin: 0;
+html,
+body {
+
   width: 100%;
   height: 100%;
+
+  margin: 0;
+
   overflow: hidden;
+
   background: #02070b;
+
   color: #dff8ff;
-  font-family: Arial, sans-serif;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 }
 
+
+/* ==============================
+   BACKGROUND
+============================== */
+
 body {
+
   background:
-    radial-gradient(circle at center,
-      rgba(0,150,210,.18),
-      transparent 35%),
+
+    radial-gradient(
+      circle at center,
+      rgba(0,150,220,.20),
+      transparent 40%
+    ),
+
     #02070b;
 }
 
-/* GRID */
 
 .grid {
+
   position: fixed;
+
   inset: 0;
-  opacity: .12;
+
   background-image:
-    linear-gradient(rgba(100,210,255,.35) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(100,210,255,.35) 1px, transparent 1px);
-  background-size: 40px 40px;
+
+    linear-gradient(
+      rgba(80,200,255,.25) 1px,
+      transparent 1px
+    ),
+
+    linear-gradient(
+      90deg,
+      rgba(80,200,255,.25) 1px,
+      transparent 1px
+    );
+
+  background-size: 45px 45px;
+
+  opacity: .12;
+
+  pointer-events: none;
 }
 
-/* MAIN */
 
-.app {
+/* ==============================
+   MAIN INTERFACE
+============================== */
+
+.interface {
+
   position: relative;
+
   z-index: 2;
+
   width: 100%;
   height: 100%;
+
   padding: 25px;
+
   display: flex;
+
   flex-direction: column;
+
   justify-content: space-between;
 }
 
-/* TOP */
 
-.top {
+/* ==============================
+   HEADER
+============================== */
+
+.header {
+
   display: flex;
+
   justify-content: space-between;
+
+  align-items: flex-start;
 }
 
-.title {
-  font-size: 11px;
+
+.small-title {
+
+  font-size: 10px;
+
   letter-spacing: 4px;
-  opacity: .5;
-}
 
-.jarvis {
-  font-size: 24px;
-  letter-spacing: 5px;
-  margin-top: 6px;
-}
-
-.clock {
-  text-align: right;
-}
-
-.time {
-  font-size: 32px;
-}
-
-.date {
-  font-size: 9px;
-  letter-spacing: 2px;
-  opacity: .4;
-}
-
-/* CENTER */
-
-.center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-/* HUD */
-
-.hud {
-  width: 290px;
-  height: 290px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* CIRCLES */
-
-.ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid rgba(100,210,255,.45);
-}
-
-.r1 {
-  width: 270px;
-  height: 270px;
-}
-
-.r2 {
-  width: 225px;
-  height: 225px;
-  border-style: dashed;
-  animation: spin 14s linear infinite;
-}
-
-.r3 {
-  width: 175px;
-  height: 175px;
-}
-
-.r4 {
-  width: 120px;
-  height: 120px;
-  border-color: rgba(160,235,255,.7);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes pulse {
-  0%,100% {
-    transform: scale(.92);
-    opacity: .45;
-  }
-
-  50% {
-    transform: scale(1.08);
-    opacity: .9;
-  }
-}
-
-/* SCAN LINE */
-
-.scanline {
-  position: absolute;
-  width: 220px;
-  height: 2px;
-  background: #aeeeff;
-  box-shadow:
-    0 0 10px #7edfff,
-    0 0 25px #199ed0;
-  animation: scan 2.5s ease-in-out infinite;
-}
-
-@keyframes scan {
-  0%,100% {
-    transform: translateY(-105px);
-  }
-
-  50% {
-    transform: translateY(105px);
-  }
-}
-
-/* CENTER CORE */
-
-.core {
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background: #dffaff;
-  box-shadow:
-    0 0 10px #c8f5ff,
-    0 0 30px #1ca6dc,
-    0 0 60px rgba(0,170,255,.7);
-}
-
-/* STATUS */
-
-.status {
-  margin-top: 10px;
-  font-size: 14px;
-  letter-spacing: 5px;
-  text-align: center;
-}
-
-.sub {
-  margin-top: 8px;
-  font-size: 9px;
-  letter-spacing: 3px;
   opacity: .45;
 }
 
-/* PANELS */
 
-.panels {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 12px;
-  width: 100%;
-  max-width: 900px;
-  margin: auto;
+.logo {
+
+  margin-top: 7px;
+
+  font-size: 23px;
+
+  letter-spacing: 5px;
+
+  text-shadow:
+    0 0 15px
+    rgba(100,220,255,.35);
 }
 
-.panel {
-  border: 1px solid rgba(100,210,255,.2);
-  background: rgba(0,100,150,.06);
-  padding: 13px;
+
+.clock {
+
+  text-align: right;
 }
 
-.panel-title {
-  font-size: 8px;
+
+.time {
+
+  font-size: 32px;
+
   letter-spacing: 2px;
+}
+
+
+.date {
+
+  margin-top: 4px;
+
+  font-size: 9px;
+
+  letter-spacing: 2px;
+
   opacity: .4;
 }
 
-.panel-value {
+
+/* ==============================
+   CENTER
+============================== */
+
+.center {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+
+/* ==============================
+   JARVIS HUD
+============================== */
+
+.hud {
+
+  width: 300px;
+
+  height: 300px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+
+/* ==============================
+   CIRCLES
+============================== */
+
+.circle {
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  border:
+    1px solid
+    rgba(100,215,255,.45);
+}
+
+
+.circle1 {
+
+  width: 275px;
+  height: 275px;
+}
+
+
+.circle2 {
+
+  width: 225px;
+  height: 225px;
+
+  border-style: dashed;
+
+  animation:
+    rotate 15s linear infinite;
+}
+
+
+.circle3 {
+
+  width: 175px;
+  height: 175px;
+
+  opacity: .7;
+}
+
+
+.circle4 {
+
+  width: 120px;
+  height: 120px;
+
+  border-color:
+    rgba(170,240,255,.7);
+
+  animation:
+    pulse 2.2s ease-in-out infinite;
+}
+
+
+@keyframes rotate {
+
+  from {
+
+    transform:
+      rotate(0deg);
+
+  }
+
+  to {
+
+    transform:
+      rotate(360deg);
+
+  }
+
+}
+
+
+@keyframes pulse {
+
+  0%,
+  100% {
+
+    transform:
+      scale(.92);
+
+    opacity: .4;
+
+  }
+
+  50% {
+
+    transform:
+      scale(1.08);
+
+    opacity: .9;
+
+  }
+
+}
+
+
+/* ==============================
+   SCANNING LINE
+============================== */
+
+.scan {
+
+  position: absolute;
+
+  width: 220px;
+
+  height: 2px;
+
+  background:
+    #b9f4ff;
+
+  box-shadow:
+
+    0 0 10px
+    #64dfff,
+
+    0 0 25px
+    #009bd5;
+
+  animation:
+    scan 2.5s ease-in-out infinite;
+}
+
+
+@keyframes scan {
+
+  0%,
+  100% {
+
+    transform:
+      translateY(-105px);
+
+    opacity: .2;
+
+  }
+
+  50% {
+
+    transform:
+      translateY(105px);
+
+    opacity: 1;
+
+  }
+
+}
+
+
+/* ==============================
+   CENTER CORE
+============================== */
+
+.core {
+
+  width: 15px;
+
+  height: 15px;
+
+  border-radius: 50%;
+
+  background:
+    #eaffff;
+
+  box-shadow:
+
+    0 0 10px
+    #d5faff,
+
+    0 0 25px
+    #27b9ed,
+
+    0 0 55px
+    rgba(0,180,255,.8);
+}
+
+
+/* ==============================
+   CORNERS
+============================== */
+
+.corner {
+
+  position: absolute;
+
+  width: 30px;
+
+  height: 30px;
+
+  border-color:
+    #a9edff;
+
+  border-style:
+    solid;
+
+  opacity: .75;
+}
+
+
+.tl {
+
+  top: 5px;
+
+  left: 5px;
+
+  border-width:
+    2px 0 0 2px;
+}
+
+
+.tr {
+
+  top: 5px;
+
+  right: 5px;
+
+  border-width:
+    2px 2px 0 0;
+}
+
+
+.bl {
+
+  bottom: 5px;
+
+  left: 5px;
+
+  border-width:
+    0 0 2px 2px;
+}
+
+
+.br {
+
+  bottom: 5px;
+
+  right: 5px;
+
+  border-width:
+    0 2px 2px 0;
+}
+
+
+/* ==============================
+   STATUS
+============================== */
+
+.status {
+
+  margin-top: 5px;
+
+  font-size: 14px;
+
+  letter-spacing: 5px;
+
+  text-align: center;
+}
+
+
+.substatus {
+
   margin-top: 9px;
+
+  font-size: 9px;
+
+  letter-spacing: 3px;
+
+  opacity: .4;
+
+  text-align: center;
+}
+
+
+/* ==============================
+   PANELS
+============================== */
+
+.panels {
+
+  width: 100%;
+
+  max-width: 900px;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap: 12px;
+}
+
+
+.panel {
+
+  padding: 13px;
+
+  min-height: 70px;
+
+  border:
+    1px solid
+    rgba(100,215,255,.2);
+
+  background:
+    rgba(0,120,180,.05);
+}
+
+
+.panel-title {
+
+  font-size: 8px;
+
+  letter-spacing: 2px;
+
+  opacity: .4;
+}
+
+
+.panel-value {
+
+  margin-top: 9px;
+
   font-size: 11px;
+
   letter-spacing: 1px;
 }
 
-.dot {
+
+.status-dot {
+
   display: inline-block;
+
   width: 6px;
+
   height: 6px;
+
   border-radius: 50%;
-  background: #b9f4ff;
-  box-shadow: 0 0 10px #52d9ff;
+
+  background:
+    #c8f6ff;
+
+  box-shadow:
+    0 0 10px
+    #45d9ff;
+
   margin-right: 6px;
 }
 
-/* BOTTOM */
 
-.bottom {
+/* ==============================
+   FOOTER
+============================== */
+
+.footer {
+
   display: flex;
-  justify-content: space-between;
+
+  justify-content:
+    space-between;
+
   font-size: 8px;
+
   letter-spacing: 2px;
+
   opacity: .3;
 }
 
-/* WELCOME */
+
+/* ==============================
+   WELCOME SCREEN
+============================== */
 
 .welcome {
+
   position: fixed;
+
   inset: 0;
+
   z-index: 10;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   flex-direction: column;
 
   background:
-    radial-gradient(circle,
-      rgba(0,150,220,.2),
-      #02070b 60%);
+
+    radial-gradient(
+      circle,
+      rgba(0,150,220,.18),
+      #02070b 60%
+    );
 
   opacity: 0;
+
   pointer-events: none;
-  transition: opacity .5s;
+
+  transition:
+    opacity .5s;
 }
 
+
 .welcome.show {
+
   opacity: 1;
 }
 
+
 .verified {
+
   font-size: 10px;
+
   letter-spacing: 5px;
+
   opacity: .5;
 }
 
-.welcomeText {
+
+.welcome-title {
+
   margin-top: 20px;
+
   font-size: 40px;
+
   letter-spacing: 7px;
 }
 
-.name {
+
+.welcome-name {
+
   margin-top: 15px;
+
   font-size: 15px;
+
   letter-spacing: 6px;
 }
 
+
 .access {
+
   margin-top: 30px;
+
   font-size: 9px;
+
   letter-spacing: 4px;
+
   opacity: .5;
 }
 
-/* INVISIBLE CAMERA */
 
-#camera,
-#canvas {
+/* ==============================
+   CAMERA
+============================== */
+
+/*
+
+The camera is deliberately
+invisible.
+
+It acts as a sensor while
+the JARVIS interface remains
+on the screen.
+
+*/
+
+#camera {
+
   position: fixed;
+
   width: 1px;
+
   height: 1px;
+
   opacity: 0;
+
   pointer-events: none;
 }
 
-/* MOBILE */
+
+#canvas {
+
+  display: none;
+}
+
+
+/* ==============================
+   SMALL SCREENS
+============================== */
 
 @media(max-width:700px) {
 
-  .app {
+  .interface {
+
     padding: 18px;
+
   }
+
 
   .hud {
-    transform: scale(.8);
+
+    transform:
+      scale(.8);
+
   }
+
 
   .panels {
-    grid-template-columns: 1fr;
+
+    grid-template-columns:
+      1fr;
+
     gap: 7px;
+
   }
+
 
   .panel {
+
+    min-height: 45px;
+
     padding: 9px;
+
   }
 
-  .welcomeText {
+
+  .welcome-title {
+
     font-size: 27px;
+
   }
+
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="grid"></div>
 
-<div class="app">
 
-  <div class="top">
+<div class="interface">
+
+
+  <!-- HEADER -->
+
+  <div class="header">
 
     <div>
-      <div class="title">PERSONAL INTERFACE</div>
-      <div class="jarvis">JARVIS // CORE</div>
+
+      <div class="small-title">
+        PERSONAL INTERFACE
+      </div>
+
+      <div class="logo">
+        JARVIS // CORE
+      </div>
+
     </div>
 
+
     <div class="clock">
-      <div class="time" id="time">--:--</div>
-      <div class="date" id="date">---</div>
+
+      <div
+        class="time"
+        id="time">
+        --:--
+      </div>
+
+      <div
+        class="date"
+        id="date">
+        ---
+      </div>
+
     </div>
 
   </div>
 
+
+
+  <!-- CENTER -->
 
   <div class="center">
 
+
     <div class="hud">
 
-      <div class="ring r1"></div>
-      <div class="ring r2"></div>
-      <div class="ring r3"></div>
-      <div class="ring r4"></div>
 
-      <div class="scanline"></div>
+      <div class="circle circle1"></div>
+
+      <div class="circle circle2"></div>
+
+      <div class="circle circle3"></div>
+
+      <div class="circle circle4"></div>
+
+
+      <div class="corner tl"></div>
+
+      <div class="corner tr"></div>
+
+      <div class="corner bl"></div>
+
+      <div class="corner br"></div>
+
+
+      <div class="scan"></div>
+
 
       <div class="core"></div>
 
+
     </div>
 
-    <div class="status" id="status">
+
+    <div
+      class="status"
+      id="status">
+
       SYSTEM READY
+
     </div>
 
-    <div class="sub" id="sub">
+
+    <div
+      class="substatus"
+      id="substatus">
+
       MONITORING ENVIRONMENT
+
     </div>
+
 
   </div>
 
+
+
+  <!-- PANELS -->
 
   <div class="panels">
 
+
     <div class="panel">
-      <div class="panel-title">CORE STATUS</div>
+
+      <div class="panel-title">
+        CORE STATUS
+      </div>
+
       <div class="panel-value">
-        <span class="dot"></span>
+
+        <span class="status-dot"></span>
+
         ONLINE
+
       </div>
+
     </div>
 
+
     <div class="panel">
-      <div class="panel-title">SECURITY</div>
+
+      <div class="panel-title">
+        SECURITY
+      </div>
+
       <div class="panel-value">
+
         AUTHENTICATION READY
+
       </div>
+
     </div>
+
 
     <div class="panel">
-      <div class="panel-title">CAMERA SENSOR</div>
-      <div class="panel-value" id="sensor">
-        STANDBY
+
+      <div class="panel-title">
+        CAMERA SENSOR
       </div>
+
+      <div
+        class="panel-value"
+        id="sensor">
+
+        STARTING...
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+
+  <!-- FOOTER -->
+
+  <div class="footer">
+
+    <div>
+      JARVIS CORE 01
+    </div>
+
+    <div>
+      LOCAL SYSTEM
+    </div>
+
+    <div>
+      v5.0
     </div>
 
   </div>
 
-
-  <div class="bottom">
-    <div>JARVIS CORE 01</div>
-    <div>LOCAL SYSTEM</div>
-    <div>v4.0</div>
-  </div>
 
 </div>
 
 
-<div class="welcome" id="welcome">
+
+<!-- WELCOME -->
+
+<div
+  class="welcome"
+  id="welcome">
 
   <div class="verified">
     IDENTITY VERIFIED
   </div>
 
-  <div class="welcomeText">
+  <div class="welcome-title">
     WELCOME BACK
   </div>
 
-  <div class="name">
+  <div class="welcome-name">
     BLAKE
   </div>
 
@@ -453,244 +976,406 @@ body {
 </div>
 
 
-<video id="camera" autoplay playsinline muted></video>
+
+<!-- INVISIBLE CAMERA -->
+
+<video
+  id="camera"
+  autoplay
+  playsinline
+  muted>
+</video>
+
+
 <canvas id="canvas"></canvas>
+
 
 
 <script>
 
-/* CLOCK */
 
-function clock() {
+/* ==============================
+   CLOCK
+============================== */
 
-  const now = new Date();
+function updateClock() {
 
-  document.getElementById("time").textContent =
-    now.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
+  const now =
+    new Date();
 
-  document.getElementById("date").textContent =
-    now.toLocaleDateString([], {
-      weekday: "long",
-      month: "long",
-      day: "numeric"
-    }).toUpperCase();
+
+  document.getElementById("time")
+    .textContent =
+
+    now.toLocaleTimeString(
+      [],
+      {
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    );
+
+
+  document.getElementById("date")
+    .textContent =
+
+    now.toLocaleDateString(
+      [],
+      {
+        weekday: "long",
+        month: "long",
+        day: "numeric"
+      }
+    ).toUpperCase();
 
 }
 
-clock();
 
-setInterval(clock,1000);
+updateClock();
 
 
-/* CAMERA */
+setInterval(
+  updateClock,
+  1000
+);
+
+
+
+/* ==============================
+   CAMERA
+============================== */
 
 const video =
-  document.getElementById("camera");
+  document.getElementById(
+    "camera"
+  );
+
 
 const canvas =
-  document.getElementById("canvas");
+  document.getElementById(
+    "canvas"
+  );
+
 
 const ctx =
-  canvas.getContext("2d");
-
-let previous = null;
-let busy = false;
-let last = 0;
+  canvas.getContext(
+    "2d"
+  );
 
 
-/*
- Automatically request
- camera permission.
-*/
+const sensor =
+  document.getElementById(
+    "sensor"
+  );
+
+
+const status =
+  document.getElementById(
+    "status"
+  );
+
+
+const substatus =
+  document.getElementById(
+    "substatus"
+  );
+
+
+const welcome =
+  document.getElementById(
+    "welcome"
+  );
+
+
+let previousFrame =
+  null;
+
+
+let scanning =
+  false;
+
+
+let lastTrigger =
+  0;
+
+
+
+/* ==============================
+   START CAMERA
+============================== */
 
 async function startCamera() {
 
   try {
 
+
     const stream =
-      await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: "user",
-          width: 640,
-          height: 480
-        },
-        audio: false
-      });
 
-    video.srcObject = stream;
+      await navigator
+        .mediaDevices
+        .getUserMedia({
 
-    document.getElementById("sensor")
-      .textContent = "ONLINE";
+          video: {
 
-    detect();
+            facingMode:
+              "user",
+
+            width:
+              640,
+
+            height:
+              480
+
+          },
+
+          audio:
+            false
+
+        });
+
+
+    video.srcObject =
+      stream;
+
+
+    sensor.textContent =
+      "ONLINE";
+
+
+    substatus.textContent =
+      "MONITORING ENVIRONMENT";
+
+
+    startDetection();
+
 
   }
 
   catch(error) {
 
-    document.getElementById("sensor")
-      .textContent = "OFFLINE";
 
-    document.getElementById("sub")
-      .textContent = "SENSOR UNAVAILABLE";
+    sensor.textContent =
+      "OFFLINE";
+
+
+    substatus.textContent =
+      "SENSOR UNAVAILABLE";
 
   }
 
 }
 
 
-/* MOTION DETECTION */
 
-function detect() {
+/* ==============================
+   MOTION DETECTION
+============================== */
 
-  canvas.width = 100;
-  canvas.height = 75;
+function startDetection() {
 
-  setInterval(() => {
+  canvas.width =
+    100;
 
-    if (!video.videoWidth) return;
+  canvas.height =
+    75;
 
-    ctx.drawImage(
-      video,
+
+  setInterval(
+    checkMotion,
+    500
+  );
+
+}
+
+
+
+function checkMotion() {
+
+
+  if (
+    !video.videoWidth
+  ) {
+
+    return;
+
+  }
+
+
+  ctx.drawImage(
+    video,
+    0,
+    0,
+    100,
+    75
+  );
+
+
+  const frame =
+    ctx.getImageData(
       0,
       0,
       100,
       75
     );
 
-    const frame =
-      ctx.getImageData(
-        0,
-        0,
-        100,
-        75
-      );
 
-    if (previous) {
-
-      let difference = 0;
-
-      for (
-        let i = 0;
-        i < frame.data.length;
-        i += 25
-      ) {
-
-        difference +=
-          Math.abs(
-            frame.data[i] -
-            previous.data[i]
-          );
-
-      }
-
-      difference /=
-        frame.data.length / 25;
+  if (previousFrame) {
 
 
-      if (
-        difference > 25 &&
-        !busy &&
-        Date.now() - last > 10000
-      ) {
+    let difference =
+      0;
 
-        runScan();
 
-      }
+    for (
+      let i = 0;
+      i < frame.data.length;
+      i += 25
+    ) {
+
+
+      difference +=
+
+        Math.abs(
+          frame.data[i] -
+          previousFrame.data[i]
+        );
 
     }
 
-    previous = frame;
 
-  },500);
+    difference /=
+
+      frame.data.length / 25;
+
+
+    if (
+
+      difference > 25 &&
+
+      !scanning &&
+
+      Date.now() -
+      lastTrigger >
+      10000
+
+    ) {
+
+      runScan();
+
+    }
+
+  }
+
+
+  previousFrame =
+    frame;
 
 }
 
 
-/* JARVIS SEQUENCE */
+
+/* ==============================
+   JARVIS SEQUENCE
+============================== */
 
 function runScan() {
 
-  busy = true;
 
-  last = Date.now();
+  scanning =
+    true;
 
-  const status =
-    document.getElementById("status");
 
-  const sub =
-    document.getElementById("sub");
-
-  const welcome =
-    document.getElementById("welcome");
+  lastTrigger =
+    Date.now();
 
 
   status.textContent =
     "MOTION DETECTED";
 
-  sub.textContent =
+
+  substatus.textContent =
     "ANALYZING SUBJECT";
 
 
-  setTimeout(() => {
+  setTimeout(
+    function() {
 
-    status.textContent =
-      "SCANNING...";
+      status.textContent =
+        "SCANNING...";
 
-    sub.textContent =
-      "IDENTITY ANALYSIS";
+      substatus.textContent =
+        "IDENTITY ANALYSIS";
 
-  },1000);
-
-
-  setTimeout(() => {
-
-    status.textContent =
-      "IDENTITY VERIFIED";
-
-    sub.textContent =
-      "ACCESS AUTHORIZED";
-
-  },2300);
+    },
+    1000
+  );
 
 
-  setTimeout(() => {
+  setTimeout(
+    function() {
 
-    welcome.classList.add("show");
+      status.textContent =
+        "IDENTITY VERIFIED";
 
-  },2800);
+      substatus.textContent =
+        "ACCESS AUTHORIZED";
+
+    },
+    2300
+  );
 
 
-  setTimeout(() => {
+  setTimeout(
+    function() {
 
-    welcome.classList.remove("show");
+      welcome.classList
+        .add("show");
 
-  },5200);
+    },
+    2800
+  );
 
 
-  setTimeout(() => {
+  setTimeout(
+    function() {
 
-    status.textContent =
-      "SYSTEM READY";
+      welcome.classList
+        .remove("show");
 
-    sub.textContent =
-      "MONITORING ENVIRONMENT";
+    },
+    5200
+  );
 
-    busy = false;
 
-  },5700);
+  setTimeout(
+    function() {
+
+      status.textContent =
+        "SYSTEM READY";
+
+      substatus.textContent =
+        "MONITORING ENVIRONMENT";
+
+      scanning =
+        false;
+
+    },
+    5700
+  );
 
 }
 
 
-/* START */
+
+/* ==============================
+   START EVERYTHING
+============================== */
 
 startCamera();
 
 </script>
 
+
 </body>
+
 </html>

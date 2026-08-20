@@ -12,15 +12,9 @@
 
 <title>JARVIS</title>
 
-
 <style>
 
-/* =========================
-   BASE
-========================= */
-
-html,
-body {
+html, body {
 
     margin: 0;
     padding: 0;
@@ -38,29 +32,25 @@ body {
         Arial,
         Helvetica,
         sans-serif;
-
 }
 
 * {
     box-sizing: border-box;
 }
 
-
-/* =========================
-   BACKGROUND
-========================= */
-
 body {
 
     background:
         radial-gradient(
             circle at center,
-            rgba(0,150,255,.20) 0%,
+            rgba(0,150,255,.20),
             rgba(0,40,70,.12) 35%,
             #020810 70%
         );
-
 }
+
+
+/* BACKGROUND GRID */
 
 .grid {
 
@@ -82,13 +72,10 @@ body {
         );
 
     background-size: 45px 45px;
-
 }
 
 
-/* =========================
-   MAIN HUD
-========================= */
+/* MAIN */
 
 .main {
 
@@ -106,13 +93,10 @@ body {
     flex-direction: column;
 
     justify-content: space-between;
-
 }
 
 
-/* =========================
-   HEADER
-========================= */
+/* HEADER */
 
 .header {
 
@@ -120,7 +104,6 @@ body {
 
     justify-content:
         space-between;
-
 }
 
 .system {
@@ -130,7 +113,6 @@ body {
     letter-spacing: 4px;
 
     opacity: .45;
-
 }
 
 .logo {
@@ -144,19 +126,16 @@ body {
     text-shadow:
         0 0 15px
         rgba(80,220,255,.7);
-
 }
 
 .clock {
 
     text-align: right;
-
 }
 
 .time {
 
     font-size: 30px;
-
 }
 
 .date {
@@ -168,13 +147,10 @@ body {
     opacity: .4;
 
     margin-top: 5px;
-
 }
 
 
-/* =========================
-   CENTER
-========================= */
+/* CENTER */
 
 .center {
 
@@ -183,13 +159,10 @@ body {
     flex-direction: column;
 
     align-items: center;
-
 }
 
 
-/* =========================
-   HUD RINGS
-========================= */
+/* HUD */
 
 .hud {
 
@@ -203,7 +176,6 @@ body {
     justify-content: center;
 
     align-items: center;
-
 }
 
 .ring {
@@ -215,14 +187,12 @@ body {
     border:
         1px solid
         rgba(90,220,255,.5);
-
 }
 
 .ring1 {
 
     width: 285px;
     height: 285px;
-
 }
 
 .ring2 {
@@ -234,7 +204,6 @@ body {
 
     animation:
         rotate 14s linear infinite;
-
 }
 
 .ring3 {
@@ -243,7 +212,6 @@ body {
     height: 175px;
 
     opacity: .7;
-
 }
 
 .ring4 {
@@ -253,7 +221,6 @@ body {
 
     animation:
         pulse 2s infinite;
-
 }
 
 
@@ -266,18 +233,16 @@ body {
     to {
         transform: rotate(360deg);
     }
-
 }
 
 
 @keyframes pulse {
 
-    0%,100% {
+    0%, 100% {
 
         transform: scale(.9);
 
         opacity: .4;
-
     }
 
     50% {
@@ -285,15 +250,11 @@ body {
         transform: scale(1.08);
 
         opacity: 1;
-
     }
-
 }
 
 
-/* =========================
-   SCAN LINE
-========================= */
+/* SCAN LINE */
 
 .scan {
 
@@ -315,19 +276,17 @@ body {
         scan 2.5s
         ease-in-out
         infinite;
-
 }
 
 
 @keyframes scan {
 
-    0%,100% {
+    0%, 100% {
 
         transform:
             translateY(-105px);
 
         opacity: .2;
-
     }
 
     50% {
@@ -336,15 +295,11 @@ body {
             translateY(105px);
 
         opacity: 1;
-
     }
-
 }
 
 
-/* =========================
-   CORE
-========================= */
+/* CORE */
 
 .core {
 
@@ -362,13 +317,10 @@ body {
         0 0 30px #28c8ff,
 
         0 0 65px #008bd0;
-
 }
 
 
-/* =========================
-   CORNERS
-========================= */
+/* CORNERS */
 
 .corner {
 
@@ -382,7 +334,6 @@ body {
 
     border-style:
         solid;
-
 }
 
 .tl {
@@ -392,7 +343,6 @@ body {
 
     border-width:
         2px 0 0 2px;
-
 }
 
 .tr {
@@ -402,7 +352,6 @@ body {
 
     border-width:
         2px 2px 0 0;
-
 }
 
 .bl {
@@ -412,7 +361,6 @@ body {
 
     border-width:
         0 0 2px 2px;
-
 }
 
 .br {
@@ -422,13 +370,10 @@ body {
 
     border-width:
         0 2px 2px 0;
-
 }
 
 
-/* =========================
-   STATUS
-========================= */
+/* STATUS */
 
 .status {
 
@@ -437,7 +382,6 @@ body {
     font-size: 14px;
 
     letter-spacing: 5px;
-
 }
 
 .substatus {
@@ -449,13 +393,10 @@ body {
     letter-spacing: 3px;
 
     opacity: .4;
-
 }
 
 
-/* =========================
-   PANELS
-========================= */
+/* PANELS */
 
 .panels {
 
@@ -471,7 +412,6 @@ body {
         repeat(3, 1fr);
 
     gap: 12px;
-
 }
 
 .panel {
@@ -484,7 +424,6 @@ body {
 
     background:
         rgba(0,100,160,.06);
-
 }
 
 .panel-title {
@@ -494,7 +433,6 @@ body {
     letter-spacing: 2px;
 
     opacity: .4;
-
 }
 
 .panel-value {
@@ -504,7 +442,6 @@ body {
     font-size: 11px;
 
     letter-spacing: 1px;
-
 }
 
 .dot {
@@ -522,13 +459,10 @@ body {
         0 0 10px #42d9ff;
 
     margin-right: 6px;
-
 }
 
 
-/* =========================
-   FOOTER
-========================= */
+/* FOOTER */
 
 .footer {
 
@@ -542,7 +476,6 @@ body {
     letter-spacing: 2px;
 
     opacity: .3;
-
 }
 
 
@@ -580,7 +513,6 @@ body {
 
     transition:
         opacity .6s;
-
 }
 
 
@@ -589,7 +521,6 @@ body {
     opacity: 1;
 
     pointer-events: auto;
-
 }
 
 
@@ -615,7 +546,6 @@ body {
     background-size: 45px 45px;
 
     opacity: .3;
-
 }
 
 
@@ -631,7 +561,6 @@ body {
     align-items: center;
 
     justify-content: center;
-
 }
 
 
@@ -644,7 +573,6 @@ body {
     border:
         1px solid
         rgba(90,220,255,.6);
-
 }
 
 
@@ -656,7 +584,6 @@ body {
     animation:
         spinConsole
         12s linear infinite;
-
 }
 
 
@@ -670,7 +597,6 @@ body {
     animation:
         spinConsoleReverse
         8s linear infinite;
-
 }
 
 
@@ -682,7 +608,6 @@ body {
     animation:
         consolePulse
         2s infinite;
-
 }
 
 
@@ -702,57 +627,45 @@ body {
         0 0 35px #22c8ff,
 
         0 0 60px #008bd0;
-
 }
 
 
 @keyframes spinConsole {
 
     from {
-
         transform:
             rotate(0deg);
-
     }
 
     to {
-
         transform:
             rotate(360deg);
-
     }
-
 }
 
 
 @keyframes spinConsoleReverse {
 
     from {
-
         transform:
             rotate(360deg);
-
     }
 
     to {
-
         transform:
             rotate(0deg);
-
     }
-
 }
 
 
 @keyframes consolePulse {
 
-    0%,100% {
+    0%, 100% {
 
         transform:
             scale(.9);
 
         opacity: .4;
-
     }
 
     50% {
@@ -761,9 +674,7 @@ body {
             scale(1.1);
 
         opacity: 1;
-
     }
-
 }
 
 
@@ -778,7 +689,6 @@ body {
     letter-spacing: 5px;
 
     opacity: .5;
-
 }
 
 
@@ -795,7 +705,6 @@ body {
     text-shadow:
         0 0 20px
         rgba(80,220,255,.7);
-
 }
 
 
@@ -808,7 +717,6 @@ body {
     font-size: 15px;
 
     letter-spacing: 6px;
-
 }
 
 
@@ -838,15 +746,15 @@ body {
     letter-spacing: 2px;
 
     line-height: 1.8;
-
 }
 
 
+#enableVoice,
 #closeConsole {
 
     position: relative;
 
-    margin-top: 25px;
+    margin-top: 15px;
 
     padding: 12px 20px;
 
@@ -865,27 +773,28 @@ body {
     letter-spacing: 3px;
 
     cursor: pointer;
-
 }
 
 
-/* =========================
-   MOBILE
-========================= */
+#closeConsole {
+
+    margin-top: 10px;
+}
+
+
+/* MOBILE */
 
 @media(max-width:700px) {
 
     .main {
 
         padding: 18px;
-
     }
 
     .hud {
 
         transform:
             scale(.8);
-
     }
 
     .panels {
@@ -894,13 +803,11 @@ body {
             1fr;
 
         gap: 7px;
-
     }
 
     .panel {
 
         padding: 9px;
-
     }
 
 }
@@ -916,9 +823,7 @@ body {
 <div class="grid"></div>
 
 
-<!-- =========================
-     MAIN HUD
-========================= -->
+<!-- MAIN HUD -->
 
 <div class="main">
 
@@ -964,7 +869,6 @@ body {
 
         <div class="hud">
 
-
             <div class="ring ring1"></div>
 
             <div class="ring ring2"></div>
@@ -986,7 +890,6 @@ body {
             <div class="scan"></div>
 
             <div class="core"></div>
-
 
         </div>
 
@@ -1073,9 +976,7 @@ body {
 </div>
 
 
-<!-- =========================
-     JARVIS CONSOLE
-========================= -->
+<!-- JARVIS CONSOLE -->
 
 <div id="jarvisConsole">
 
@@ -1120,6 +1021,11 @@ body {
     </div>
 
 
+    <button id="enableVoice">
+        ENABLE JARVIS VOICE
+    </button>
+
+
     <button id="closeConsole">
         RETURN TO SYSTEM
     </button>
@@ -1131,9 +1037,7 @@ body {
 <script>
 
 
-/* =========================
-   CLOCK
-========================= */
+/* CLOCK */
 
 function updateClock() {
 
@@ -1179,9 +1083,7 @@ setInterval(
 );
 
 
-/* =========================
-   CAMERA
-========================= */
+/* CAMERA */
 
 const video =
     document.createElement(
@@ -1217,9 +1119,7 @@ let scanning = false;
 let lastScan = 0;
 
 
-/* =========================
-   START CAMERA
-========================= */
+/* START CAMERA */
 
 async function startCamera() {
 
@@ -1266,7 +1166,6 @@ async function startCamera() {
             1000
         );
 
-
     }
 
     catch(error) {
@@ -1281,9 +1180,7 @@ async function startCamera() {
 }
 
 
-/* =========================
-   MOTION DETECTION
-========================= */
+/* MOTION DETECTION */
 
 function checkMotion() {
 
@@ -1295,32 +1192,24 @@ function checkMotion() {
         );
 
         return;
-
     }
 
 
     ctx.drawImage(
-
         video,
-
         0,
         0,
-
         64,
         48
-
     );
 
 
     const frame =
         ctx.getImageData(
-
             0,
             0,
-
             64,
             48
-
         );
 
 
@@ -1343,11 +1232,8 @@ function checkMotion() {
             difference +=
 
                 Math.abs(
-
                     frame.data[i] -
-
                     previous.data[i]
-
                 );
 
         }
@@ -1393,9 +1279,7 @@ function checkMotion() {
 }
 
 
-/* =========================
-   SCAN SEQUENCE
-========================= */
+/* SCAN */
 
 function runScan() {
 
@@ -1454,21 +1338,17 @@ function runScan() {
 }
 
 
-/* =========================
-   OPEN JARVIS CONSOLE
-========================= */
+/* OPEN CONSOLE */
 
 function openConsole() {
 
     const consoleScreen =
-
         document.getElementById(
             "jarvisConsole"
         );
 
 
     const message =
-
         document.getElementById(
             "consoleMessage"
         );
@@ -1480,31 +1360,88 @@ function openConsole() {
 
 
     message.textContent =
-
         "JARVIS ONLINE. ALL SYSTEMS ARE OPERATIONAL.";
 
 
-    speak(
+    if (voiceEnabled) {
 
-        "Welcome back, Blake. All systems are operational."
+        speak(
+            "Welcome back, Blake. All systems are operational."
+        );
 
-    );
+    }
 
 }
 
 
-/* =========================
-   JARVIS VOICE
-========================= */
+/* VOICE */
 
-function speak(text) {
+let voiceEnabled =
+    false;
+
+
+function enableVoice() {
 
     if (
         !("speechSynthesis" in window)
     ) {
 
-        return;
+        alert(
+            "Speech is not supported on this device."
+        );
 
+        return;
+    }
+
+
+    const testVoice =
+        new SpeechSynthesisUtterance(
+            "JARVIS voice online."
+        );
+
+
+    testVoice.rate =
+        0.85;
+
+
+    testVoice.pitch =
+        0.75;
+
+
+    testVoice.volume =
+        1;
+
+
+    window.speechSynthesis.cancel();
+
+
+    window.speechSynthesis.speak(
+        testVoice
+    );
+
+
+    voiceEnabled =
+        true;
+
+
+    document
+        .getElementById(
+            "enableVoice"
+        )
+        .textContent =
+        "JARVIS VOICE ONLINE";
+
+}
+
+
+function speak(text) {
+
+    if (
+        !voiceEnabled ||
+        !("speechSynthesis" in window)
+    ) {
+
+        return;
     }
 
 
@@ -1512,18 +1449,17 @@ function speak(text) {
 
 
     const voice =
-
         new SpeechSynthesisUtterance(
             text
         );
 
 
     voice.rate =
-        0.9;
+        0.85;
 
 
     voice.pitch =
-        0.8;
+        0.75;
 
 
     voice.volume =
@@ -1537,9 +1473,19 @@ function speak(text) {
 }
 
 
-/* =========================
-   RETURN BUTTON
-========================= */
+/* VOICE BUTTON */
+
+document
+    .getElementById(
+        "enableVoice"
+    )
+    .addEventListener(
+        "click",
+        enableVoice
+    );
+
+
+/* RETURN BUTTON */
 
 document
     .getElementById(
@@ -1578,17 +1524,13 @@ document
             scanning =
                 false;
 
-
         }
     );
 
 
-/* =========================
-   START
-========================= */
+/* START */
 
 startCamera();
-
 
 </script>
 
